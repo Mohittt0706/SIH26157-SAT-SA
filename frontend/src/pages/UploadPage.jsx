@@ -1,9 +1,7 @@
-"use client";
-
 import { useRef, useState } from "react";
 import { Upload, FileText, X, ArrowRight } from "lucide-react";
-import Link from "next/link";
-import axios from "axios";
+import { Link } from "react-router-dom";
+import { uploadCSV } from "../lib/api";
 
 export default function UploadPage() {
   const fileInputRef = useRef(null);
@@ -70,15 +68,8 @@ export default function UploadPage() {
     setUploadResult(null);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await axios.post(
-        "http://localhost:8000/api/upload",
-        formData
-      );
-
-      setUploadResult(response.data);
+      const data = await uploadCSV(file);
+      setUploadResult(data);
     } catch (err) {
       console.error(err);
 
@@ -104,7 +95,7 @@ export default function UploadPage() {
   return (
     <main className="upload-shell">
       <nav className="upload-nav">
-        <Link href="/" className="upload-brand">
+        <Link to="/" className="upload-brand">
           <div className="upload-brand-mark">V</div>
 
           <div>
@@ -291,7 +282,7 @@ export default function UploadPage() {
               </div>
 
               <Link
-                href="/dashboard"
+                to="/dashboard"
                 className="dashboard-button"
               >
                 VIEW DASHBOARD

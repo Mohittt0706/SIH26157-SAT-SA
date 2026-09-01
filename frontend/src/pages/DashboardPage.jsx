@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
   ShieldAlert,
@@ -87,7 +85,7 @@ export default function DashboardPage() {
     <main className="dashboard-shell">
       {/* NAVBAR */}
       <nav className="dashboard-nav">
-        <Link href="/" className="dashboard-brand">
+        <Link to="/" className="dashboard-brand">
           <div className="dashboard-brand-mark">V</div>
 
           <div>
@@ -99,7 +97,7 @@ export default function DashboardPage() {
         </Link>
 
         <div className="dashboard-nav-links">
-          <Link href="/upload">ANALYZE</Link>
+          <Link to="/upload">ANALYZE</Link>
           <span className="active">OVERVIEW</span>
         </div>
 
@@ -197,7 +195,7 @@ export default function DashboardPage() {
               {entities.map((entity) => (
                 <Link
                   key={entity.name}
-                  href={`/entities/${encodeURIComponent(entity.name)}`}
+                  to={`/entities/${encodeURIComponent(entity.name)}`}
                   className="entity-row"
                 >
                   <span className="entity-rank">{entity.rank}</span>

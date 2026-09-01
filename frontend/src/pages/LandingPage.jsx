@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 const capabilities = [
   {
@@ -46,7 +46,7 @@ const entities = [
   },
 ];
 
-export default function Home() {
+export default function LandingPage() {
   return (
     <main className="site-shell">
       {/* NAVBAR */}
@@ -91,7 +91,7 @@ export default function Home() {
           </p>
 
           <div className="hero-actions">
-            <Link href="/upload" className="primary-button">
+            <Link to="/upload" className="primary-button">
               START ANALYSIS
               <span>→</span>
             </Link>
@@ -304,7 +304,7 @@ export default function Home() {
           </h2>
         </div>
 
-        <Link href="/upload" className="cta-button">
+        <Link to="/upload" className="cta-button">
           START ANALYSIS
           <span>→</span>
         </Link>
