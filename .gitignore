@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# SAT-SA project
+venv/
+.venv/
+*.db
+*.sqlite3
+backend/data/*.db
+node_modules/
+dist/
+.env
+dataset/answer_key_INTERNAL_ONLY.csv
