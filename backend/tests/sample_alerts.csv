@@ -1,0 +1,425 @@
+alert_id,entity_name,severity,created_time,closed_time,escalated,investigation_notes,asset_type
+ALT001,Continental Banking Corp,low,2025-01-01 08:00:00,2025-01-01 09:00:00,yes,Network scan detected,Server
+ALT002,Continental Banking Corp,medium,2025-01-02 10:00:00,2025-01-02 11:00:00,yes,Phishing attempt blocked,Workstation
+ALT003,Continental Banking Corp,high,2025-01-03 14:00:00,2025-01-03 15:30:00,yes,Unauthorized access attempt,Server
+ALT004,Continental Banking Corp,low,2025-01-04 09:00:00,2025-01-04 09:30:00,yes,Port scan from external IP,Firewall
+ALT005,Continental Banking Corp,medium,2025-01-05 11:00:00,2025-01-05 12:00:00,yes,Data exfiltration attempt,Server
+ALT006,Continental Banking Corp,critical,2025-01-06 08:00:00,2025-01-06 10:00:00,yes,Ransomware detected,Server
+ALT007,Continental Banking Corp,low,2025-01-07 09:00:00,2025-01-07 09:45:00,yes,Failed login attempts,Workstation
+ALT008,Continental Banking Corp,medium,2025-01-08 10:00:00,2025-01-08 11:00:00,yes,Suspicious process,Server
+ALT009,Continental Banking Corp,high,2025-01-09 13:00:00,2025-01-09 14:00:00,yes,Privilege escalation,Workstation
+ALT010,Continental Banking Corp,low,2025-01-10 08:00:00,2025-01-10 08:30:00,yes,Config change detected,Firewall
+ALT011,Continental Banking Corp,medium,2025-01-11 09:00:00,2025-01-11 10:00:00,yes,Vulnerability scan,Server
+ALT012,Continental Banking Corp,low,2025-01-12 07:00:00,2025-01-12 07:30:00,yes,Normal traffic spike,Network
+ALT013,Continental Banking Corp,high,2025-01-13 11:00:00,2025-01-13 12:30:00,yes,Brute force attempt,Server
+ALT014,Continental Banking Corp,medium,2025-01-14 10:00:00,2025-01-14 11:00:00,yes,Outbound anomaly,Workstation
+ALT015,Continental Banking Corp,low,2025-01-15 08:00:00,2025-01-15 09:00:00,yes,DNS query spike,DNS
+ALT016,Continental Banking Corp,critical,2025-01-16 09:00:00,2025-01-16 11:00:00,yes,Active breach confirmed,Server
+ALT017,Continental Banking Corp,low,2025-01-17 10:00:00,2025-01-17 10:30:00,yes,Update check,Workstation
+ALT018,Continental Banking Corp,medium,2025-01-18 09:00:00,2025-01-18 10:00:00,yes,Patch validation,Server
+ALT019,Continental Banking Corp,high,2025-01-19 14:00:00,2025-01-19 15:00:00,yes,Lateral movement detected,Server
+ALT020,Continental Banking Corp,low,2025-01-20 08:00:00,2025-01-20 08:45:00,yes,Access log review,Firewall
+ALT021,Continental Banking Corp,medium,2025-01-21 11:00:00,2025-01-21 12:00:00,yes,Endpoint anomaly,Workstation
+ALT022,Continental Banking Corp,low,2025-01-22 09:00:00,2025-01-22 09:30:00,yes,Firewall rule update,Firewall
+ALT023,Continental Banking Corp,high,2025-01-23 10:00:00,2025-01-23 11:30:00,yes,Suspicious download,Workstation
+ALT024,Continental Banking Corp,medium,2025-01-24 08:00:00,2025-01-24 09:00:00,yes,Service restart,Server
+ALT025,Continental Banking Corp,low,2025-01-25 10:00:00,2025-01-25 10:30:00,yes,Log rotation,Server
+ALT026,Continental Banking Corp,critical,2025-01-26 09:00:00,2025-01-26 11:00:00,yes,Zero-day exploitation,Server
+ALT027,Continental Banking Corp,low,2025-01-27 08:00:00,2025-01-27 08:30:00,yes,Backup verification,Server
+ALT028,Continental Banking Corp,medium,2025-01-28 09:00:00,2025-01-28 10:00:00,yes,Certificate expiry,Server
+ALT029,Continental Banking Corp,high,2025-01-29 11:00:00,2025-01-29 12:00:00,yes,SQL injection attempt,Server
+ALT030,Continental Banking Corp,low,2025-01-30 10:00:00,2025-01-30 10:30:00,yes,Normal audit,Workstation
+ALT031,Continental Banking Corp,medium,2025-02-01 09:00:00,2025-02-01 10:00:00,yes,IDS signature update,Network
+ALT032,Continental Banking Corp,high,2025-02-02 10:00:00,2025-02-02 11:30:00,yes,DDoS attempt,Network
+ALT033,Continental Banking Corp,low,2025-02-03 08:00:00,2025-02-03 08:30:00,yes,Password policy check,Workstation
+ALT034,Continental Banking Corp,medium,2025-02-04 11:00:00,2025-02-04 12:00:00,yes,API rate limit hit,Server
+ALT035,Continental Banking Corp,low,2025-02-05 09:00:00,2025-02-05 09:30:00,yes,Netflow review,Network
+ALT036,Continental Banking Corp,high,2025-02-06 08:00:00,2025-02-06 09:30:00,yes,Insider threat signal,Server
+ALT037,Continental Banking Corp,medium,2025-02-07 10:00:00,2025-02-07 11:00:00,yes,Vulnerability remediation,Workstation
+ALT038,Continental Banking Corp,low,2025-02-08 07:00:00,2025-02-08 07:30:00,yes,Login banner check,Firewall
+ALT039,Continental Banking Corp,critical,2025-02-09 09:00:00,2025-02-09 11:00:00,yes,Root access detected,Server
+ALT040,Continental Banking Corp,medium,2025-02-10 08:00:00,2025-02-10 09:00:00,yes,Web filter update,Firewall
+ALT041,Continental Banking Corp,low,2025-02-11 10:00:00,2025-02-11 10:30:00,yes,Asset inventory,Server
+ALT042,Continental Banking Corp,high,2025-02-12 09:00:00,2025-02-12 10:30:00,yes,C2 communication,Server
+ALT043,Continental Banking Corp,medium,2025-02-13 11:00:00,2025-02-13 12:00:00,yes,Email phishing,Workstation
+ALT044,Continental Banking Corp,low,2025-02-14 08:00:00,2025-02-14 08:30:00,yes,Regular scan,Network
+ALT045,Continental Banking Corp,high,2025-02-15 10:00:00,2025-02-15 11:00:00,yes,Data leak attempt,Server
+ALT046,Continental Banking Corp,low,2025-02-16 09:00:00,2025-02-16 09:30:00,yes,Permission review,Workstation
+ALT047,Continental Banking Corp,medium,2025-02-17 08:00:00,2025-02-17 09:00:00,yes,SIEM rule update,Server
+ALT048,Continental Banking Corp,critical,2025-02-18 10:00:00,2025-02-18 12:00:00,yes,Complete compromise,Server
+ALT049,Continental Banking Corp,low,2025-02-19 07:00:00,2025-02-19 07:30:00,yes,Morning check,Workstation
+ALT050,Continental Banking Corp,medium,2025-02-20 09:00:00,2025-02-20 10:00:00,yes,Network segment review,Network
+ALT051,Continental Banking Corp,high,2025-02-21 11:00:00,2025-02-21 12:00:00,yes,Advanced persistent threat,Server
+ALT052,Continental Banking Corp,low,2025-02-22 08:00:00,2025-02-22 08:30:00,yes,Config validation,Firewall
+ALT053,Continental Banking Corp,medium,2025-02-23 10:00:00,2025-02-23 11:00:00,yes,Access anomaly,Workstation
+ALT054,Continental Banking Corp,low,2025-02-24 09:00:00,2025-02-24 09:30:00,yes,Log search,Server
+ALT055,Continental Banking Corp,high,2025-02-25 08:00:00,2025-02-25 09:00:00,yes,Threat intel match,Server
+ALT056,Continental Banking Corp,medium,2025-02-26 11:00:00,2025-02-26 12:00:00,yes,Compliance check,Workstation
+ALT057,Continental Banking Corp,low,2025-02-27 10:00:00,2025-02-27 10:30:00,yes,Storage review,Server
+ALT058,Continental Banking Corp,high,2025-02-28 09:00:00,2025-02-28 10:30:00,yes,Credential stuffing,Server
+ALT059,Continental Banking Corp,low,2025-03-01 08:00:00,2025-03-01 08:30:00,yes,Weekly scan,Network
+ALT060,Continental Banking Corp,medium,2025-03-02 09:00:00,2025-03-02 10:00:00,yes,Incident review,Server
+ALT061,Delta Rail Systems,low,2025-01-01 08:00:00,2025-01-01 09:00:00,yes,Initial scan,Server
+ALT062,Delta Rail Systems,low,2025-01-05 10:00:00,2025-01-05 10:30:00,yes,Config check,Workstation
+ALT063,Delta Rail Systems,low,2025-01-10 09:00:00,2025-01-10 09:30:00,yes,Log review,Server
+ALT064,Delta Rail Systems,low,2025-01-15 08:00:00,2025-01-15 08:30:00,yes,Access check,Workstation
+ALT065,Delta Rail Systems,low,2025-01-20 10:00:00,2025-01-20 10:30:00,yes,Backup check,Server
+ALT066,Delta Rail Systems,low,2025-01-25 09:00:00,2025-01-25 09:30:00,yes,Normal traffic,Network
+ALT067,Delta Rail Systems,low,2025-02-01 08:00:00,2025-02-01 08:30:00,yes,Firewall check,Firewall
+ALT068,Delta Rail Systems,low,2025-02-05 10:00:00,2025-02-05 10:30:00,yes,Service status,Server
+ALT069,Delta Rail Systems,low,2025-02-10 09:00:00,2025-02-10 09:30:00,yes,Update check,Workstation
+ALT070,Delta Rail Systems,low,2025-02-15 08:00:00,2025-02-15 08:30:00,yes,Netflow review,Network
+ALT071,Delta Rail Systems,low,2025-02-20 10:00:00,2025-02-20 10:30:00,yes,Certificate check,Server
+ALT072,Delta Rail Systems,low,2025-02-25 09:00:00,2025-02-25 09:30:00,yes,Permission audit,Workstation
+ALT073,Delta Rail Systems,low,2025-03-01 08:00:00,2025-03-01 08:30:00,yes,Monthly review,Server
+ALT074,Delta Rail Systems,low,2025-03-05 10:00:00,2025-03-05 10:30:00,yes,Log rotation,Server
+ALT075,Delta Rail Systems,low,2025-03-10 09:00:00,2025-03-10 09:30:00,yes,Access log,Workstation
+ALT076,Delta Rail Systems,low,2025-03-15 08:00:00,2025-03-15 08:30:00,yes,Config review,Firewall
+ALT077,Delta Rail Systems,low,2025-03-20 10:00:00,2025-03-20 10:30:00,yes,Traffic review,Network
+ALT078,Delta Rail Systems,low,2025-03-25 09:00:00,2025-03-25 09:30:00,yes,Asset check,Server
+ALT079,Delta Rail Systems,low,2025-04-01 08:00:00,2025-04-01 08:30:00,yes,Quarterly review,Workstation
+ALT080,Delta Rail Systems,low,2025-04-05 10:00:00,2025-04-05 10:30:00,yes,Normal activity,Server
+ALT081,Delta Rail Systems,medium,2025-04-10 09:00:00,2025-04-10 10:00:00,yes,Suspicious login,Workstation
+ALT082,Delta Rail Systems,low,2025-04-15 08:00:00,2025-04-15 08:30:00,yes,Port scan,Network
+ALT083,Delta Rail Systems,low,2025-04-20 10:00:00,2025-04-20 10:30:00,yes,Service check,Server
+ALT084,Delta Rail Systems,low,2025-04-25 09:00:00,2025-04-25 09:30:00,yes,Access review,Workstation
+ALT085,Delta Rail Systems,low,2025-05-01 08:00:00,2025-05-01 08:30:00,yes,Normal scan,Server
+ALT086,Delta Rail Systems,low,2025-05-05 10:00:00,2025-05-05 10:30:00,yes,Config check,Firewall
+ALT087,Delta Rail Systems,low,2025-05-10 09:00:00,2025-05-10 09:30:00,yes,Netflow check,Network
+ALT088,Delta Rail Systems,medium,2025-05-15 08:00:00,2025-05-15 09:00:00,yes,Email alert,Workstation
+ALT089,Delta Rail Systems,low,2025-05-20 10:00:00,2025-05-20 10:30:00,yes,Service review,Server
+ALT090,Delta Rail Systems,low,2025-05-25 09:00:00,2025-05-25 09:30:00,yes,Log check,Server
+ALT091,Delta Rail Systems,low,2025-06-01 08:00:00,2025-06-01 08:30:00,yes,Monthly check,Workstation
+ALT092,Delta Rail Systems,low,2025-06-05 10:00:00,2025-06-05 10:30:00,yes,Normal scan,Network
+ALT093,Delta Rail Systems,low,2025-06-10 09:00:00,2025-06-10 09:30:00,yes,Access check,Server
+ALT094,Delta Rail Systems,low,2025-06-15 08:00:00,2025-06-15 08:30:00,yes,Config review,Firewall
+ALT095,Delta Rail Systems,low,2025-06-20 10:00:00,2025-06-20 10:30:00,yes,Traffic review,Server
+ALT096,Delta Rail Systems,low,2025-06-25 09:00:00,2025-06-25 09:30:00,yes,Permission check,Workstation
+ALT097,Delta Rail Systems,low,2025-07-01 08:00:00,2025-07-01 08:30:00,yes,Quarterly review,Server
+ALT098,Delta Rail Systems,medium,2025-07-05 10:00:00,2025-07-05 11:00:00,yes,Suspicious traffic,Network
+ALT099,Delta Rail Systems,low,2025-07-10 09:00:00,2025-07-10 09:30:00,yes,Asset review,Server
+ALT100,Delta Rail Systems,low,2025-07-15 08:00:00,2025-07-15 08:30:00,yes,Log check,Workstation
+ALT101,Delta Rail Systems,low,2025-07-20 10:00:00,2025-07-20 10:30:00,yes,Normal activity,Server
+ALT102,Delta Rail Systems,low,2025-07-25 09:00:00,2025-07-25 09:30:00,yes,Service status,Server
+ALT103,Delta Rail Systems,low,2025-08-01 08:00:00,2025-08-01 08:30:00,yes,Monthly review,Workstation
+ALT104,Delta Rail Systems,low,2025-08-05 10:00:00,2025-08-05 10:30:00,yes,Config check,Firewall
+ALT105,Delta Rail Systems,low,2025-08-10 09:00:00,2025-08-10 09:30:00,yes,Access review,Network
+ALT106,Delta Rail Systems,low,2025-08-15 08:00:00,2025-08-15 08:30:00,yes,Netflow check,Server
+ALT107,Delta Rail Systems,low,2025-08-20 10:00:00,2025-08-20 10:30:00,yes,Normal scan,Server
+ALT108,Delta Rail Systems,low,2025-08-25 09:00:00,2025-08-25 09:30:00,yes,Log review,Workstation
+ALT109,Fortis Defense Systems,low,2025-01-01 08:00:00,2025-01-01 09:00:00,yes,Initial scan,Server
+ALT110,Fortis Defense Systems,medium,2025-01-01 08:15:00,2025-01-01 09:15:00,yes,Email alert,Workstation
+ALT111,Fortis Defense Systems,high,2025-01-01 08:30:00,2025-01-01 10:00:00,yes,Brute force,Server
+ALT112,Fortis Defense Systems,critical,2025-01-01 09:00:00,2025-01-01 11:00:00,yes,Ransomware,Server
+ALT113,Fortis Defense Systems,low,2025-01-02 08:00:00,2025-01-02 09:00:00,yes,Config check,Firewall
+ALT114,Fortis Defense Systems,medium,2025-01-02 08:15:00,2025-01-02 09:15:00,yes,Phishing,Workstation
+ALT115,Fortis Defense Systems,high,2025-01-02 08:30:00,2025-01-02 10:00:00,yes,Lateral movement,Server
+ALT116,Fortis Defense Systems,low,2025-01-03 08:00:00,2025-01-03 09:00:00,yes,Netflow review,Network
+ALT117,Fortis Defense Systems,medium,2025-01-03 08:15:00,2025-01-03 09:15:00,yes,Data exfiltration,Server
+ALT118,Fortis Defense Systems,high,2025-01-03 08:30:00,2025-01-03 10:00:00,yes,Privilege escalation,Workstation
+ALT119,Fortis Defense Systems,critical,2025-01-03 09:00:00,2025-01-03 11:00:00,yes,Active breach,Server
+ALT120,Fortis Defense Systems,low,2025-01-04 08:00:00,2025-01-04 09:00:00,yes,Normal scan,Server
+ALT121,Fortis Defense Systems,medium,2025-01-04 08:15:00,2025-01-04 09:15:00,yes,Port scan,Network
+ALT122,Fortis Defense Systems,high,2025-01-04 08:30:00,2025-01-04 10:00:00,yes,SQL injection,Server
+ALT123,Fortis Defense Systems,low,2025-01-05 08:00:00,2025-01-05 09:00:00,yes,Service check,Workstation
+ALT124,Fortis Defense Systems,medium,2025-01-05 08:15:00,2025-01-05 09:15:00,yes,C2 detection,Server
+ALT125,Fortis Defense Systems,high,2025-01-05 08:30:00,2025-01-05 10:00:00,yes,Zero-day exploit,Server
+ALT126,Fortis Defense Systems,critical,2025-01-05 09:00:00,2025-01-05 11:00:00,yes,Root access,Server
+ALT127,Fortis Defense Systems,low,2025-01-06 08:00:00,2025-01-06 09:00:00,yes,Config update,Firewall
+ALT128,Fortis Defense Systems,medium,2025-01-06 08:15:00,2025-01-06 09:15:00,yes,Insider threat,Workstation
+ALT129,Fortis Defense Systems,high,2025-01-06 08:30:00,2025-01-06 10:00:00,yes,APT detection,Server
+ALT130,Fortis Defense Systems,low,2025-01-07 08:00:00,2025-01-07 09:00:00,yes,Log review,Server
+ALT131,Fortis Defense Systems,medium,2025-01-07 08:15:00,2025-01-07 09:15:00,yes,Credential stuffing,Workstation
+ALT132,Fortis Defense Systems,high,2025-01-07 08:30:00,2025-01-07 10:00:00,yes,DDoS attempt,Network
+ALT133,Fortis Defense Systems,low,2025-01-08 08:00:00,2025-01-08 09:00:00,yes,Access check,Firewall
+ALT134,Fortis Defense Systems,medium,2025-01-08 08:15:00,2025-01-08 09:15:00,yes,Web attack,Server
+ALT135,Fortis Defense Systems,high,2025-01-08 08:30:00,2025-01-08 10:00:00,yes,Data leak,Server
+ALT136,Fortis Defense Systems,critical,2025-01-08 09:00:00,2025-01-08 11:00:00,yes,Complete compromise,Server
+ALT137,Fortis Defense Systems,low,2025-01-09 08:00:00,2025-01-09 09:00:00,yes,Backup check,Server
+ALT138,Fortis Defense Systems,medium,2025-01-09 08:15:00,2025-01-09 09:15:00,yes,Suspicious email,Workstation
+ALT139,Fortis Defense Systems,high,2025-01-09 08:30:00,2025-01-09 10:00:00,yes,Network breach,Network
+ALT140,Fortis Defense Systems,low,2025-01-10 08:00:00,2025-01-10 09:00:00,yes,Permission audit,Workstation
+ALT141,Fortis Defense Systems,medium,2025-01-10 08:15:00,2025-01-10 09:15:00,yes,Vulnerability found,Server
+ALT142,Fortis Defense Systems,high,2025-01-10 08:30:00,2025-01-10 10:00:00,yes,Advanced threat,Server
+ALT143,Fortis Defense Systems,low,2025-01-11 08:00:00,2025-01-11 09:00:00,yes,Certificate check,Server
+ALT144,Fortis Defense Systems,medium,2025-01-11 08:15:00,2025-01-11 09:15:00,yes,API abuse,Server
+ALT145,Fortis Defense Systems,high,2025-01-11 08:30:00,2025-01-11 10:00:00,yes,Persistent threat,Server
+ALT146,Fortis Defense Systems,critical,2025-01-11 09:00:00,2025-01-11 11:00:00,yes,Nation state attack,Server
+ALT147,Fortis Defense Systems,low,2025-01-12 08:00:00,2025-01-12 09:00:00,yes,Service status,Workstation
+ALT148,Fortis Defense Systems,medium,2025-01-12 08:15:00,2025-01-12 09:15:00,yes,Email phishing,Workstation
+ALT149,Fortis Defense Systems,high,2025-01-12 08:30:00,2025-01-12 10:00:00,yes,Intrusion detected,Server
+ALT150,Fortis Defense Systems,low,2025-01-13 08:00:00,2025-01-13 09:00:00,yes,Config review,Firewall
+ALT151,Fortis Defense Systems,medium,2025-01-13 08:15:00,2025-01-13 09:15:00,yes,Anomalous login,Workstation
+ALT152,Fortis Defense Systems,high,2025-01-13 08:30:00,2025-01-13 10:00:00,yes,File exfiltration,Server
+ALT153,Fortis Defense Systems,low,2025-01-14 08:00:00,2025-01-14 09:00:00,yes,Netflow check,Network
+ALT154,Fortis Defense Systems,medium,2025-01-14 08:15:00,2025-01-14 09:15:00,yes,Threat detected,Server
+ALT155,Fortis Defense Systems,high,2025-01-14 08:30:00,2025-01-14 10:00:00,yes,Exploit attempt,Server
+ALT156,Fortis Defense Systems,low,2025-01-15 08:00:00,2025-01-15 09:00:00,yes,Log search,Server
+ALT157,Fortis Defense Systems,medium,2025-01-15 08:15:00,2025-01-15 09:15:00,yes,Access anomaly,Workstation
+ALT158,Fortis Defense Systems,high,2025-01-15 08:30:00,2025-01-15 10:00:00,yes,Malware detected,Server
+ALT159,Fortis Defense Systems,critical,2025-01-15 09:00:00,2025-01-15 11:00:00,yes,Critical breach,Server
+ALT160,Fortis Defense Systems,low,2025-01-16 08:00:00,2025-01-16 09:00:00,yes,Normal scan,Network
+ALT161,Fortis Defense Systems,medium,2025-01-16 08:15:00,2025-01-16 09:15:00,yes,Vulnerability scan,Server
+ALT162,Fortis Defense Systems,high,2025-01-16 08:30:00,2025-01-16 10:00:00,yes,Ransomware attempt,Server
+ALT163,Fortis Defense Systems,low,2025-01-17 08:00:00,2025-01-17 09:00:00,yes,Asset check,Server
+ALT164,Fortis Defense Systems,medium,2025-01-17 08:15:00,2025-01-17 09:15:00,yes,Suspicious traffic,Network
+ALT165,Fortis Defense Systems,high,2025-01-17 08:30:00,2025-01-17 10:00:00,yes,Privilege abuse,Workstation
+ALT166,Fortis Defense Systems,low,2025-01-18 08:00:00,2025-01-18 09:00:00,yes,Backup verify,Server
+ALT167,Fortis Defense Systems,medium,2025-01-18 08:15:00,2025-01-18 09:15:00,yes,Email threat,Workstation
+ALT168,Fortis Defense Systems,high,2025-01-18 08:30:00,2025-01-18 10:00:00,yes,Network intrusion,Network
+ALT169,Fortis Defense Systems,low,2025-01-19 08:00:00,2025-01-19 09:00:00,yes,Permission check,Workstation
+ALT170,Fortis Defense Systems,medium,2025-01-19 08:15:00,2025-01-19 09:15:00,yes,Data breach,Server
+ALT171,Fortis Defense Systems,high,2025-01-19 08:30:00,2025-01-19 10:00:00,yes,APT confirmed,Server
+ALT172,Fortis Defense Systems,critical,2025-01-19 09:00:00,2025-01-19 11:00:00,yes,Major incident,Server
+ALT173,Fortis Defense Systems,low,2025-01-20 08:00:00,2025-01-20 09:00:00,yes,Service check,Server
+ALT174,Fortis Defense Systems,medium,2025-01-20 08:15:00,2025-01-20 09:15:00,yes,Credential theft,Workstation
+ALT175,Fortis Defense Systems,high,2025-01-20 08:30:00,2025-01-20 10:00:00,yes,Data compromise,Server
+ALT176,Fortis Defense Systems,low,2025-01-21 08:00:00,2025-01-21 09:00:00,yes,Config check,Firewall
+ALT177,Fortis Defense Systems,medium,2025-01-21 08:15:00,2025-01-21 09:15:00,yes,Web attack detected,Server
+ALT178,Fortis Defense Systems,high,2025-01-21 08:30:00,2025-01-21 10:00:00,yes,Advanced malware,Server
+ALT179,Fortis Defense Systems,low,2025-01-22 08:00:00,2025-01-22 09:00:00,yes,Log review,Server
+ALT180,Fortis Defense Systems,medium,2025-01-22 08:15:00,2025-01-22 09:15:00,yes,Suspicious process,Workstation
+ALT181,Fortis Defense Systems,high,2025-01-22 08:30:00,2025-01-22 10:00:00,yes,Zero-day detection,Server
+ALT182,Fortis Defense Systems,critical,2025-01-22 09:00:00,2025-01-22 11:00:00,yes,Critical exploit,Server
+ALT183,Fortis Defense Systems,low,2025-01-23 08:00:00,2025-01-23 09:00:00,yes,Access review,Workstation
+ALT184,Fortis Defense Systems,medium,2025-01-23 08:15:00,2025-01-23 09:15:00,yes,File integrity,Server
+ALT185,Fortis Defense Systems,high,2025-01-23 08:30:00,2025-01-23 10:00:00,yes,Exfiltration attempt,Server
+ALT186,Fortis Defense Systems,low,2025-01-24 08:00:00,2025-01-24 09:00:00,yes,Normal activity,Network
+ALT187,Fortis Defense Systems,medium,2025-01-24 08:15:00,2025-01-24 09:15:00,yes,Threat intel match,Server
+ALT188,Fortis Defense Systems,high,2025-01-24 08:30:00,2025-01-24 10:00:00,yes,Intrusion campaign,Server
+ALT189,Fortis Defense Systems,low,2025-01-25 08:00:00,2025-01-25 09:00:00,yes,Certificate check,Server
+ALT190,Fortis Defense Systems,medium,2025-01-25 08:15:00,2025-01-25 09:15:00,yes,Anomalous behavior,Workstation
+ALT191,Fortis Defense Systems,high,2025-01-25 08:30:00,2025-01-25 10:00:00,yes,Sophisticated attack,Server
+ALT192,Fortis Defense Systems,low,2025-01-26 08:00:00,2025-01-26 09:00:00,yes,Service review,Server
+ALT193,Fortis Defense Systems,medium,2025-01-26 08:15:00,2025-01-26 09:15:00,yes,Policy violation,Workstation
+ALT194,Fortis Defense Systems,high,2025-01-26 08:30:00,2025-01-26 10:00:00,yes,Targeted attack,Server
+ALT195,Fortis Defense Systems,critical,2025-01-26 09:00:00,2025-01-26 11:00:00,yes,Full compromise,Server
+ALT196,Fortis Defense Systems,low,2025-01-27 08:00:00,2025-01-27 09:00:00,yes,Backup check,Server
+ALT197,Fortis Defense Systems,medium,2025-01-27 08:15:00,2025-01-27 09:15:00,yes,Email anomaly,Workstation
+ALT198,Fortis Defense Systems,high,2025-01-27 08:30:00,2025-01-27 10:00:00,yes,Network attack,Network
+ALT199,Fortis Defense Systems,low,2025-01-28 08:00:00,2025-01-28 09:00:00,yes,Config review,Firewall
+ALT200,Fortis Defense Systems,medium,2025-01-28 08:15:00,2025-01-28 09:15:00,yes,Access breach,Server
+ALT201,Fortis Defense Systems,high,2025-01-28 08:30:00,2025-01-28 10:00:00,yes,Data theft,Server
+ALT202,Fortis Defense Systems,low,2025-01-29 08:00:00,2025-01-29 09:00:00,yes,Log check,Server
+ALT203,Fortis Defense Systems,medium,2025-01-29 08:15:00,2025-01-29 09:15:00,yes,Privilege exploit,Workstation
+ALT204,Fortis Defense Systems,high,2025-01-29 08:30:00,2025-01-29 10:00:00,yes,Threat escalation,Server
+ALT205,Fortis Defense Systems,low,2025-01-30 08:00:00,2025-01-30 09:00:00,yes,Netflow review,Network
+ALT206,Fortis Defense Systems,medium,2025-01-30 08:15:00,2025-01-30 09:15:00,yes,Malware incident,Server
+ALT207,Fortis Defense Systems,high,2025-01-30 08:30:00,2025-01-30 10:00:00,yes,APT activity,Server
+ALT208,Fortis Defense Systems,low,2025-02-01 08:00:00,2025-02-01 09:00:00,yes,Permission audit,Workstation
+ALT209,Fortis Defense Systems,medium,2025-02-01 08:15:00,2025-02-01 09:15:00,yes,Incident report,Server
+ALT210,Fortis Defense Systems,high,2025-02-01 08:30:00,2025-02-01 10:00:00,yes,Zero-day response,Server
+ALT211,Fortis Defense Systems,critical,2025-02-01 09:00:00,2025-02-01 11:00:00,yes,Nation state breach,Server
+ALT212,Fortis Defense Systems,low,2025-02-02 08:00:00,2025-02-02 09:00:00,yes,Service check,Server
+ALT213,Fortis Defense Systems,medium,2025-02-02 08:15:00,2025-02-02 09:15:00,yes,Credential compromise,Workstation
+ALT214,Fortis Defense Systems,high,2025-02-02 08:30:00,2025-02-02 10:00:00,yes,Data breach confirmed,Server
+ALT215,Fortis Defense Systems,low,2025-02-03 08:00:00,2025-02-03 09:00:00,yes,Config check,Firewall
+ALT216,Fortis Defense Systems,medium,2025-02-03 08:15:00,2025-02-03 09:15:00,yes,Intrusion detected,Server
+ALT217,Fortis Defense Systems,high,2025-02-03 08:30:00,2025-02-03 10:00:00,yes,Advanced attack,Server
+ALT218,Fortis Defense Systems,low,2025-02-04 08:00:00,2025-02-04 09:00:00,yes,Normal scan,Network
+ALT219,Fortis Defense Systems,medium,2025-02-04 08:15:00,2025-02-04 09:15:00,yes,Web compromise,Server
+ALT220,Fortis Defense Systems,high,2025-02-04 08:30:00,2025-02-04 10:00:00,yes,Targeted intrusion,Server
+ALT221,Fortis Defense Systems,low,2025-02-05 08:00:00,2025-02-05 09:00:00,yes,Log review,Server
+ALT222,Fortis Defense Systems,medium,2025-02-05 08:15:00,2025-02-05 09:15:00,yes,Email attack,Workstation
+ALT223,Fortis Defense Systems,high,2025-02-05 08:30:00,2025-02-05 10:00:00,yes,Malware outbreak,Server
+ALT224,Fortis Defense Systems,low,2025-02-06 08:00:00,2025-02-06 09:00:00,yes,Access check,Workstation
+ALT225,Fortis Defense Systems,medium,2025-02-06 08:15:00,2025-02-06 09:15:00,yes,Privilege attack,Server
+ALT226,Fortis Defense Systems,high,2025-02-06 08:30:00,2025-02-06 10:00:00,yes,Exfiltration event,Server
+ALT227,Fortis Defense Systems,critical,2025-02-06 09:00:00,2025-02-06 11:00:00,yes,Critical intrusion,Server
+ALT228,Fortis Defense Systems,low,2025-02-07 08:00:00,2025-02-07 09:00:00,yes,Backup check,Server
+ALT229,Fortis Defense Systems,medium,2025-02-07 08:15:00,2025-02-07 09:15:00,yes,Suspicious activity,Workstation
+ALT230,Fortis Defense Systems,high,2025-02-07 08:30:00,2025-02-07 10:00:00,yes,Network compromise,Network
+ALT231,Fortis Defense Systems,low,2025-02-08 08:00:00,2025-02-08 09:00:00,yes,Service review,Server
+ALT232,Fortis Defense Systems,medium,2025-02-08 08:15:00,2025-02-08 09:15:00,yes,Incident analysis,Workstation
+ALT233,Fortis Defense Systems,high,2025-02-08 08:30:00,2025-02-08 10:00:00,yes,Threat escalation,Server
+ALT234,Fortis Defense Systems,low,2025-02-09 08:00:00,2025-02-09 09:00:00,yes,Config review,Firewall
+ALT235,Fortis Defense Systems,medium,2025-02-09 08:15:00,2025-02-09 09:15:00,yes,Anomalous access,Workstation
+ALT236,Fortis Defense Systems,high,2025-02-09 08:30:00,2025-02-09 10:00:00,yes,Attack detected,Server
+ALT237,Fortis Defense Systems,low,2025-02-10 08:00:00,2025-02-10 09:00:00,yes,Netflow check,Network
+ALT238,Fortis Defense Systems,medium,2025-02-10 08:15:00,2025-02-10 09:15:00,yes,Data leak detected,Server
+ALT239,Fortis Defense Systems,high,2025-02-10 08:30:00,2025-02-10 10:00:00,yes,APT compromise,Server
+ALT240,Fortis Defense Systems,low,2025-02-11 08:00:00,2025-02-11 09:00:00,yes,Log check,Server
+ALT241,Fortis Defense Systems,medium,2025-02-11 08:15:00,2025-02-11 09:15:00,yes,Credential abuse,Workstation
+ALT242,Fortis Defense Systems,high,2025-02-11 08:30:00,2025-02-11 10:00:00,yes,Intrusion attempt,Server
+ALT243,Fortis Defense Systems,critical,2025-02-11 09:00:00,2025-02-11 11:00:00,yes,Critical incident,Server
+ALT244,Fortis Defense Systems,low,2025-02-12 08:00:00,2025-02-12 09:00:00,yes,Permission check,Workstation
+ALT245,Fortis Defense Systems,medium,2025-02-12 08:15:00,2025-02-12 09:15:00,yes,File compromise,Server
+ALT246,Fortis Defense Systems,high,2025-02-12 08:30:00,2025-02-12 10:00:00,yes,Network breach,Network
+ALT247,Fortis Defense Systems,low,2025-02-13 08:00:00,2025-02-13 09:00:00,yes,Service status,Server
+ALT248,Fortis Defense Systems,medium,2025-02-13 08:15:00,2025-02-13 09:15:00,yes,Email threat detected,Workstation
+ALT249,Fortis Defense Systems,high,2025-02-13 08:30:00,2025-02-13 10:00:00,yes,Exploit detected,Server
+ALT250,Fortis Defense Systems,low,2025-02-14 08:00:00,2025-02-14 09:00:00,yes,Backup verify,Server
+ALT251,Fortis Defense Systems,medium,2025-02-14 08:15:00,2025-02-14 09:15:00,yes,Anomalous network,Network
+ALT252,Fortis Defense Systems,high,2025-02-14 08:30:00,2025-02-14 10:00:00,yes,Data compromise,Server
+ALT253,Fortis Defense Systems,low,2025-02-15 08:00:00,2025-02-15 09:00:00,yes,Normal scan,Server
+ALT254,Fortis Defense Systems,medium,2025-02-15 08:15:00,2025-02-15 09:15:00,yes,Suspicious process,Workstation
+ALT255,Fortis Defense Systems,high,2025-02-15 08:30:00,2025-02-15 10:00:00,yes,Sophisticated attack,Server
+ALT256,Fortis Defense Systems,low,2025-02-16 08:00:00,2025-02-16 09:00:00,yes,Config check,Firewall
+ALT257,Fortis Defense Systems,medium,2025-02-16 08:15:00,2025-02-16 09:15:00,yes,Access anomaly,Workstation
+ALT258,Fortis Defense Systems,high,2025-02-16 08:30:00,2025-02-16 10:00:00,yes,Intrusion campaign,Server
+ALT259,Fortis Defense Systems,critical,2025-02-16 09:00:00,2025-02-16 11:00:00,yes,Major breach,Server
+ALT260,Fortis Defense Systems,low,2025-02-17 08:00:00,2025-02-17 09:00:00,yes,Log review,Server
+ALT261,Fortis Defense Systems,medium,2025-02-17 08:15:00,2025-02-17 09:15:00,yes,Threat detected,Server
+ALT262,Fortis Defense Systems,high,2025-02-17 08:30:00,2025-02-17 10:00:00,yes,Advanced persistent,Server
+ALT263,Fortis Defense Systems,low,2025-02-18 08:00:00,2025-02-18 09:00:00,yes,Access review,Workstation
+ALT264,Fortis Defense Systems,medium,2025-02-18 08:15:00,2025-02-18 09:15:00,yes,Credential theft,Workstation
+ALT265,Fortis Defense Systems,high,2025-02-18 08:30:00,2025-02-18 10:00:00,yes,Exfiltration attempt,Server
+ALT266,Fortis Defense Systems,low,2025-02-19 08:00:00,2025-02-19 09:00:00,yes,Service check,Server
+ALT267,Fortis Defense Systems,medium,2025-02-19 08:15:00,2025-02-19 09:15:00,yes,Policy breach,Workstation
+ALT268,Fortis Defense Systems,high,2025-02-19 08:30:00,2025-02-19 10:00:00,yes,Targeted attack,Server
+ALT269,Fortis Defense Systems,low,2025-02-20 08:00:00,2025-02-20 09:00:00,yes,Netflow review,Network
+ALT270,Fortis Defense Systems,medium,2025-02-20 08:15:00,2025-02-20 09:15:00,yes,Malware incident,Server
+ALT271,Fortis Defense Systems,high,2025-02-20 08:30:00,2025-02-20 10:00:00,yes,APT activity,Server
+ALT272,Fortis Defense Systems,low,2025-02-21 08:00:00,2025-02-21 09:00:00,yes,Permission audit,Workstation
+ALT273,Fortis Defense Systems,medium,2025-02-21 08:15:00,2025-02-21 09:15:00,yes,Incident report,Server
+ALT274,Fortis Defense Systems,high,2025-02-21 08:30:00,2025-02-21 10:00:00,yes,Zero-day response,Server
+ALT275,Fortis Defense Systems,critical,2025-02-21 09:00:00,2025-02-21 11:00:00,yes,State-sponsored attack,Server
+ALT276,Fortis Defense Systems,low,2025-02-22 08:00:00,2025-02-22 09:00:00,yes,Normal activity,Network
+ALT277,Fortis Defense Systems,medium,2025-02-22 08:15:00,2025-02-22 09:15:00,yes,Web compromise,Server
+ALT278,Fortis Defense Systems,high,2025-02-22 08:30:00,2025-02-22 10:00:00,yes,Data theft,Server
+ALT279,Fortis Defense Systems,low,2025-02-23 08:00:00,2025-02-23 09:00:00,yes,Config review,Firewall
+ALT280,Fortis Defense Systems,medium,2025-02-23 08:15:00,2025-02-23 09:15:00,yes,Suspicious email,Workstation
+ALT281,Fortis Defense Systems,high,2025-02-23 08:30:00,2025-02-23 10:00:00,yes,Network intrusion,Network
+ALT282,Fortis Defense Systems,low,2025-02-24 08:00:00,2025-02-24 09:00:00,yes,Log check,Server
+ALT283,Fortis Defense Systems,medium,2025-02-24 08:15:00,2025-02-24 09:15:00,yes,Access breach,Server
+ALT284,Fortis Defense Systems,high,2025-02-24 08:30:00,2025-02-24 10:00:00,yes,Intrusion detected,Server
+ALT285,Fortis Defense Systems,low,2025-02-25 08:00:00,2025-02-25 09:00:00,yes,Service review,Server
+ALT286,Fortis Defense Systems,medium,2025-02-25 08:15:00,2025-02-25 09:15:00,yes,Anomalous login,Workstation
+ALT287,Fortis Defense Systems,high,2025-02-25 08:30:00,2025-02-25 10:00:00,yes,Attack escalation,Server
+ALT288,Fortis Defense Systems,low,2025-02-26 08:00:00,2025-02-26 09:00:00,yes,Backup check,Server
+ALT289,Fortis Defense Systems,medium,2025-02-26 08:15:00,2025-02-26 09:15:00,yes,Email compromise,Workstation
+ALT290,Fortis Defense Systems,high,2025-02-26 08:30:00,2025-02-26 10:00:00,yes,Data exfiltration,Server
+ALT291,Fortis Defense Systems,low,2025-02-27 08:00:00,2025-02-27 09:00:00,yes,Permission check,Workstation
+ALT292,Fortis Defense Systems,medium,2025-02-27 08:15:00,2025-02-27 09:15:00,yes,Privilege exploit,Server
+ALT293,Fortis Defense Systems,high,2025-02-27 08:30:00,2025-02-27 10:00:00,yes,Advanced threat,Server
+ALT294,Fortis Defense Systems,critical,2025-02-27 09:00:00,2025-02-27 11:00:00,yes,Critical breach,Server
+ALT295,Fortis Defense Systems,low,2025-02-28 08:00:00,2025-02-28 09:00:00,yes,Normal scan,Server
+ALT296,Fortis Defense Systems,medium,2025-02-28 08:15:00,2025-02-28 09:15:00,yes,File integrity,Server
+ALT297,Fortis Defense Systems,high,2025-02-28 08:30:00,2025-02-28 10:00:00,yes,Network attack,Network
+ALT298,Fortis Defense Systems,low,2025-03-01 08:00:00,2025-03-01 09:00:00,yes,Config check,Firewall
+ALT299,Fortis Defense Systems,medium,2025-03-01 08:15:00,2025-03-01 09:15:00,yes,Credential abuse,Workstation
+ALT300,Fortis Defense Systems,high,2025-03-01 08:30:00,2025-03-01 10:00:00,yes,APT compromise,Server
+ALT301,Fortis Defense Systems,low,2025-03-02 08:00:00,2025-03-02 09:00:00,yes,Log review,Server
+ALT302,Fortis Defense Systems,medium,2025-03-02 08:15:00,2025-03-02 09:15:00,yes,Anomalous traffic,Network
+ALT303,Fortis Defense Systems,high,2025-03-02 08:30:00,2025-03-02 10:00:00,yes,Intrusion confirmed,Server
+ALT304,Fortis Defense Systems,critical,2025-03-02 09:00:00,2025-03-02 11:00:00,yes,Full system compromise,Server
+ALT305,Indus Financial Services,low,2025-01-01 08:00:00,2025-01-01 09:00:00,yes,Initial scan,Server
+ALT306,Indus Financial Services,medium,2025-01-02 08:00:00,2025-01-02 09:00:00,yes,Email alert,Workstation
+ALT307,Indus Financial Services,high,2025-01-03 08:00:00,2025-01-03 09:00:00,yes,Brute force,Server
+ALT308,Indus Financial Services,critical,2025-01-04 08:00:00,2025-01-04 10:00:00,yes,Ransomware,Server
+ALT309,Indus Financial Services,low,2025-01-05 08:00:00,2025-01-05 09:00:00,yes,Config check,Firewall
+ALT310,Indus Financial Services,medium,2025-01-06 08:00:00,2025-01-06 09:00:00,yes,Phishing,Workstation
+ALT311,Indus Financial Services,high,2025-01-07 08:00:00,2025-01-07 09:00:00,yes,Lateral movement,Server
+ALT312,Indus Financial Services,low,2025-01-08 08:00:00,2025-01-08 09:00:00,yes,Netflow review,Network
+ALT313,Indus Financial Services,medium,2025-01-09 08:00:00,2025-01-09 09:00:00,yes,Data exfiltration,Server
+ALT314,Indus Financial Services,high,2025-01-10 08:00:00,2025-01-10 09:00:00,yes,Privilege escalation,Workstation
+ALT315,Indus Financial Services,critical,2025-01-11 08:00:00,2025-01-11 10:00:00,yes,Active breach,Server
+ALT316,Indus Financial Services,low,2025-01-12 08:00:00,2025-01-12 09:00:00,yes,Normal scan,Server
+ALT317,Indus Financial Services,medium,2025-01-13 08:00:00,2025-01-13 09:00:00,yes,Port scan,Network
+ALT318,Indus Financial Services,high,2025-01-14 08:00:00,2025-01-14 09:00:00,yes,SQL injection,Server
+ALT319,Indus Financial Services,low,2025-01-15 08:00:00,2025-01-15 09:00:00,yes,Service check,Workstation
+ALT320,Indus Financial Services,medium,2025-01-16 08:00:00,2025-01-16 09:00:00,yes,C2 detection,Server
+ALT321,Indus Financial Services,high,2025-01-17 08:00:00,2025-01-17 09:00:00,yes,Zero-day exploit,Server
+ALT322,Indus Financial Services,low,2025-01-18 08:00:00,2025-01-18 09:00:00,yes,Backup check,Server
+ALT323,Indus Financial Services,medium,2025-01-19 08:00:00,2025-01-19 09:00:00,yes,Insider threat,Workstation
+ALT324,Indus Financial Services,high,2025-01-20 08:00:00,2025-01-20 09:00:00,yes,APT detection,Server
+ALT325,Indus Financial Services,low,2025-01-21 08:00:00,2025-01-21 09:00:00,yes,Log review,Server
+ALT326,Indus Financial Services,medium,2025-01-22 08:00:00,2025-01-22 09:00:00,yes,Credential stuffing,Workstation
+ALT327,Indus Financial Services,high,2025-01-23 08:00:00,2025-01-23 09:00:00,yes,DDoS attempt,Network
+ALT328,Indus Financial Services,low,2025-01-24 08:00:00,2025-01-24 09:00:00,yes,Access check,Firewall
+ALT329,Indus Financial Services,medium,2025-01-25 08:00:00,2025-01-25 09:00:00,yes,Web attack,Server
+ALT330,Indus Financial Services,high,2025-01-26 08:00:00,2025-01-26 09:00:00,yes,Data leak,Server
+ALT331,Indus Financial Services,low,2025-01-27 08:00:00,2025-01-27 09:00:00,yes,Permission audit,Workstation
+ALT332,Indus Financial Services,medium,2025-01-28 08:00:00,2025-01-28 09:00:00,yes,Vulnerability found,Server
+ALT333,Indus Financial Services,high,2025-01-29 08:00:00,2025-01-29 09:00:00,yes,Advanced threat,Server
+ALT334,Indus Financial Services,low,2025-01-30 08:00:00,2025-01-30 09:00:00,yes,Certificate check,Server
+ALT335,Indus Financial Services,medium,2025-02-01 08:00:00,2025-02-01 09:00:00,yes,API abuse,Server
+ALT336,Indus Financial Services,high,2025-02-02 08:00:00,2025-02-02 09:00:00,yes,Persistent threat,Server
+ALT337,Indus Financial Services,critical,2025-02-03 08:00:00,2025-02-03 10:00:00,yes,Nation state attack,Server
+ALT338,Indus Financial Services,low,2025-02-04 08:00:00,2025-02-04 09:00:00,yes,Service status,Workstation
+ALT339,Indus Financial Services,medium,2025-02-05 08:00:00,2025-02-05 09:00:00,yes,Email phishing,Workstation
+ALT340,Indus Financial Services,high,2025-02-06 08:00:00,2025-02-06 09:00:00,yes,Intrusion detected,Server
+ALT341,Indus Financial Services,low,2025-02-07 08:00:00,2025-02-07 09:00:00,yes,Config review,Firewall
+ALT342,Indus Financial Services,medium,2025-02-08 08:00:00,2025-02-08 09:00:00,yes,Anomalous login,Workstation
+ALT343,Indus Financial Services,high,2025-02-09 08:00:00,2025-02-09 09:00:00,yes,File exfiltration,Server
+ALT344,Indus Financial Services,low,2025-02-10 08:00:00,2025-02-10 09:00:00,yes,Netflow check,Network
+ALT345,Indus Financial Services,medium,2025-02-11 08:00:00,2025-02-11 09:00:00,yes,Threat detected,Server
+ALT346,Indus Financial Services,high,2025-02-12 08:00:00,2025-02-12 09:00:00,yes,Exploit attempt,Server
+ALT347,Indus Financial Services,low,2025-02-13 08:00:00,2025-02-13 09:00:00,yes,Log search,Server
+ALT348,Indus Financial Services,medium,2025-02-14 08:00:00,2025-02-14 09:00:00,yes,Access anomaly,Workstation
+ALT349,Indus Financial Services,high,2025-02-15 08:00:00,2025-02-15 09:00:00,yes,Malware detected,Server
+ALT350,Indus Financial Services,low,2025-02-16 08:00:00,2025-02-16 09:00:00,yes,Normal scan,Network
+ALT351,Indus Financial Services,medium,2025-02-17 08:00:00,2025-02-17 09:00:00,yes,Vulnerability scan,Server
+ALT352,Indus Financial Services,high,2025-02-18 08:00:00,2025-02-18 09:00:00,yes,Ransomware attempt,Server
+ALT353,Indus Financial Services,low,2025-02-19 08:00:00,2025-02-19 09:00:00,yes,Asset check,Server
+ALT354,Indus Financial Services,medium,2025-02-20 08:00:00,2025-02-20 09:00:00,yes,Suspicious traffic,Network
+ALT355,Indus Financial Services,high,2025-02-21 08:00:00,2025-02-21 09:00:00,yes,Privilege abuse,Workstation
+ALT356,Indus Financial Services,low,2025-02-22 08:00:00,2025-02-22 09:00:00,yes,Backup verify,Server
+ALT357,Indus Financial Services,medium,2025-02-23 08:00:00,2025-02-23 09:00:00,yes,Email threat,Workstation
+ALT358,Indus Financial Services,high,2025-02-24 08:00:00,2025-02-24 09:00:00,yes,Network intrusion,Network
+ALT359,Indus Financial Services,low,2025-02-25 08:00:00,2025-02-25 09:00:00,yes,Permission check,Workstation
+ALT360,Indus Financial Services,medium,2025-02-26 08:00:00,2025-02-26 09:00:00,yes,Data breach,Server
+ALT361,Indus Financial Services,high,2025-02-27 08:00:00,2025-02-27 09:00:00,yes,APT confirmed,Server
+ALT362,Indus Financial Services,low,2025-02-28 08:00:00,2025-02-28 09:00:00,yes,Service check,Server
+ALT363,Indus Financial Services,medium,2025-03-01 08:00:00,2025-03-01 09:00:00,yes,Anomalous behavior,Workstation
+ALT364,Indus Financial Services,high,2025-03-02 08:00:00,2025-03-02 09:00:00,yes,Intrusion campaign,Server
+ALT365,Normal Corp,low,2025-01-01 08:00:00,2025-01-01 09:00:00,yes,Initial scan,Server
+ALT366,Normal Corp,medium,2025-01-02 08:00:00,2025-01-02 09:00:00,yes,Email alert,Workstation
+ALT367,Normal Corp,high,2025-01-03 08:00:00,2025-01-03 09:00:00,yes,Brute force,Server
+ALT368,Normal Corp,low,2025-01-04 08:00:00,2025-01-04 09:00:00,yes,Config check,Firewall
+ALT369,Normal Corp,medium,2025-01-05 08:00:00,2025-01-05 09:00:00,yes,Phishing,Workstation
+ALT370,Normal Corp,high,2025-01-06 08:00:00,2025-01-06 09:00:00,yes,Lateral movement,Server
+ALT371,Normal Corp,low,2025-01-07 08:00:00,2025-01-07 09:00:00,yes,Netflow review,Network
+ALT372,Normal Corp,medium,2025-01-08 08:00:00,2025-01-08 09:00:00,yes,Data exfiltration,Server
+ALT373,Normal Corp,high,2025-01-09 08:00:00,2025-01-09 09:00:00,yes,Privilege escalation,Workstation
+ALT374,Normal Corp,low,2025-01-10 08:00:00,2025-01-10 09:00:00,yes,Normal scan,Server
+ALT375,Normal Corp,medium,2025-01-11 08:00:00,2025-01-11 09:00:00,yes,Port scan,Network
+ALT376,Normal Corp,high,2025-01-12 08:00:00,2025-01-12 09:00:00,yes,SQL injection,Server
+ALT377,Normal Corp,low,2025-01-13 08:00:00,2025-01-13 09:00:00,yes,Service check,Workstation
+ALT378,Normal Corp,medium,2025-01-14 08:00:00,2025-01-14 09:00:00,yes,C2 detection,Server
+ALT379,Normal Corp,high,2025-01-15 08:00:00,2025-01-15 09:00:00,yes,Zero-day exploit,Server
+ALT380,Normal Corp,low,2025-01-16 08:00:00,2025-01-16 09:00:00,yes,Backup check,Server
+ALT381,Normal Corp,medium,2025-01-17 08:00:00,2025-01-17 09:00:00,yes,Insider threat,Workstation
+ALT382,Normal Corp,high,2025-01-18 08:00:00,2025-01-18 09:00:00,yes,APT detection,Server
+ALT383,Normal Corp,low,2025-01-19 08:00:00,2025-01-19 09:00:00,yes,Log review,Server
+ALT384,Normal Corp,medium,2025-01-20 08:00:00,2025-01-20 09:00:00,yes,Credential stuffing,Workstation
+ALT385,Normal Corp,high,2025-01-21 08:00:00,2025-01-21 09:00:00,yes,DDoS attempt,Network
+ALT386,Normal Corp,low,2025-01-22 08:00:00,2025-01-22 09:00:00,yes,Access check,Firewall
+ALT387,Normal Corp,medium,2025-01-23 08:00:00,2025-01-23 09:00:00,yes,Web attack,Server
+ALT388,Normal Corp,high,2025-01-24 08:00:00,2025-01-24 09:00:00,yes,Data leak,Server
+ALT389,Normal Corp,low,2025-01-25 08:00:00,2025-01-25 09:00:00,yes,Permission audit,Workstation
+ALT390,Normal Corp,medium,2025-01-26 08:00:00,2025-01-26 09:00:00,yes,Vulnerability found,Server
+ALT391,Normal Corp,high,2025-01-27 08:00:00,2025-01-27 09:00:00,yes,Advanced threat,Server
+ALT392,Normal Corp,low,2025-01-28 08:00:00,2025-01-28 09:00:00,yes,Certificate check,Server
+ALT393,Normal Corp,medium,2025-01-29 08:00:00,2025-01-29 09:00:00,yes,API abuse,Server
+ALT394,Normal Corp,high,2025-01-30 08:00:00,2025-01-30 09:00:00,yes,Persistent threat,Server
+ALT395,Normal Corp,low,2025-02-01 08:00:00,2025-02-01 09:00:00,yes,Service check,Server
+ALT396,Normal Corp,medium,2025-02-02 08:00:00,2025-02-02 09:00:00,yes,Anomalous login,Workstation
+ALT397,Normal Corp,high,2025-02-03 08:00:00,2025-02-03 09:00:00,yes,File exfiltration,Server
+ALT398,Normal Corp,low,2025-02-04 08:00:00,2025-02-04 09:00:00,yes,Config review,Firewall
+ALT399,Normal Corp,medium,2025-02-05 08:00:00,2025-02-05 09:00:00,yes,Email compromise,Workstation
+ALT400,Normal Corp,high,2025-02-06 08:00:00,2025-02-06 09:00:00,yes,Network breach,Network
+ALT401,Normal Corp,low,2025-02-07 08:00:00,2025-02-07 09:00:00,yes,Log check,Server
+ALT402,Normal Corp,medium,2025-02-08 08:00:00,2025-02-08 09:00:00,yes,Access breach,Server
+ALT403,Normal Corp,high,2025-02-09 08:00:00,2025-02-09 09:00:00,yes,Intrusion detected,Server
+ALT404,Normal Corp,low,2025-02-10 08:00:00,2025-02-10 09:00:00,yes,Normal scan,Network
+ALT405,Normal Corp,medium,2025-02-11 08:00:00,2025-02-11 09:00:00,yes,Vulnerability scan,Server
+ALT406,Normal Corp,high,2025-02-12 08:00:00,2025-02-12 09:00:00,yes,Ransomware attempt,Server
+ALT407,Normal Corp,low,2025-02-13 08:00:00,2025-02-13 09:00:00,yes,Asset check,Server
+ALT408,Normal Corp,medium,2025-02-14 08:00:00,2025-02-14 09:00:00,yes,Suspicious traffic,Network
+ALT409,Normal Corp,high,2025-02-15 08:00:00,2025-02-15 09:00:00,yes,Privilege abuse,Workstation
+ALT410,Normal Corp,low,2025-02-16 08:00:00,2025-02-16 09:00:00,yes,Backup verify,Server
+ALT411,Normal Corp,medium,2025-02-17 08:00:00,2025-02-17 09:00:00,yes,Email threat,Workstation
+ALT412,Normal Corp,high,2025-02-18 08:00:00,2025-02-18 09:00:00,yes,Network intrusion,Network
+ALT413,Normal Corp,low,2025-02-19 08:00:00,2025-02-19 09:00:00,yes,Permission check,Workstation
+ALT414,Normal Corp,medium,2025-02-20 08:00:00,2025-02-20 09:00:00,yes,Data breach,Server
+ALT415,Normal Corp,high,2025-02-21 08:00:00,2025-02-21 09:00:00,yes,APT confirmed,Server
+ALT416,Normal Corp,low,2025-02-22 08:00:00,2025-02-22 09:00:00,yes,Service status,Server
+ALT417,Normal Corp,medium,2025-02-23 08:00:00,2025-02-23 09:00:00,yes,Anomalous behavior,Workstation
+ALT418,Normal Corp,high,2025-02-24 08:00:00,2025-02-24 09:00:00,yes,Intrusion campaign,Server
+ALT419,Normal Corp,low,2025-02-25 08:00:00,2025-02-25 09:00:00,yes,Normal scan,Server
+ALT420,Normal Corp,medium,2025-02-26 08:00:00,2025-02-26 09:00:00,yes,Policy violation,Workstation
+ALT421,Normal Corp,high,2025-02-27 08:00:00,2025-02-27 09:00:00,yes,Targeted attack,Server
+ALT422,Normal Corp,low,2025-02-28 08:00:00,2025-02-28 09:00:00,yes,Log review,Server
+ALT423,Normal Corp,medium,2025-03-01 08:00:00,2025-03-01 09:00:00,yes,Access anomaly,Workstation
+ALT424,Normal Corp,high,2025-03-02 08:00:00,2025-03-02 09:00:00,yes,Attack escalation,Server
