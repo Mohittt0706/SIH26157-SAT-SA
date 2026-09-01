@@ -77,8 +77,9 @@ project.md sits at the repo root alongside CLAUDE.md.
   (`build_peer_baseline()`) — needs updating to match the median/MAD
   convention below.
 - `anomaly.py` — **done**, Isolation Forest with MAD-based feature attribution
-- `risk_score.py` — **not started**
-- analytics router — **not started**
+- `risk_score.py` — **done**, weighted combination with a soft floor (see
+  "Scoring decisions" below)
+- analytics router — **done** (`GET /api/risk-scores`, `GET /api/entities/{entity_name}`)
 - frontend, Docker, docs — **not started**
 
 ## Data schema (alert CSV)
@@ -128,6 +129,34 @@ these before combining:
 - Rule scores are graded ramps between named threshold constants, not binary
   thresholds — an entity should not look clean right up to a hard cutoff and
   then suddenly read as maximally guilty.
+
+## Scoring decisions
+- **Weights**: `execution_gap` 0.40, `negative_space` 0.35, `anomaly` 0.25
+  (must sum to 1.0).
+- **Soft floor**: `final = max(weighted_sum, highest_raw_score * 0.85)`, no
+  hard threshold. An earlier hard-threshold version (floor only applied above
+  0.70) produced a cliff — two entities 0.016 apart in raw score landed 31
+  risk-score points apart depending on which side of 0.70 they fell. The
+  continuous soft floor removes that cliff at the cost of also lifting some
+  low, single-detector scores partway toward their raw value.
+- **`FINDING_SUMMARY_THRESHOLD = 0.30`** gates which detectors appear in
+  `findings_summary` (dashboard) and in the drill-down `findings` list. A
+  detector must score at or above this to count as having "meaningfully
+  fired" — merely non-zero isn't enough, since `anomaly.py` reports its
+  top-3 deviant features unconditionally regardless of how anomalous an
+  entity actually is.
+- `risk_band` is an investigative priority ranking, not a verdict. An entity
+  can sit at "medium" with an empty `findings` list — statistical deviation
+  without a specific rule violation. Ganga Oil & Gas is that case in the
+  current dataset: its only signal is an anomaly score (0.270) that clears
+  the soft floor enough to land at "medium" but falls short of
+  `FINDING_SUMMARY_THRESHOLD`, so no named finding backs it up. That's the
+  tool correctly flagging borderline signal for human review, not a bug.
+- **Final results on the real dataset**: Delta Rail Systems 85.0 critical,
+  Indus Financial Services 61.8 high, Continental Banking Corp 58.2 high,
+  Fortis Defense Systems 42.3 medium, Ganga Oil & Gas 22.9 medium, remaining
+  five entities low. All four seeded entities (2 execution-gap, 1
+  negative-space, 1 anomaly-spike) land in the top four.
 
 ## Team
 | Member | Role |
