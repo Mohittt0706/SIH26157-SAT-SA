@@ -83,7 +83,7 @@ export default function UploadPage() {
       console.error(err);
 
       let errorMessage = "Upload failed. Make sure the backend is running.";
-      
+
       if (err.response?.data?.detail) {
         const detail = err.response.data.detail;
         if (typeof detail === "object" && detail.missing_columns) {
@@ -105,12 +105,12 @@ export default function UploadPage() {
     <main className="upload-shell">
       <nav className="upload-nav">
         <Link href="/" className="upload-brand">
-          <div className="upload-brand-mark">S</div>
+          <div className="upload-brand-mark">V</div>
 
           <div>
-            <div className="upload-brand-name">SAT-SA</div>
+            <div className="upload-brand-name">VEIL</div>
             <div className="upload-brand-subtitle">
-              SOC SUPERVISORY ANALYTICS
+              Supervisory Intelligence for SOC Assessment
             </div>
           </div>
         </Link>

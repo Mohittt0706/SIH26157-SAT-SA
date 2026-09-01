@@ -88,12 +88,12 @@ export default function DashboardPage() {
       {/* NAVBAR */}
       <nav className="dashboard-nav">
         <Link href="/" className="dashboard-brand">
-          <div className="dashboard-brand-mark">S</div>
+          <div className="dashboard-brand-mark">V</div>
 
           <div>
-            <div className="dashboard-brand-name">SAT-SA</div>
+            <div className="dashboard-brand-name">VEIL</div>
             <div className="dashboard-brand-subtitle">
-              SOC SUPERVISORY ANALYTICS
+              Supervisory Intelligence for SOC Assessment
             </div>
           </div>
         </Link>

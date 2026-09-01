@@ -52,10 +52,10 @@ export default function Home() {
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="brand">
-          <div className="brand-mark">S</div>
+          <div className="brand-mark">V</div>
           <div>
-            <div className="brand-name">SAT-SA</div>
-            <div className="brand-subtitle">SOC SUPERVISORY ANALYTICS</div>
+            <div className="brand-name">VEIL</div>
+            <div className="brand-subtitle">Supervisory Intelligence for SOC Assessment</div>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export default function Home() {
       <section className="hero-section" id="platform">
         <div className="hero-copy">
           <div className="eyebrow">
-            SUPERVISORY ANALYTICS / SOC ASSESSMENT
+            SUPERVISORY INTELLIGENCE / SOC ASSESSMENT
           </div>
 
           <h1>
@@ -85,7 +85,7 @@ export default function Home() {
           </h1>
 
           <p className="hero-description">
-            SAT-SA analyzes structured SOC operational data to surface
+            VEIL analyzes structured SOC operational data to surface
             execution gaps, negative space, anomalies, and peer deviations
             requiring supervisory attention.
           </p>
@@ -191,7 +191,7 @@ export default function Home() {
 
       {/* INTRO */}
       <section className="intro-section">
-        <div className="section-label">WHY SAT-SA</div>
+        <div className="section-label">WHY VEIL</div>
 
         <div className="intro-content">
           <h2>
@@ -202,7 +202,7 @@ export default function Home() {
 
           <p>
             Supervisory assessment requires looking beyond individual cases.
-            SAT-SA turns structured SOC activity into patterns, comparisons,
+            VEIL turns structured SOC activity into patterns, comparisons,
             and evidence that help reviewers focus their attention where it
             matters most.
           </p>
@@ -282,10 +282,10 @@ export default function Home() {
         <div className="positioning-copy">
           <div className="section-label">PRODUCT POSITIONING</div>
 
-          <h2>SAT-SA IS NOT A SIEM.</h2>
+          <h2>VEIL IS NOT A SIEM.</h2>
 
           <p>
-            It does not replace threat detection infrastructure. SAT-SA sits
+            It does not replace threat detection infrastructure. VEIL sits
             above structured SOC operational data to support supervisory
             assessment and prioritize cases for manual review.
           </p>
@@ -313,8 +313,8 @@ export default function Home() {
       {/* FOOTER */}
       <footer className="footer">
         <div>
-          <strong>SAT-SA</strong>
-          <span>Supervisory Analytics Tool for SOC Assessment</span>
+          <strong>VEIL</strong>
+          <span>Supervisory Intelligence for SOC Assessment</span>
         </div>
 
         <div className="footer-meta">

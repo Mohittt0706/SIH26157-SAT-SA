@@ -95,10 +95,10 @@ export default function EntityDrillDownPage({ params }) {
       {/* NAVBAR */}
       <nav className="dashboard-nav">
         <Link href="/" className="dashboard-brand">
-          <div className="dashboard-brand-mark">S</div>
+          <div className="dashboard-brand-mark">V</div>
           <div>
-            <div className="dashboard-brand-name">SAT-SA</div>
-            <div className="dashboard-brand-subtitle">SOC SUPERVISORY ANALYTICS</div>
+            <div className="dashboard-brand-name">VEIL</div>
+            <div className="dashboard-brand-subtitle">Supervisory Intelligence for SOC Assessment</div>
           </div>
         </Link>
         <div className="dashboard-nav-links">
@@ -128,7 +128,7 @@ export default function EntityDrillDownPage({ params }) {
             <h1>{entityName}</h1>
             <p>Supervisory assessment and evidence documentation.</p>
           </div>
-          
+
           <div className={`drilldown-score-panel ${scoreClass(data.score)}`}>
             <span>RISK SCORE</span>
             <strong>{data.score}</strong>
@@ -192,7 +192,7 @@ export default function EntityDrillDownPage({ params }) {
                 <h2>Deviation Details</h2>
               </div>
             </div>
-            
+
             <div className="peer-chart-container">
               <ResponsiveContainer width="100%" height={250}>
                 <BarChart
