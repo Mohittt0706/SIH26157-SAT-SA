@@ -1,7 +1,4 @@
-"use client";
-
-import { use } from "react";
-import Link from "next/link";
+import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, AlertTriangle, FileText, CheckCircle2 } from "lucide-react";
 import {
   ResponsiveContainer,
@@ -83,9 +80,9 @@ function scoreClass(score) {
   return "score-low";
 }
 
-export default function EntityDrillDownPage({ params }) {
-  const resolvedParams = use(params);
-  const entityName = decodeURIComponent(resolvedParams.entityName);
+export default function DrillDownPage() {
+  const { entityName: paramEntityName } = useParams();
+  const entityName = decodeURIComponent(paramEntityName || "");
   const data = MOCK_ENTITIES[entityName] || DEFAULT_ENTITY;
 
   const isHighRisk = data.score >= 70;
@@ -94,7 +91,7 @@ export default function EntityDrillDownPage({ params }) {
     <main className="drilldown-shell">
       {/* NAVBAR */}
       <nav className="dashboard-nav">
-        <Link href="/" className="dashboard-brand">
+        <Link to="/" className="dashboard-brand">
           <div className="dashboard-brand-mark">V</div>
           <div>
             <div className="dashboard-brand-name">VEIL</div>
@@ -102,8 +99,8 @@ export default function EntityDrillDownPage({ params }) {
           </div>
         </Link>
         <div className="dashboard-nav-links">
-          <Link href="/upload">ANALYZE</Link>
-          <Link href="/dashboard">OVERVIEW</Link>
+          <Link to="/upload">ANALYZE</Link>
+          <Link to="/dashboard">OVERVIEW</Link>
           <span className="active">DRILLDOWN</span>
         </div>
         <div className="dashboard-status">
@@ -115,7 +112,7 @@ export default function EntityDrillDownPage({ params }) {
       <section className="drilldown-page">
         {/* BACK BUTTON */}
         <div className="drilldown-back">
-          <Link href="/dashboard">
+          <Link to="/dashboard">
             <ArrowLeft size={15} />
             BACK TO OVERVIEW
           </Link>
