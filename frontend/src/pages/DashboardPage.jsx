@@ -212,7 +212,13 @@ export default function DashboardPage() {
                       <span className="entity-title">{entity.entity_name}</span>
                       <span className={`entity-signal ${(entity.risk_band || 'low').toLowerCase()}`}>
                         <span className="signal-dot" />
-                        {entity.primary_driver || "Normal"}
+                        {(!entity.findings_summary || entity.findings_summary.length === 0) 
+                          ? ((entity.risk_band || '').toLowerCase() === "medium" 
+                              ? "No specific findings — statistical deviation only" 
+                              : (entity.risk_band || '').toLowerCase() === "low" 
+                                ? "No significant findings" 
+                                : entity.primary_driver || "Normal")
+                          : (entity.primary_driver || "Normal")}
                       </span>
                       <span className={`entity-score ${scoreClass}`}>
                         {Number(entity.risk_score).toFixed(1)}
