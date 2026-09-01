@@ -227,3 +227,4 @@ node_modules/
 dist/
 .env
 dataset/answer_key_INTERNAL_ONLY.csv
+*.zip
