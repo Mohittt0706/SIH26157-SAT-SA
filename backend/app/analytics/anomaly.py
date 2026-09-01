@@ -291,8 +291,11 @@ def _compute_anomaly_matrix(
 # Public API — integrates with SQLAlchemy (matches negative_space.py pattern)
 # ---------------------------------------------------------------------------
 
-def compute_anomaly(db: Session) -> dict[str, AnomalyResult]:
+def compute_anomaly(db: Session) -> dict[str, dict]:
     """Compute Isolation Forest anomaly scores for every entity.
+
+    Returns the shared detector contract shape documented in project.md:
+    ``{"score": float, "metrics": dict, "evidence": list[{"detail": str, "reason": str}]}``.
 
     Parameters
     ----------
@@ -301,8 +304,8 @@ def compute_anomaly(db: Session) -> dict[str, AnomalyResult]:
 
     Returns
     -------
-    dict[str, AnomalyResult]
-        Mapping of entity name → its ``AnomalyResult``.
+    dict[str, dict]
+        Mapping of entity name → its contract-shaped result dict.
     """
     alerts = db.execute(select(Alert)).scalars().all()
 
@@ -310,7 +313,17 @@ def compute_anomaly(db: Session) -> dict[str, AnomalyResult]:
     for alert in alerts:
         by_entity[alert.entity_name].append(alert)
 
-    return _compute_anomaly_matrix(by_entity)
+    objects = _compute_anomaly_matrix(by_entity)
+    return {entity_name: _to_contract_dict(result) for entity_name, result in objects.items()}
+
+
+def _to_contract_dict(result: AnomalyResult) -> dict:
+    """Serialize an AnomalyResult into the shared detector contract shape."""
+    return {
+        "score": result.score,
+        "metrics": result.metrics,
+        "evidence": result.evidence,
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -372,7 +385,11 @@ def _run_cli() -> None:
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
     try:
-        results = compute_anomaly(db)
+        alerts = db.execute(select(Alert)).scalars().all()
+        by_entity: dict[str, list[Alert]] = defaultdict(list)
+        for alert in alerts:
+            by_entity[alert.entity_name].append(alert)
+        results = _compute_anomaly_matrix(by_entity)
     finally:
         db.close()
 

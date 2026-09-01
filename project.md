@@ -29,7 +29,9 @@ Supporting: **Isolation Forest anomaly detection** on per-company feature vector
 and **peer percentile comparison**. All combined into a weighted risk score per entity.
 
 ## Tech stack (locked — do not swap)
-- Frontend: React (Vite) + Tailwind + Recharts
+- Frontend: React 18 + Vite + React Router v6 + Tailwind + Recharts + Lucide React + Axios.
+  UI-only — all analytics and ML computation stays in the FastAPI backend.
+  Page flow: Landing → Upload → Dashboard → DrillDown → Supervisory Review.
 - Backend: Python + FastAPI
 - DB: SQLite (local file, offline-compatible)
 - ML: scikit-learn Isolation Forest
@@ -55,12 +57,29 @@ SIH26157-SAT-SA/
 │   │       ├── anomaly.py       # Isolation Forest
 │   │       └── risk_score.py    # Weighted combination -> final score per entity
 │   ├── requirements.txt
-│   └── data/                    # SQLite db file lands here (gitignored)
+│   ├── data/                    # SQLite db file lands here (gitignored)
+│   └── tests/
 ├── frontend/
 ├── dataset/
 ├── docs/
-└── project.md
+├── project.md
+└── CLAUDE.md
 ```
+project.md sits at the repo root alongside CLAUDE.md.
+
+## Current status
+- `database.py`, `models.py`, `schemas.py`, `main.py` — **done**
+- `ingestion.py` — `POST /api/upload` — **done and verified**
+  (639 rows inserted, 0 skipped, 10 entities)
+- `execution_gap.py` — **done**
+- `negative_space.py` — **done**, uses median/MAD robust baseline
+  ⚠️ except its `LOW_ALERT_VOLUME` rule, which still uses mean/stdev
+  (`build_peer_baseline()`) — needs updating to match the median/MAD
+  convention below.
+- `anomaly.py` — **done**, Isolation Forest with MAD-based feature attribution
+- `risk_score.py` — **not started**
+- analytics router — **not started**
+- frontend, Docker, docs — **not started**
 
 ## Data schema (alert CSV)
 `alert_id, entity_name, severity, created_time, closed_time, escalated (yes/no),
@@ -72,6 +91,43 @@ intentionally baked-in suspicious patterns (2 execution-gap, 1 negative-space,
 
 `dataset/answer_key_INTERNAL_ONLY.csv` maps which company is which — internal
 testing only, gitignored, never submitted.
+
+### Dataset
+`dataset/soc_alerts_synthetic_dataset.csv` is committed to the repo — 639
+alerts, 10 entities. The answer key is internal only and gitignored (see above).
+
+## Detector contract
+All three detectors are meant to share one return shape so `risk_score.py`
+and the analytics router can combine them uniformly:
+
+```
+compute_<name>(db: Session) -> dict[str, dict]
+```
+
+Each value: `{"score": float 0.0-1.0 (higher = worse), "metrics": dict,
+"evidence": list[{"detail": str, "reason": str}]}`.
+
+⚠️ **Not yet consistent in code** — `risk_score.py` will need to normalize
+these before combining:
+- `execution_gap.py` returns `score` but no `metrics` dict (the three rule
+  rates are separate fields), and `evidence` is `dict[str, list[RuleEvidence]]`
+  keyed by rule name rather than a flat list.
+- `negative_space.py` returns `negative_space_score` (not `score`), plus
+  `metrics` and `evidence: list[Finding]` (fields: `type`, `detail`, `reason`).
+- `anomaly.py` returns `score`, `metrics`, and `evidence: list[dict]` with
+  `detail`/`reason` keys — the closest match to the target contract above.
+
+## Statistical conventions
+- Peer baselines use the **median** and **MAD** (median absolute deviation)
+  with a modified z-score, not mean and standard deviation. With only 10
+  entities, a single outlier inflates a standard deviation enough to suppress
+  real signals; median/MAD is robust to that.
+  Currently only `anomaly.py`'s evidence generation follows this
+  (`MAD_ZSCORE_SCALE = 0.6745`) — see the gap noted above for
+  `negative_space.py`.
+- Rule scores are graded ramps between named threshold constants, not binary
+  thresholds — an entity should not look clean right up to a hard cutoff and
+  then suddenly read as maximally guilty.
 
 ## Team
 | Member | Role |

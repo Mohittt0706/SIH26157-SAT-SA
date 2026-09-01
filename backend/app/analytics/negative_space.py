@@ -334,8 +334,11 @@ def _compute_for_entity(
 # Public API — integrates with SQLAlchemy (matches execution_gap.py pattern)
 # ---------------------------------------------------------------------------
 
-def compute_negative_space(db: Session) -> dict[str, NegativeSpaceResult]:
+def compute_negative_space(db: Session) -> dict[str, dict]:
     """Compute Negative Space results for every entity present in the alerts table.
+
+    Returns the shared detector contract shape documented in project.md:
+    ``{"score": float, "metrics": dict, "evidence": list[{"detail": str, "reason": str}]}``.
 
     Parameters
     ----------
@@ -344,9 +347,26 @@ def compute_negative_space(db: Session) -> dict[str, NegativeSpaceResult]:
 
     Returns
     -------
-    dict[str, NegativeSpaceResult]
-        Mapping of entity name → its ``NegativeSpaceResult``.
+    dict[str, dict]
+        Mapping of entity name → its contract-shaped result dict.
     """
+    objects = _compute_negative_space_objects(db)
+    return {entity_name: _to_contract_dict(result) for entity_name, result in objects.items()}
+
+
+def _to_contract_dict(result: NegativeSpaceResult) -> dict:
+    """Serialize a NegativeSpaceResult into the shared detector contract shape."""
+    return {
+        "score": result.negative_space_score,
+        "metrics": result.metrics,
+        "evidence": [
+            {"detail": f"{f.type}: {f.detail}", "reason": f.reason} for f in result.evidence
+        ],
+    }
+
+
+def _compute_negative_space_objects(db: Session) -> dict[str, NegativeSpaceResult]:
+    """Compute Negative Space results as internal dataclasses (used by compute_negative_space and the CLI)."""
     alerts = db.execute(select(Alert)).scalars().all()
 
     # Group alerts by entity.
@@ -423,7 +443,7 @@ def _run_cli() -> None:
     SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     db = SessionLocal()
     try:
-        results = compute_negative_space(db)
+        results = _compute_negative_space_objects(db)
     finally:
         db.close()
 
