@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from app.database import Base, engine, get_db
 from app.models import Alert
+from app.routers import ingestion
 
 ALLOWED_ORIGINS: list[str] = [
     "http://localhost:5173",
@@ -42,7 +43,8 @@ def health(db: Session = Depends(get_db)) -> dict[str, object]:
     return {"status": "ok", "alert_count": alert_count}
 
 
-# TODO: register routers here once built:
-# from app.routers import ingestion, analytics
-# app.include_router(ingestion.router, prefix="/api")
+app.include_router(ingestion.router, prefix="/api")
+
+# TODO: register the analytics router here once built:
+# from app.routers import analytics
 # app.include_router(analytics.router, prefix="/api")
