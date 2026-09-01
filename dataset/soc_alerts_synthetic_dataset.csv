@@ -1,0 +1,640 @@
+alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
+ALT00627,Jupiter Aviation Control,Low,Data Exfiltration Attempt,Database,2026-01-01 19:48:00,2026-01-02 00:33:00,285,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00240,Eastern Water Utility,Low,Insider Threat Indicator,Network Device,2026-01-02 08:24:00,2026-01-02 11:42:00,198,No,Closed,Reviewed and closed.
+ALT00586,Indus Financial Services,Low,Unauthorized Access,Server,2026-01-02 09:14:00,2026-01-02 09:17:00,3,Yes,Closed,No further action required.
+ALT00284,Fortis Defense Systems,Medium,Unauthorized Access,Server,2026-01-02 09:28:00,2026-01-02 11:05:00,97,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00289,Fortis Defense Systems,High,Data Exfiltration Attempt,Network Device,2026-01-02 12:21:00,2026-01-02 18:06:00,345,Yes,Closed,No further action required.
+ALT00328,Fortis Defense Systems,Low,Malware,Database,2026-01-03 00:44:00,2026-01-03 02:21:00,97,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00434,Ganga Oil & Gas,Medium,Unauthorized Access,Network Device,2026-01-03 04:42:00,2026-01-03 08:56:00,254,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00380,Fortis Defense Systems,Low,Malware,Network Device,2026-01-03 08:13:00,2026-01-03 10:54:00,161,No,Closed,Reviewed and closed.
+ALT00272,Fortis Defense Systems,High,DDoS,Network Device,2026-01-04 00:33:00,2026-01-04 02:41:00,128,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00558,Indus Financial Services,Low,Unauthorized Access,Database,2026-01-04 15:13:00,2026-01-04 15:16:00,3,No,Closed,Reviewed and closed.
+ALT00422,Ganga Oil & Gas,Medium,Phishing,Endpoint,2026-01-05 21:00:00,2026-01-06 00:26:00,206,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00544,Indus Financial Services,Low,Unauthorized Access,IoT Device,2026-01-06 04:46:00,2026-01-06 04:47:00,1,No,Closed,Closed as per standard procedure.
+ALT00252,Fortis Defense Systems,High,DDoS,Database,2026-01-06 09:29:00,2026-01-06 16:01:00,392,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00090,Bharat Telecom Networks,Critical,Insider Threat Indicator,Cloud Workload,2026-01-07 02:14:00,2026-01-07 09:14:00,420,No,Closed,False positive.
+ALT00473,Himalayan Healthcare Network,Low,Malware,Server,2026-01-07 14:45:00,2026-01-07 15:42:00,57,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00612,Jupiter Aviation Control,Critical,Data Exfiltration Attempt,Network Device,2026-01-08 10:56:00,2026-01-08 16:42:00,346,Yes,Closed,False positive.
+ALT00060,Apex Power Grid Ltd,High,Insider Threat Indicator,Database,2026-01-08 12:21:00,2026-01-08 20:31:00,490,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00359,Fortis Defense Systems,Medium,Misconfiguration,Cloud Workload,2026-01-08 12:54:00,2026-01-08 15:31:00,157,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00194,Eastern Water Utility,Low,Misconfiguration,Network Device,2026-01-09 04:04:00,2026-01-09 07:39:00,215,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00086,Bharat Telecom Networks,High,Misconfiguration,Database,2026-01-09 07:18:00,2026-01-09 09:54:00,156,Yes,Closed,No further action required.
+ALT00236,Eastern Water Utility,Medium,Malware,Network Device,2026-01-10 00:19:00,2026-01-10 03:14:00,175,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00630,Jupiter Aviation Control,Low,DDoS,Cloud Workload,2026-01-10 04:54:00,2026-01-10 07:56:00,182,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00398,Fortis Defense Systems,Medium,DDoS,Cloud Workload,2026-01-10 05:17:00,2026-01-10 09:12:00,235,Yes,Closed,False positive.
+ALT00465,Himalayan Healthcare Network,Low,Malware,IoT Device,2026-01-11 04:59:00,2026-01-11 08:03:00,184,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00469,Himalayan Healthcare Network,Low,Insider Threat Indicator,Server,2026-01-11 21:56:00,2026-01-12 01:43:00,227,Yes,Closed,Reviewed and closed.
+ALT00575,Indus Financial Services,Critical,Phishing,Server,2026-01-12 04:11:00,2026-01-12 04:15:00,4,No,Closed,Reviewed and closed.
+ALT00499,Himalayan Healthcare Network,Medium,Phishing,IoT Device,2026-01-12 04:36:00,2026-01-12 09:28:00,292,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00150,Continental Banking Corp,Critical,Malware,Server,2026-01-12 07:25:00,2026-01-12 07:27:00,2,No,Closed,No further action required.
+ALT00638,Jupiter Aviation Control,Medium,Misconfiguration,Endpoint,2026-01-12 10:22:00,2026-01-12 10:57:00,35,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00345,Fortis Defense Systems,Medium,Phishing,Endpoint,2026-01-12 15:23:00,2026-01-12 16:11:00,48,No,Closed,Closed as per standard procedure.
+ALT00258,Fortis Defense Systems,High,Insider Threat Indicator,Cloud Workload,2026-01-13 11:41:00,2026-01-13 16:24:00,283,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00386,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Endpoint,2026-01-13 12:36:00,2026-01-13 13:33:00,57,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00026,Apex Power Grid Ltd,High,Malware,Endpoint,2026-01-13 20:34:00,2026-01-13 23:59:00,205,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00427,Ganga Oil & Gas,Medium,Data Exfiltration Attempt,Server,2026-01-13 22:07:00,2026-01-14 00:46:00,159,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00260,Fortis Defense Systems,Critical,DDoS,Cloud Workload,2026-01-15 17:26:00,2026-01-15 20:34:00,188,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00412,Ganga Oil & Gas,High,Misconfiguration,Endpoint,2026-01-15 19:25:00,2026-01-16 03:34:00,489,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00365,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Endpoint,2026-01-16 02:17:00,2026-01-16 07:16:00,299,Yes,Closed,Reviewed and closed.
+ALT00027,Apex Power Grid Ltd,Low,Data Exfiltration Attempt,Network Device,2026-01-16 05:24:00,2026-01-16 09:46:00,262,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00319,Fortis Defense Systems,High,Misconfiguration,Endpoint,2026-01-16 08:55:00,2026-01-16 13:02:00,247,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00567,Indus Financial Services,Low,DDoS,Server,2026-01-16 11:41:00,2026-01-16 11:43:00,2,No,Closed,False positive.
+ALT00024,Apex Power Grid Ltd,Low,Insider Threat Indicator,Server,2026-01-16 12:46:00,2026-01-16 15:23:00,157,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00607,Jupiter Aviation Control,Critical,Insider Threat Indicator,Server,2026-01-16 20:16:00,2026-01-17 03:00:00,404,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00225,Eastern Water Utility,Medium,DDoS,Network Device,2026-01-16 22:08:00,2026-01-17 02:42:00,274,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00136,Continental Banking Corp,Medium,DDoS,Cloud Workload,2026-01-17 04:17:00,2026-01-17 04:20:00,3,No,Closed,False positive.
+ALT00166,Continental Banking Corp,Medium,Data Exfiltration Attempt,Network Device,2026-01-17 10:06:00,2026-01-17 10:09:00,3,No,Closed,No further action required.
+ALT00043,Apex Power Grid Ltd,Medium,Data Exfiltration Attempt,IoT Device,2026-01-18 08:22:00,2026-01-18 11:41:00,199,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00639,Jupiter Aviation Control,Medium,Unauthorized Access,Server,2026-01-18 09:19:00,2026-01-18 10:47:00,88,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00603,Jupiter Aviation Control,Low,Insider Threat Indicator,IoT Device,2026-01-18 12:42:00,2026-01-18 16:16:00,214,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00571,Indus Financial Services,Medium,Insider Threat Indicator,Network Device,2026-01-18 16:09:00,2026-01-18 16:12:00,3,No,Closed,Closed as per standard procedure.
+ALT00542,Indus Financial Services,Low,Unauthorized Access,Network Device,2026-01-19 02:10:00,2026-01-19 02:13:00,3,No,Closed,Closed as per standard procedure.
+ALT00262,Fortis Defense Systems,High,Misconfiguration,IoT Device,2026-01-19 06:51:00,2026-01-19 13:37:00,406,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00198,Eastern Water Utility,Critical,Data Exfiltration Attempt,Server,2026-01-19 14:11:00,2026-01-19 23:05:00,534,Yes,Closed,False positive.
+ALT00466,Himalayan Healthcare Network,Medium,Phishing,Cloud Workload,2026-01-19 22:20:00,2026-01-19 23:24:00,64,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00279,Fortis Defense Systems,Medium,DDoS,Database,2026-01-20 09:10:00,2026-01-20 12:29:00,199,No,Closed,Reviewed and closed.
+ALT00105,Bharat Telecom Networks,Critical,Unauthorized Access,Cloud Workload,2026-01-20 15:50:00,2026-01-20 23:44:00,474,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00525,Himalayan Healthcare Network,Low,Unauthorized Access,Network Device,2026-01-20 17:59:00,2026-01-20 20:20:00,141,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00193,Eastern Water Utility,Medium,DDoS,IoT Device,2026-01-20 21:40:00,2026-01-20 23:31:00,111,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00590,Jupiter Aviation Control,High,Unauthorized Access,Database,2026-01-21 01:58:00,2026-01-21 07:31:00,333,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00205,Eastern Water Utility,Medium,DDoS,Network Device,2026-01-21 08:12:00,2026-01-21 09:46:00,94,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00501,Himalayan Healthcare Network,Medium,Data Exfiltration Attempt,Database,2026-01-22 06:28:00,2026-01-22 08:25:00,117,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00594,Jupiter Aviation Control,High,DDoS,Database,2026-01-22 15:36:00,2026-01-22 19:50:00,254,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00164,Continental Banking Corp,Low,Phishing,IoT Device,2026-01-22 16:41:00,2026-01-22 16:45:00,4,Yes,Closed,No further action required.
+ALT00312,Fortis Defense Systems,High,Phishing,Network Device,2026-01-22 18:01:00,2026-01-22 20:17:00,136,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00395,Fortis Defense Systems,Medium,Unauthorized Access,Network Device,2026-01-23 12:35:00,2026-01-23 17:31:00,296,No,Closed,Closed as per standard procedure.
+ALT00155,Continental Banking Corp,Low,Data Exfiltration Attempt,Cloud Workload,2026-01-23 13:54:00,2026-01-23 13:58:00,4,No,Closed,Closed as per standard procedure.
+ALT00352,Fortis Defense Systems,Low,Insider Threat Indicator,Cloud Workload,2026-01-24 01:58:00,2026-01-24 05:59:00,241,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00357,Fortis Defense Systems,High,Insider Threat Indicator,IoT Device,2026-01-24 05:51:00,2026-01-24 13:47:00,476,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00117,Continental Banking Corp,High,Phishing,Endpoint,2026-01-24 09:20:00,2026-01-24 09:22:00,2,No,Closed,False positive.
+ALT00362,Fortis Defense Systems,Low,Data Exfiltration Attempt,Server,2026-01-24 10:07:00,2026-01-24 12:03:00,116,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00467,Himalayan Healthcare Network,Critical,Misconfiguration,Network Device,2026-01-24 11:14:00,2026-01-24 16:03:00,289,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00120,Continental Banking Corp,Low,Malware,Database,2026-01-24 12:00:00,2026-01-24 12:03:00,3,No,Closed,False positive.
+ALT00140,Continental Banking Corp,High,Unauthorized Access,Endpoint,2026-01-24 13:06:00,2026-01-24 13:07:00,1,No,Closed,False positive.
+ALT00505,Himalayan Healthcare Network,Low,DDoS,Cloud Workload,2026-01-24 15:42:00,2026-01-24 16:12:00,30,No,Closed,Closed as per standard procedure.
+ALT00445,Ganga Oil & Gas,Medium,DDoS,Cloud Workload,2026-01-24 19:39:00,2026-01-24 21:54:00,135,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00326,Fortis Defense Systems,Low,Unauthorized Access,IoT Device,2026-01-24 20:23:00,2026-01-24 22:17:00,114,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00036,Apex Power Grid Ltd,High,Malware,Server,2026-01-24 20:27:00,2026-01-25 01:17:00,290,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00128,Continental Banking Corp,Medium,DDoS,Server,2026-01-24 21:13:00,2026-01-24 21:14:00,1,No,Closed,No further action required.
+ALT00622,Jupiter Aviation Control,Low,Insider Threat Indicator,Cloud Workload,2026-01-24 23:32:00,2026-01-25 01:11:00,99,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00146,Continental Banking Corp,Low,Data Exfiltration Attempt,Database,2026-01-24 23:33:00,2026-01-24 23:36:00,3,No,Closed,False positive.
+ALT00587,Indus Financial Services,Medium,Phishing,Network Device,2026-01-25 01:29:00,2026-01-25 01:32:00,3,No,Closed,No further action required.
+ALT00116,Continental Banking Corp,Low,Insider Threat Indicator,Database,2026-01-25 20:41:00,2026-01-25 20:42:00,1,No,Closed,No further action required.
+ALT00432,Ganga Oil & Gas,Low,Unauthorized Access,Network Device,2026-01-26 08:41:00,2026-01-26 13:08:00,267,Yes,Closed,Reviewed and closed.
+ALT00104,Bharat Telecom Networks,Medium,Data Exfiltration Attempt,Server,2026-01-26 14:06:00,2026-01-26 15:49:00,103,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00382,Fortis Defense Systems,Critical,Misconfiguration,IoT Device,2026-01-26 15:50:00,2026-01-26 19:45:00,235,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00580,Indus Financial Services,Medium,Phishing,Endpoint,2026-01-26 23:14:00,2026-01-26 23:16:00,2,No,Closed,No further action required.
+ALT00285,Fortis Defense Systems,Medium,Malware,Cloud Workload,2026-01-27 00:05:00,2026-01-27 03:21:00,196,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00545,Indus Financial Services,Critical,Data Exfiltration Attempt,Cloud Workload,2026-01-27 03:04:00,2026-01-27 03:05:00,1,No,Closed,Closed as per standard procedure.
+ALT00329,Fortis Defense Systems,Medium,Unauthorized Access,Endpoint,2026-01-27 03:20:00,2026-01-27 07:05:00,225,No,Closed,No further action required.
+ALT00582,Indus Financial Services,Low,Data Exfiltration Attempt,Cloud Workload,2026-01-27 05:50:00,2026-01-27 05:53:00,3,No,Closed,Closed as per standard procedure.
+ALT00351,Fortis Defense Systems,Critical,Data Exfiltration Attempt,Database,2026-01-27 06:33:00,2026-01-27 09:03:00,150,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00299,Fortis Defense Systems,Critical,Malware,Server,2026-01-27 09:26:00,2026-01-27 18:31:00,545,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00437,Ganga Oil & Gas,Medium,Insider Threat Indicator,Cloud Workload,2026-01-27 13:58:00,2026-01-27 18:12:00,254,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00068,Bharat Telecom Networks,Low,Misconfiguration,Cloud Workload,2026-01-27 22:49:00,2026-01-28 00:20:00,91,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00510,Himalayan Healthcare Network,High,Unauthorized Access,Network Device,2026-01-28 04:27:00,2026-01-28 13:44:00,557,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00296,Fortis Defense Systems,High,Phishing,IoT Device,2026-01-28 07:42:00,2026-01-28 14:55:00,433,Yes,Closed,Closed as per standard procedure.
+ALT00449,Ganga Oil & Gas,Low,Malware,Database,2026-01-28 08:39:00,2026-01-28 10:59:00,140,No,Closed,False positive.
+ALT00450,Ganga Oil & Gas,Critical,Insider Threat Indicator,IoT Device,2026-01-28 13:02:00,2026-01-28 20:03:00,421,Yes,Closed,Closed as per standard procedure.
+ALT00053,Apex Power Grid Ltd,Low,Misconfiguration,Cloud Workload,2026-01-28 13:14:00,2026-01-28 17:41:00,267,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00070,Bharat Telecom Networks,Medium,Insider Threat Indicator,Database,2026-01-28 13:23:00,2026-01-28 15:11:00,108,No,Closed,False positive.
+ALT00231,Eastern Water Utility,Medium,Phishing,Server,2026-01-28 19:47:00,2026-01-28 22:12:00,145,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00001,Apex Power Grid Ltd,Low,Phishing,Endpoint,2026-01-29 00:47:00,2026-01-29 02:09:00,82,No,Closed,Reviewed and closed.
+ALT00012,Apex Power Grid Ltd,Low,Misconfiguration,Database,2026-01-29 04:40:00,2026-01-29 05:42:00,62,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00396,Fortis Defense Systems,Low,DDoS,Cloud Workload,2026-01-29 13:09:00,2026-01-29 14:30:00,81,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00374,Fortis Defense Systems,Medium,Malware,Network Device,2026-01-29 16:55:00,2026-01-29 20:47:00,232,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00599,Jupiter Aviation Control,Low,DDoS,Endpoint,2026-01-29 23:03:00,2026-01-30 02:00:00,177,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00447,Ganga Oil & Gas,High,Malware,Network Device,2026-01-30 03:48:00,2026-01-30 08:49:00,301,No,Closed,False positive.
+ALT00094,Bharat Telecom Networks,Medium,Malware,IoT Device,2026-01-30 12:55:00,2026-01-30 17:21:00,266,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00498,Himalayan Healthcare Network,Medium,Phishing,Cloud Workload,2026-01-30 15:43:00,2026-01-30 17:35:00,112,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00246,Fortis Defense Systems,High,Data Exfiltration Attempt,Server,2026-01-30 21:13:00,2026-01-31 06:53:00,580,Yes,Closed,Closed as per standard procedure.
+ALT00342,Fortis Defense Systems,High,Unauthorized Access,Cloud Workload,2026-01-31 00:21:00,2026-01-31 02:53:00,152,Yes,Closed,Reviewed and closed.
+ALT00637,Jupiter Aviation Control,Medium,Malware,IoT Device,2026-01-31 00:29:00,2026-01-31 02:45:00,136,No,Closed,Closed as per standard procedure.
+ALT00393,Fortis Defense Systems,Critical,Phishing,Endpoint,2026-01-31 14:11:00,2026-01-31 23:04:00,533,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00360,Fortis Defense Systems,High,Phishing,Endpoint,2026-02-01 00:03:00,2026-02-01 03:44:00,221,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00479,Himalayan Healthcare Network,Medium,Data Exfiltration Attempt,Cloud Workload,2026-02-01 01:00:00,2026-02-01 02:13:00,73,No,Closed,False positive.
+ALT00624,Jupiter Aviation Control,High,Misconfiguration,Network Device,2026-02-01 02:07:00,2026-02-01 04:50:00,163,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00204,Eastern Water Utility,Low,Phishing,Network Device,2026-02-01 16:09:00,2026-02-01 18:34:00,145,No,Closed,False positive.
+ALT00129,Continental Banking Corp,Low,Insider Threat Indicator,Cloud Workload,2026-02-02 18:13:00,2026-02-02 18:15:00,2,No,Closed,No further action required.
+ALT00018,Apex Power Grid Ltd,Critical,Phishing,Network Device,2026-02-02 21:30:00,2026-02-03 04:00:00,390,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00247,Fortis Defense Systems,Medium,Malware,Cloud Workload,2026-02-03 16:26:00,2026-02-03 20:52:00,266,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00375,Fortis Defense Systems,Critical,Insider Threat Indicator,IoT Device,2026-02-04 05:46:00,2026-02-04 11:55:00,369,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00595,Jupiter Aviation Control,Low,Data Exfiltration Attempt,IoT Device,2026-02-04 15:35:00,2026-02-04 17:45:00,130,No,Closed,No further action required.
+ALT00237,Eastern Water Utility,Low,Insider Threat Indicator,Server,2026-02-04 16:29:00,2026-02-04 19:48:00,199,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00123,Continental Banking Corp,Low,Data Exfiltration Attempt,Server,2026-02-05 01:02:00,2026-02-05 01:03:00,1,No,Closed,No further action required.
+ALT00057,Apex Power Grid Ltd,Medium,Phishing,IoT Device,2026-02-05 04:14:00,2026-02-05 06:33:00,139,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00418,Ganga Oil & Gas,Medium,DDoS,Database,2026-02-05 06:21:00,2026-02-05 08:04:00,103,No,Closed,Reviewed and closed.
+ALT00151,Continental Banking Corp,Low,Malware,Database,2026-02-05 08:18:00,2026-02-05 08:22:00,4,No,Closed,Closed as per standard procedure.
+ALT00610,Jupiter Aviation Control,High,DDoS,Endpoint,2026-02-05 09:44:00,2026-02-05 15:24:00,340,No,Closed,No further action required.
+ALT00487,Himalayan Healthcare Network,Low,Misconfiguration,Server,2026-02-05 17:12:00,2026-02-05 18:20:00,68,No,Closed,Reviewed and closed.
+ALT00219,Eastern Water Utility,High,DDoS,Database,2026-02-05 22:21:00,2026-02-06 01:37:00,196,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00458,Ganga Oil & Gas,Low,Unauthorized Access,Endpoint,2026-02-07 01:42:00,2026-02-07 04:38:00,176,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00358,Fortis Defense Systems,Low,Unauthorized Access,Database,2026-02-07 02:45:00,2026-02-07 07:37:00,292,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00179,Continental Banking Corp,Low,Insider Threat Indicator,Database,2026-02-07 04:02:00,2026-02-07 04:04:00,2,No,Closed,Closed as per standard procedure.
+ALT00364,Fortis Defense Systems,Medium,Phishing,IoT Device,2026-02-08 01:39:00,2026-02-08 04:40:00,181,No,Closed,Closed as per standard procedure.
+ALT00613,Jupiter Aviation Control,Low,Malware,Cloud Workload,2026-02-08 06:06:00,2026-02-08 08:52:00,166,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00160,Continental Banking Corp,Medium,Misconfiguration,Network Device,2026-02-08 14:04:00,2026-02-08 14:07:00,3,No,Closed,False positive.
+ALT00101,Bharat Telecom Networks,Medium,Unauthorized Access,Cloud Workload,2026-02-08 14:34:00,2026-02-08 18:17:00,223,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00504,Himalayan Healthcare Network,Low,DDoS,Cloud Workload,2026-02-08 19:06:00,2026-02-08 19:55:00,49,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00527,Himalayan Healthcare Network,Critical,Misconfiguration,IoT Device,2026-02-09 03:07:00,2026-02-09 09:19:00,372,Yes,Closed,Reviewed and closed.
+ALT00028,Apex Power Grid Ltd,Low,Malware,Cloud Workload,2026-02-09 06:18:00,2026-02-09 07:19:00,61,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00551,Indus Financial Services,Low,Insider Threat Indicator,Endpoint,2026-02-09 09:00:00,2026-02-09 09:03:00,3,No,Closed,Reviewed and closed.
+ALT00016,Apex Power Grid Ltd,Low,Insider Threat Indicator,Cloud Workload,2026-02-09 11:48:00,2026-02-09 12:18:00,30,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00243,Fortis Defense Systems,Critical,Unauthorized Access,Database,2026-02-09 14:47:00,2026-02-09 22:46:00,479,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00385,Fortis Defense Systems,Low,Phishing,Database,2026-02-10 01:06:00,2026-02-10 03:51:00,165,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00085,Bharat Telecom Networks,Medium,Phishing,Server,2026-02-10 07:11:00,2026-02-10 11:10:00,239,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00213,Eastern Water Utility,Medium,Unauthorized Access,Database,2026-02-10 15:32:00,2026-02-10 16:13:00,41,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00040,Apex Power Grid Ltd,Medium,Phishing,IoT Device,2026-02-11 05:56:00,2026-02-11 09:16:00,200,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00007,Apex Power Grid Ltd,Low,Unauthorized Access,IoT Device,2026-02-11 11:22:00,2026-02-11 12:28:00,66,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00514,Himalayan Healthcare Network,Low,Malware,Endpoint,2026-02-11 12:40:00,2026-02-11 17:11:00,271,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00008,Apex Power Grid Ltd,Low,Misconfiguration,IoT Device,2026-02-11 14:24:00,2026-02-11 16:46:00,142,No,Closed,Reviewed and closed.
+ALT00341,Fortis Defense Systems,Medium,Insider Threat Indicator,IoT Device,2026-02-11 15:22:00,2026-02-11 18:04:00,162,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00037,Apex Power Grid Ltd,Medium,Data Exfiltration Attempt,Cloud Workload,2026-02-11 23:28:00,2026-02-12 00:02:00,34,Yes,Closed,No further action required.
+ALT00423,Ganga Oil & Gas,Low,Unauthorized Access,Database,2026-02-12 02:52:00,2026-02-12 07:48:00,296,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00500,Himalayan Healthcare Network,Low,Data Exfiltration Attempt,Cloud Workload,2026-02-12 08:59:00,2026-02-12 09:38:00,39,No,Closed,False positive.
+ALT00379,Fortis Defense Systems,Critical,Insider Threat Indicator,IoT Device,2026-02-12 20:56:00,2026-02-13 04:39:00,463,Yes,Closed,Closed as per standard procedure.
+ALT00192,Eastern Water Utility,Medium,Malware,IoT Device,2026-02-12 22:28:00,2026-02-13 01:58:00,210,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00050,Apex Power Grid Ltd,Low,Misconfiguration,IoT Device,2026-02-13 21:05:00,2026-02-14 00:26:00,201,Yes,Closed,No further action required.
+ALT00131,Continental Banking Corp,Critical,Phishing,Server,2026-02-14 03:42:00,2026-02-14 03:45:00,3,No,Closed,No further action required.
+ALT00235,Eastern Water Utility,High,Malware,Database,2026-02-14 13:56:00,2026-02-14 22:39:00,523,Yes,Closed,False positive.
+ALT00273,Fortis Defense Systems,Low,Phishing,Endpoint,2026-02-15 03:58:00,2026-02-15 06:06:00,128,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00623,Jupiter Aviation Control,Critical,Phishing,Database,2026-02-15 14:37:00,2026-02-15 17:23:00,166,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00044,Apex Power Grid Ltd,Low,DDoS,Database,2026-02-15 18:16:00,2026-02-15 21:42:00,206,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00491,Himalayan Healthcare Network,High,Phishing,IoT Device,2026-02-15 18:36:00,2026-02-16 02:50:00,494,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00073,Bharat Telecom Networks,Medium,Unauthorized Access,Network Device,2026-02-16 15:13:00,2026-02-16 18:06:00,173,No,Closed,False positive.
+ALT00572,Indus Financial Services,Critical,Insider Threat Indicator,Cloud Workload,2026-02-17 00:39:00,2026-02-17 00:41:00,2,No,Closed,Reviewed and closed.
+ALT00238,Eastern Water Utility,Low,Unauthorized Access,Cloud Workload,2026-02-17 00:47:00,2026-02-17 02:55:00,128,Yes,Closed,Closed as per standard procedure.
+ALT00557,Indus Financial Services,Low,Misconfiguration,Database,2026-02-17 03:18:00,2026-02-17 03:19:00,1,No,Closed,No further action required.
+ALT00310,Fortis Defense Systems,Medium,Malware,Network Device,2026-02-17 10:53:00,2026-02-17 11:27:00,34,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00389,Fortis Defense Systems,Medium,Phishing,Database,2026-02-17 11:56:00,2026-02-17 12:48:00,52,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00615,Jupiter Aviation Control,Medium,Phishing,Endpoint,2026-02-17 12:31:00,2026-02-17 14:56:00,145,Yes,Closed,Reviewed and closed.
+ALT00532,Indus Financial Services,Low,Data Exfiltration Attempt,Cloud Workload,2026-02-17 17:16:00,2026-02-17 17:19:00,3,No,Closed,Closed as per standard procedure.
+ALT00282,Fortis Defense Systems,High,Malware,Cloud Workload,2026-02-17 21:37:00,2026-02-18 02:08:00,271,No,Closed,Reviewed and closed.
+ALT00224,Eastern Water Utility,Low,Phishing,Database,2026-02-18 00:28:00,2026-02-18 02:42:00,134,No,Closed,Closed as per standard procedure.
+ALT00023,Apex Power Grid Ltd,High,Unauthorized Access,Database,2026-02-18 03:06:00,2026-02-18 08:36:00,330,Yes,Closed,Reviewed and closed.
+ALT00570,Indus Financial Services,Medium,Unauthorized Access,IoT Device,2026-02-18 18:11:00,2026-02-18 18:15:00,4,No,Closed,No further action required.
+ALT00517,Himalayan Healthcare Network,Medium,DDoS,IoT Device,2026-02-19 01:50:00,2026-02-19 04:18:00,148,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00481,Himalayan Healthcare Network,High,DDoS,Server,2026-02-19 03:11:00,2026-02-19 12:26:00,555,No,Closed,Closed as per standard procedure.
+ALT00078,Bharat Telecom Networks,Medium,Misconfiguration,Cloud Workload,2026-02-19 06:47:00,2026-02-19 11:45:00,298,No,Closed,No further action required.
+ALT00170,Continental Banking Corp,Low,Unauthorized Access,Server,2026-02-19 07:08:00,2026-02-19 07:09:00,1,No,Closed,No further action required.
+ALT00605,Jupiter Aviation Control,Medium,Misconfiguration,Server,2026-02-20 16:29:00,2026-02-20 17:19:00,50,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00317,Fortis Defense Systems,Low,Unauthorized Access,Cloud Workload,2026-02-22 06:51:00,2026-02-22 09:44:00,173,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00266,Fortis Defense Systems,Medium,DDoS,Endpoint,2026-02-22 11:20:00,2026-02-22 13:04:00,104,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00049,Apex Power Grid Ltd,Medium,Misconfiguration,Network Device,2026-02-23 13:50:00,2026-02-23 18:18:00,268,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00293,Fortis Defense Systems,Low,Misconfiguration,Server,2026-02-23 14:51:00,2026-02-23 18:50:00,239,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00316,Fortis Defense Systems,High,Insider Threat Indicator,IoT Device,2026-02-23 23:37:00,2026-02-24 06:49:00,432,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00497,Himalayan Healthcare Network,Low,DDoS,IoT Device,2026-02-24 04:11:00,2026-02-24 05:41:00,90,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00480,Himalayan Healthcare Network,Medium,DDoS,Endpoint,2026-02-24 13:57:00,2026-02-24 15:49:00,112,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00323,Fortis Defense Systems,Low,Unauthorized Access,Network Device,2026-02-24 15:17:00,2026-02-24 16:53:00,96,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00010,Apex Power Grid Ltd,Medium,Misconfiguration,Database,2026-02-24 20:31:00,2026-02-24 22:14:00,103,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00425,Ganga Oil & Gas,Medium,Phishing,Server,2026-02-24 23:01:00,2026-02-25 02:38:00,217,No,Closed,Closed as per standard procedure.
+ALT00004,Apex Power Grid Ltd,Low,Malware,Network Device,2026-02-25 10:06:00,2026-02-25 13:32:00,206,No,Closed,Closed as per standard procedure.
+ALT00126,Continental Banking Corp,Critical,Insider Threat Indicator,Network Device,2026-02-25 14:28:00,2026-02-25 14:29:00,1,Yes,Closed,False positive.
+ALT00003,Apex Power Grid Ltd,Low,Insider Threat Indicator,Server,2026-02-26 14:37:00,2026-02-26 16:28:00,111,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00177,Continental Banking Corp,Low,Malware,Database,2026-02-26 14:56:00,2026-02-26 14:57:00,1,No,Closed,False positive.
+ALT00369,Fortis Defense Systems,Critical,Data Exfiltration Attempt,Network Device,2026-02-26 18:54:00,2026-02-27 04:52:00,598,No,Closed,No further action required.
+ALT00346,Fortis Defense Systems,Medium,Misconfiguration,Network Device,2026-02-27 10:15:00,2026-02-27 13:03:00,168,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00064,Apex Power Grid Ltd,High,Misconfiguration,Server,2026-02-27 20:04:00,2026-02-28 04:30:00,506,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00462,Himalayan Healthcare Network,High,Unauthorized Access,Cloud Workload,2026-02-27 20:45:00,2026-02-28 03:24:00,399,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00376,Fortis Defense Systems,High,Data Exfiltration Attempt,Network Device,2026-02-27 21:37:00,2026-02-28 05:52:00,495,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00009,Apex Power Grid Ltd,Low,Unauthorized Access,Server,2026-02-28 01:51:00,2026-02-28 04:09:00,138,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00021,Apex Power Grid Ltd,Low,Unauthorized Access,Server,2026-02-28 02:57:00,2026-02-28 07:50:00,293,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00503,Himalayan Healthcare Network,Low,Malware,Endpoint,2026-02-28 12:24:00,2026-02-28 17:21:00,297,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00115,Bharat Telecom Networks,Medium,Misconfiguration,Endpoint,2026-02-28 19:51:00,2026-02-28 22:29:00,158,No,Closed,No further action required.
+ALT00508,Himalayan Healthcare Network,Medium,DDoS,Database,2026-03-01 02:18:00,2026-03-01 04:59:00,161,Yes,Closed,Reviewed and closed.
+ALT00604,Jupiter Aviation Control,Critical,Malware,Network Device,2026-03-01 12:32:00,2026-03-01 18:40:00,368,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00255,Fortis Defense Systems,High,Insider Threat Indicator,Server,2026-03-01 17:13:00,2026-03-01 20:24:00,191,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00173,Continental Banking Corp,Low,Insider Threat Indicator,Database,2026-03-01 17:15:00,2026-03-01 17:17:00,2,No,Closed,Closed as per standard procedure.
+ALT00350,Fortis Defense Systems,Medium,Misconfiguration,Server,2026-03-01 17:22:00,2026-03-01 20:43:00,201,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00372,Fortis Defense Systems,Low,Data Exfiltration Attempt,Server,2026-03-01 19:14:00,2026-03-01 22:33:00,199,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00614,Jupiter Aviation Control,Medium,Misconfiguration,Database,2026-03-01 21:01:00,2026-03-01 22:39:00,98,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00628,Jupiter Aviation Control,High,Data Exfiltration Attempt,Database,2026-03-02 06:37:00,2026-03-02 12:23:00,346,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00354,Fortis Defense Systems,Critical,Insider Threat Indicator,Database,2026-03-02 09:16:00,2026-03-02 17:14:00,478,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00178,Continental Banking Corp,Medium,Malware,Network Device,2026-03-02 12:05:00,2026-03-02 12:06:00,1,No,Closed,False positive.
+ALT00370,Fortis Defense Systems,High,Misconfiguration,Network Device,2026-03-02 18:20:00,2026-03-03 04:07:00,587,Yes,Closed,False positive.
+ALT00254,Fortis Defense Systems,Low,Malware,Database,2026-03-03 06:04:00,2026-03-03 06:58:00,54,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00214,Eastern Water Utility,Medium,Malware,Network Device,2026-03-03 06:37:00,2026-03-03 11:20:00,283,No,Closed,Closed as per standard procedure.
+ALT00294,Fortis Defense Systems,Low,Data Exfiltration Attempt,Database,2026-03-03 08:42:00,2026-03-03 09:49:00,67,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00405,Fortis Defense Systems,Medium,Phishing,Database,2026-03-03 11:31:00,2026-03-03 15:00:00,209,No,Closed,False positive.
+ALT00183,Delta Rail Systems,Low,Misconfiguration,Server,2026-03-03 18:26:00,2026-03-03 23:24:00,298,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00518,Himalayan Healthcare Network,Critical,Malware,Network Device,2026-03-03 20:00:00,2026-03-04 04:39:00,519,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00596,Jupiter Aviation Control,High,Unauthorized Access,IoT Device,2026-03-04 02:17:00,2026-03-04 12:10:00,593,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00302,Fortis Defense Systems,Medium,Unauthorized Access,Cloud Workload,2026-03-04 16:11:00,2026-03-04 20:19:00,248,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00196,Eastern Water Utility,High,Data Exfiltration Attempt,Cloud Workload,2026-03-05 03:01:00,2026-03-05 08:19:00,318,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00020,Apex Power Grid Ltd,Low,DDoS,Cloud Workload,2026-03-05 07:04:00,2026-03-05 09:31:00,147,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00561,Indus Financial Services,Critical,Phishing,IoT Device,2026-03-05 12:49:00,2026-03-05 12:50:00,1,No,Closed,Reviewed and closed.
+ALT00244,Fortis Defense Systems,Medium,Insider Threat Indicator,Server,2026-03-05 21:48:00,2026-03-06 02:47:00,299,No,Closed,Reviewed and closed.
+ALT00175,Continental Banking Corp,Medium,Unauthorized Access,Cloud Workload,2026-03-06 01:41:00,2026-03-06 01:42:00,1,No,Closed,Reviewed and closed.
+ALT00188,Eastern Water Utility,Medium,Unauthorized Access,Network Device,2026-03-06 01:48:00,2026-03-06 02:42:00,54,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00512,Himalayan Healthcare Network,Low,Misconfiguration,Database,2026-03-06 09:36:00,2026-03-06 11:16:00,100,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00537,Indus Financial Services,Medium,Data Exfiltration Attempt,Server,2026-03-06 17:54:00,2026-03-06 17:56:00,2,No,Closed,False positive.
+ALT00602,Jupiter Aviation Control,Low,Insider Threat Indicator,IoT Device,2026-03-07 05:03:00,2026-03-07 07:51:00,168,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00158,Continental Banking Corp,Medium,Insider Threat Indicator,IoT Device,2026-03-07 06:11:00,2026-03-07 06:12:00,1,No,Closed,Closed as per standard procedure.
+ALT00588,Jupiter Aviation Control,Medium,DDoS,Endpoint,2026-03-07 09:05:00,2026-03-07 10:14:00,69,No,Closed,No further action required.
+ALT00268,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Database,2026-03-07 15:46:00,2026-03-07 17:42:00,116,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00031,Apex Power Grid Ltd,High,Phishing,Network Device,2026-03-08 06:42:00,2026-03-08 12:04:00,322,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00413,Ganga Oil & Gas,Medium,Malware,Cloud Workload,2026-03-08 13:25:00,2026-03-08 15:32:00,127,No,Closed,Closed as per standard procedure.
+ALT00515,Himalayan Healthcare Network,Low,Malware,IoT Device,2026-03-09 07:23:00,2026-03-09 11:09:00,226,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00494,Himalayan Healthcare Network,Medium,Data Exfiltration Attempt,IoT Device,2026-03-09 18:34:00,2026-03-09 22:17:00,223,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00283,Fortis Defense Systems,High,Misconfiguration,Endpoint,2026-03-10 04:24:00,2026-03-10 12:42:00,498,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00041,Apex Power Grid Ltd,High,Data Exfiltration Attempt,Server,2026-03-10 05:50:00,2026-03-10 15:09:00,559,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00287,Fortis Defense Systems,Medium,Malware,Endpoint,2026-03-10 09:17:00,2026-03-10 13:29:00,252,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00274,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Database,2026-03-10 12:05:00,2026-03-10 14:39:00,154,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00390,Fortis Defense Systems,Low,Misconfiguration,IoT Device,2026-03-10 18:03:00,2026-03-10 19:22:00,79,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00401,Fortis Defense Systems,Medium,Malware,Endpoint,2026-03-10 23:26:00,2026-03-11 03:42:00,256,Yes,Closed,Closed as per standard procedure.
+ALT00367,Fortis Defense Systems,Low,Phishing,Server,2026-03-11 05:01:00,2026-03-11 07:54:00,173,Yes,Closed,False positive.
+ALT00355,Fortis Defense Systems,Critical,Phishing,Cloud Workload,2026-03-11 07:04:00,2026-03-11 09:59:00,175,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00035,Apex Power Grid Ltd,Low,Unauthorized Access,Endpoint,2026-03-11 09:38:00,2026-03-11 12:23:00,165,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00616,Jupiter Aviation Control,High,Phishing,Endpoint,2026-03-11 13:14:00,2026-03-11 15:47:00,153,Yes,Closed,Closed as per standard procedure.
+ALT00543,Indus Financial Services,Critical,Unauthorized Access,IoT Device,2026-03-11 14:49:00,2026-03-11 14:53:00,4,No,Closed,No further action required.
+ALT00089,Bharat Telecom Networks,Medium,Malware,Cloud Workload,2026-03-11 16:34:00,2026-03-11 17:24:00,50,No,Closed,False positive.
+ALT00556,Indus Financial Services,Medium,Unauthorized Access,Server,2026-03-11 22:39:00,2026-03-11 22:41:00,2,No,Closed,Reviewed and closed.
+ALT00114,Bharat Telecom Networks,Critical,Insider Threat Indicator,IoT Device,2026-03-12 00:36:00,2026-03-12 03:01:00,145,No,Closed,False positive.
+ALT00338,Fortis Defense Systems,Low,Phishing,Endpoint,2026-03-13 02:19:00,2026-03-13 05:36:00,197,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00063,Apex Power Grid Ltd,High,Data Exfiltration Attempt,Server,2026-03-13 13:16:00,2026-03-13 21:39:00,503,Yes,Closed,False positive.
+ALT00072,Bharat Telecom Networks,High,DDoS,Cloud Workload,2026-03-13 14:15:00,2026-03-13 21:57:00,462,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00400,Fortis Defense Systems,High,Malware,Endpoint,2026-03-13 15:54:00,2026-03-13 19:02:00,188,Yes,Closed,False positive.
+ALT00227,Eastern Water Utility,Low,Unauthorized Access,Network Device,2026-03-13 17:19:00,2026-03-13 19:35:00,136,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00176,Continental Banking Corp,Low,Data Exfiltration Attempt,Cloud Workload,2026-03-14 02:48:00,2026-03-14 02:50:00,2,No,Closed,Reviewed and closed.
+ALT00429,Ganga Oil & Gas,Low,Phishing,Cloud Workload,2026-03-14 03:50:00,2026-03-14 06:02:00,132,No,Closed,No further action required.
+ALT00348,Fortis Defense Systems,Low,Data Exfiltration Attempt,Server,2026-03-14 09:20:00,2026-03-14 12:58:00,218,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00540,Indus Financial Services,High,Data Exfiltration Attempt,IoT Device,2026-03-14 11:20:00,2026-03-14 11:24:00,4,No,Closed,Closed as per standard procedure.
+ALT00547,Indus Financial Services,Low,DDoS,Endpoint,2026-03-14 14:40:00,2026-03-14 14:41:00,1,No,Closed,False positive.
+ALT00181,Delta Rail Systems,Low,Phishing,Database,2026-03-15 07:19:00,2026-03-15 11:43:00,264,Yes,Closed,Closed as per standard procedure.
+ALT00215,Eastern Water Utility,High,Data Exfiltration Attempt,Endpoint,2026-03-15 17:00:00,2026-03-16 02:31:00,571,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00397,Fortis Defense Systems,Low,Data Exfiltration Attempt,Network Device,2026-03-15 17:56:00,2026-03-15 21:42:00,226,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00234,Eastern Water Utility,Critical,Malware,IoT Device,2026-03-15 20:03:00,2026-03-16 02:56:00,413,Yes,Closed,Reviewed and closed.
+ALT00154,Continental Banking Corp,Low,Unauthorized Access,Endpoint,2026-03-16 03:25:00,2026-03-16 03:29:00,4,No,Closed,False positive.
+ALT00433,Ganga Oil & Gas,High,Data Exfiltration Attempt,IoT Device,2026-03-16 11:51:00,2026-03-16 14:50:00,179,Yes,Closed,Reviewed and closed.
+ALT00212,Eastern Water Utility,Medium,Phishing,Endpoint,2026-03-16 12:55:00,2026-03-16 16:12:00,197,No,Closed,No further action required.
+ALT00318,Fortis Defense Systems,Critical,DDoS,IoT Device,2026-03-16 18:17:00,2026-03-17 03:14:00,537,Yes,Closed,Closed as per standard procedure.
+ALT00291,Fortis Defense Systems,Medium,DDoS,Endpoint,2026-03-16 23:44:00,2026-03-17 03:00:00,196,No,Closed,Closed as per standard procedure.
+ALT00383,Fortis Defense Systems,Low,Malware,Server,2026-03-17 00:20:00,2026-03-17 03:45:00,205,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00267,Fortis Defense Systems,Low,Data Exfiltration Attempt,Cloud Workload,2026-03-17 04:12:00,2026-03-17 06:47:00,155,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00187,Eastern Water Utility,High,Malware,Network Device,2026-03-17 06:02:00,2026-03-17 15:59:00,597,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00079,Bharat Telecom Networks,Low,Malware,IoT Device,2026-03-17 07:23:00,2026-03-17 08:57:00,94,Yes,Closed,False positive.
+ALT00463,Himalayan Healthcare Network,Critical,Malware,Endpoint,2026-03-17 14:11:00,2026-03-17 17:39:00,208,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00334,Fortis Defense Systems,High,Insider Threat Indicator,Endpoint,2026-03-17 20:03:00,2026-03-18 02:16:00,373,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00315,Fortis Defense Systems,Low,Insider Threat Indicator,Server,2026-03-18 01:28:00,2026-03-18 05:42:00,254,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00290,Fortis Defense Systems,Critical,Phishing,Database,2026-03-18 10:38:00,2026-03-18 15:18:00,280,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00263,Fortis Defense Systems,Critical,Misconfiguration,Server,2026-03-19 00:13:00,2026-03-19 08:35:00,502,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00428,Ganga Oil & Gas,Low,DDoS,Network Device,2026-03-19 13:42:00,2026-03-19 15:22:00,100,No,Closed,Reviewed and closed.
+ALT00308,Fortis Defense Systems,Medium,Phishing,Cloud Workload,2026-03-20 03:11:00,2026-03-20 06:59:00,228,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00265,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Database,2026-03-20 08:23:00,2026-03-20 09:43:00,80,No,Closed,False positive.
+ALT00600,Jupiter Aviation Control,Low,Phishing,IoT Device,2026-03-20 14:30:00,2026-03-20 16:48:00,138,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00084,Bharat Telecom Networks,Low,Misconfiguration,Server,2026-03-20 18:39:00,2026-03-20 20:55:00,136,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00076,Bharat Telecom Networks,Medium,DDoS,Cloud Workload,2026-03-20 21:37:00,2026-03-21 01:03:00,206,No,Closed,False positive.
+ALT00168,Continental Banking Corp,Medium,Unauthorized Access,Endpoint,2026-03-21 17:24:00,2026-03-21 17:25:00,1,No,Closed,Closed as per standard procedure.
+ALT00609,Jupiter Aviation Control,Medium,Phishing,Endpoint,2026-03-21 19:21:00,2026-03-21 21:01:00,100,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00339,Fortis Defense Systems,High,Insider Threat Indicator,Endpoint,2026-03-21 22:27:00,2026-03-22 00:56:00,149,Yes,Closed,Reviewed and closed.
+ALT00156,Continental Banking Corp,Low,Insider Threat Indicator,Endpoint,2026-03-21 23:21:00,2026-03-21 23:22:00,1,No,Closed,Reviewed and closed.
+ALT00032,Apex Power Grid Ltd,Medium,DDoS,Server,2026-03-22 02:00:00,2026-03-22 03:07:00,67,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00618,Jupiter Aviation Control,Critical,DDoS,Cloud Workload,2026-03-22 12:39:00,2026-03-22 19:13:00,394,Yes,Closed,Reviewed and closed.
+ALT00356,Fortis Defense Systems,Medium,Insider Threat Indicator,Endpoint,2026-03-22 13:07:00,2026-03-22 17:28:00,261,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00139,Continental Banking Corp,High,Unauthorized Access,Endpoint,2026-03-22 13:20:00,2026-03-22 13:24:00,4,No,Closed,Reviewed and closed.
+ALT00531,Indus Financial Services,Low,Phishing,Database,2026-03-22 22:00:00,2026-03-22 22:01:00,1,No,Closed,False positive.
+ALT00301,Fortis Defense Systems,Low,Misconfiguration,Server,2026-03-23 02:19:00,2026-03-23 03:00:00,41,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00584,Indus Financial Services,Medium,Phishing,Database,2026-03-24 19:15:00,2026-03-24 19:18:00,3,No,Closed,Closed as per standard procedure.
+ALT00163,Continental Banking Corp,Medium,Malware,Database,2026-03-24 19:30:00,2026-03-24 19:31:00,1,No,Closed,False positive.
+ALT00281,Fortis Defense Systems,Low,Data Exfiltration Attempt,Database,2026-03-25 00:40:00,2026-03-25 03:06:00,146,No,Closed,Closed as per standard procedure.
+ALT00548,Indus Financial Services,Critical,DDoS,Network Device,2026-03-25 15:29:00,2026-03-25 15:33:00,4,No,Closed,No further action required.
+ALT00147,Continental Banking Corp,Low,Malware,Endpoint,2026-03-25 18:38:00,2026-03-25 18:40:00,2,No,Closed,Reviewed and closed.
+ALT00559,Indus Financial Services,High,Phishing,Server,2026-03-26 02:53:00,2026-03-26 02:56:00,3,No,Closed,Reviewed and closed.
+ALT00130,Continental Banking Corp,Critical,Malware,Network Device,2026-03-26 04:50:00,2026-03-26 04:52:00,2,Yes,Closed,False positive.
+ALT00431,Ganga Oil & Gas,Low,Malware,Server,2026-03-26 07:00:00,2026-03-26 11:42:00,282,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00297,Fortis Defense Systems,Low,Unauthorized Access,Endpoint,2026-03-26 13:06:00,2026-03-26 17:57:00,291,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00232,Eastern Water Utility,Low,Insider Threat Indicator,Endpoint,2026-03-26 22:30:00,2026-03-26 23:02:00,32,No,Closed,No further action required.
+ALT00167,Continental Banking Corp,High,Unauthorized Access,Network Device,2026-03-27 02:37:00,2026-03-27 02:41:00,4,No,Closed,Reviewed and closed.
+ALT00119,Continental Banking Corp,Critical,Phishing,Endpoint,2026-03-28 03:29:00,2026-03-28 03:33:00,4,Yes,Closed,False positive.
+ALT00145,Continental Banking Corp,Low,Phishing,Cloud Workload,2026-03-28 11:00:00,2026-03-28 11:04:00,4,No,Closed,Reviewed and closed.
+ALT00218,Eastern Water Utility,High,Phishing,Cloud Workload,2026-03-28 17:23:00,2026-03-28 23:43:00,380,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00300,Fortis Defense Systems,Low,Data Exfiltration Attempt,Network Device,2026-03-29 14:50:00,2026-03-29 19:23:00,273,Yes,Closed,Closed as per standard procedure.
+ALT00424,Ganga Oil & Gas,High,Phishing,Database,2026-03-29 15:22:00,2026-03-29 17:31:00,129,Yes,Closed,No further action required.
+ALT00100,Bharat Telecom Networks,High,Unauthorized Access,IoT Device,2026-03-29 16:17:00,2026-03-29 20:49:00,272,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00210,Eastern Water Utility,Low,Misconfiguration,Network Device,2026-03-29 19:09:00,2026-03-29 22:35:00,206,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00373,Fortis Defense Systems,Critical,Insider Threat Indicator,Network Device,2026-03-29 22:11:00,2026-03-30 00:41:00,150,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00539,Indus Financial Services,Low,Insider Threat Indicator,IoT Device,2026-03-30 00:26:00,2026-03-30 00:28:00,2,No,Closed,No further action required.
+ALT00253,Fortis Defense Systems,Low,Misconfiguration,Server,2026-03-30 04:17:00,2026-03-30 05:03:00,46,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00520,Himalayan Healthcare Network,Medium,Phishing,Database,2026-03-30 08:14:00,2026-03-30 12:10:00,236,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00550,Indus Financial Services,Low,Malware,Database,2026-03-30 15:34:00,2026-03-30 15:37:00,3,No,Closed,False positive.
+ALT00069,Bharat Telecom Networks,High,Malware,Cloud Workload,2026-03-30 17:27:00,2026-03-31 00:58:00,451,Yes,Closed,Closed as per standard procedure.
+ALT00441,Ganga Oil & Gas,Medium,Phishing,Cloud Workload,2026-03-30 21:43:00,2026-03-30 22:40:00,57,Yes,Closed,Closed as per standard procedure.
+ALT00033,Apex Power Grid Ltd,Low,Unauthorized Access,Endpoint,2026-03-31 02:56:00,2026-03-31 07:10:00,254,No,Closed,Reviewed and closed.
+ALT00042,Apex Power Grid Ltd,High,Phishing,Endpoint,2026-03-31 09:52:00,2026-03-31 12:04:00,132,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00332,Fortis Defense Systems,High,Phishing,Network Device,2026-03-31 13:20:00,2026-03-31 20:50:00,450,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00143,Continental Banking Corp,Low,Unauthorized Access,Cloud Workload,2026-03-31 17:23:00,2026-03-31 17:25:00,2,No,Closed,Reviewed and closed.
+ALT00228,Eastern Water Utility,Critical,Misconfiguration,Network Device,2026-03-31 17:59:00,2026-03-31 22:26:00,267,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00507,Himalayan Healthcare Network,High,Insider Threat Indicator,IoT Device,2026-03-31 18:51:00,2026-04-01 01:45:00,414,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00142,Continental Banking Corp,Medium,Phishing,IoT Device,2026-04-01 03:36:00,2026-04-01 03:40:00,4,No,Closed,Reviewed and closed.
+ALT00583,Indus Financial Services,Critical,Unauthorized Access,Network Device,2026-04-01 10:35:00,2026-04-01 10:39:00,4,No,Closed,Closed as per standard procedure.
+ALT00077,Bharat Telecom Networks,Low,Unauthorized Access,Endpoint,2026-04-01 22:29:00,2026-04-02 00:00:00,91,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00483,Himalayan Healthcare Network,High,Malware,Network Device,2026-04-02 04:42:00,2026-04-02 11:59:00,437,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00039,Apex Power Grid Ltd,Low,Malware,Network Device,2026-04-02 06:43:00,2026-04-02 10:41:00,238,No,Closed,No further action required.
+ALT00430,Ganga Oil & Gas,Low,Malware,Cloud Workload,2026-04-02 22:26:00,2026-04-03 03:10:00,284,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00569,Indus Financial Services,Low,Malware,Database,2026-04-02 23:08:00,2026-04-02 23:12:00,4,No,Closed,Closed as per standard procedure.
+ALT00288,Fortis Defense Systems,High,Data Exfiltration Attempt,Cloud Workload,2026-04-03 08:15:00,2026-04-03 15:30:00,435,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00017,Apex Power Grid Ltd,Low,DDoS,Server,2026-04-03 09:15:00,2026-04-03 10:28:00,73,No,Closed,No further action required.
+ALT00200,Eastern Water Utility,Low,Phishing,Endpoint,2026-04-03 16:14:00,2026-04-03 18:45:00,151,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00216,Eastern Water Utility,Low,DDoS,Endpoint,2026-04-04 01:25:00,2026-04-04 05:00:00,215,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00446,Ganga Oil & Gas,Low,Data Exfiltration Attempt,Network Device,2026-04-04 01:52:00,2026-04-04 06:24:00,272,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00292,Fortis Defense Systems,Medium,DDoS,Cloud Workload,2026-04-04 03:59:00,2026-04-04 06:01:00,122,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00165,Continental Banking Corp,Low,Data Exfiltration Attempt,Network Device,2026-04-04 11:58:00,2026-04-04 11:59:00,1,No,Closed,False positive.
+ALT00046,Apex Power Grid Ltd,Critical,Unauthorized Access,Cloud Workload,2026-04-04 13:04:00,2026-04-04 17:44:00,280,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00189,Eastern Water Utility,Medium,Data Exfiltration Attempt,Database,2026-04-05 13:56:00,2026-04-05 17:19:00,203,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00190,Eastern Water Utility,High,Misconfiguration,Database,2026-04-05 16:17:00,2026-04-05 18:57:00,160,Yes,Closed,No further action required.
+ALT00566,Indus Financial Services,Low,Malware,IoT Device,2026-04-06 02:15:00,2026-04-06 02:18:00,3,Yes,Closed,Reviewed and closed.
+ALT00435,Ganga Oil & Gas,Low,Data Exfiltration Attempt,Database,2026-04-06 10:11:00,2026-04-06 13:00:00,169,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00250,Fortis Defense Systems,Critical,Data Exfiltration Attempt,Database,2026-04-06 12:28:00,2026-04-06 15:09:00,161,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00528,Indus Financial Services,Medium,DDoS,Network Device,2026-04-06 19:20:00,2026-04-06 19:24:00,4,No,Closed,False positive.
+ALT00259,Fortis Defense Systems,Medium,Phishing,Endpoint,2026-04-07 05:48:00,2026-04-07 08:51:00,183,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00554,Indus Financial Services,Low,Misconfiguration,Endpoint,2026-04-07 07:16:00,2026-04-07 07:19:00,3,No,Closed,False positive.
+ALT00625,Jupiter Aviation Control,Low,Phishing,Network Device,2026-04-07 17:24:00,2026-04-07 19:10:00,106,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00535,Indus Financial Services,High,Misconfiguration,Endpoint,2026-04-08 06:09:00,2026-04-08 06:13:00,4,No,Closed,No further action required.
+ALT00366,Fortis Defense Systems,Medium,Insider Threat Indicator,Database,2026-04-08 22:22:00,2026-04-09 01:48:00,206,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00099,Bharat Telecom Networks,Medium,Misconfiguration,Endpoint,2026-04-09 06:58:00,2026-04-09 08:03:00,65,Yes,Closed,Closed as per standard procedure.
+ALT00381,Fortis Defense Systems,Medium,Phishing,Database,2026-04-09 14:46:00,2026-04-09 19:28:00,282,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00045,Apex Power Grid Ltd,Low,Misconfiguration,Database,2026-04-09 18:12:00,2026-04-09 18:42:00,30,No,Closed,No further action required.
+ALT00103,Bharat Telecom Networks,High,Phishing,Database,2026-04-09 21:50:00,2026-04-10 00:08:00,138,Yes,Closed,False positive.
+ALT00286,Fortis Defense Systems,Critical,Phishing,Cloud Workload,2026-04-10 02:46:00,2026-04-10 09:12:00,386,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00461,Himalayan Healthcare Network,Critical,Unauthorized Access,Cloud Workload,2026-04-10 13:50:00,2026-04-10 16:17:00,147,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00124,Continental Banking Corp,High,Misconfiguration,IoT Device,2026-04-10 14:23:00,2026-04-10 14:27:00,4,No,Closed,No further action required.
+ALT00608,Jupiter Aviation Control,Low,Data Exfiltration Attempt,Cloud Workload,2026-04-11 21:08:00,2026-04-11 23:34:00,146,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00529,Indus Financial Services,Medium,Malware,Cloud Workload,2026-04-12 07:48:00,2026-04-12 07:52:00,4,No,Closed,Reviewed and closed.
+ALT00248,Fortis Defense Systems,Low,Phishing,Cloud Workload,2026-04-12 08:52:00,2026-04-12 09:59:00,67,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00490,Himalayan Healthcare Network,Low,Phishing,Cloud Workload,2026-04-12 11:32:00,2026-04-12 13:26:00,114,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00229,Eastern Water Utility,High,Unauthorized Access,Server,2026-04-12 11:49:00,2026-04-12 16:16:00,267,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00477,Himalayan Healthcare Network,Medium,DDoS,Endpoint,2026-04-12 21:01:00,2026-04-12 22:40:00,99,No,Closed,False positive.
+ALT00030,Apex Power Grid Ltd,Medium,DDoS,Cloud Workload,2026-04-14 03:56:00,2026-04-14 04:46:00,50,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00321,Fortis Defense Systems,Low,Unauthorized Access,Database,2026-04-14 16:47:00,2026-04-14 21:26:00,279,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00233,Eastern Water Utility,Critical,Data Exfiltration Attempt,Database,2026-04-15 20:59:00,2026-04-16 04:32:00,453,Yes,Closed,False positive.
+ALT00555,Indus Financial Services,Low,Phishing,Network Device,2026-04-16 06:54:00,2026-04-16 06:55:00,1,No,Closed,Closed as per standard procedure.
+ALT00257,Fortis Defense Systems,Low,DDoS,IoT Device,2026-04-16 09:17:00,2026-04-16 11:16:00,119,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00524,Himalayan Healthcare Network,Medium,Misconfiguration,Network Device,2026-04-16 11:33:00,2026-04-16 14:10:00,157,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00172,Continental Banking Corp,High,Data Exfiltration Attempt,Cloud Workload,2026-04-16 11:43:00,2026-04-16 11:46:00,3,No,Closed,Closed as per standard procedure.
+ALT00439,Ganga Oil & Gas,Low,Misconfiguration,Network Device,2026-04-16 14:02:00,2026-04-16 14:38:00,36,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00331,Fortis Defense Systems,Medium,Phishing,Server,2026-04-16 19:43:00,2026-04-16 21:04:00,81,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00093,Bharat Telecom Networks,Low,Data Exfiltration Attempt,Cloud Workload,2026-04-16 22:31:00,2026-04-16 23:19:00,48,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00058,Apex Power Grid Ltd,High,Data Exfiltration Attempt,Cloud Workload,2026-04-17 01:13:00,2026-04-17 09:09:00,476,Yes,Closed,Closed as per standard procedure.
+ALT00631,Jupiter Aviation Control,High,DDoS,IoT Device,2026-04-17 05:10:00,2026-04-17 13:04:00,474,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00125,Continental Banking Corp,High,DDoS,Database,2026-04-17 20:06:00,2026-04-17 20:09:00,3,No,Closed,False positive.
+ALT00626,Jupiter Aviation Control,High,Data Exfiltration Attempt,Network Device,2026-04-18 09:19:00,2026-04-18 16:39:00,440,Yes,Closed,No further action required.
+ALT00416,Ganga Oil & Gas,Low,Unauthorized Access,Database,2026-04-18 10:23:00,2026-04-18 11:53:00,90,No,Closed,Reviewed and closed.
+ALT00536,Indus Financial Services,Critical,Insider Threat Indicator,IoT Device,2026-04-18 15:08:00,2026-04-18 15:11:00,3,No,Closed,False positive.
+ALT00436,Ganga Oil & Gas,High,Malware,Endpoint,2026-04-18 20:56:00,2026-04-19 04:52:00,476,Yes,Closed,No further action required.
+ALT00087,Bharat Telecom Networks,Low,Phishing,Network Device,2026-04-19 03:34:00,2026-04-19 05:16:00,102,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00025,Apex Power Grid Ltd,Medium,Insider Threat Indicator,Server,2026-04-19 05:17:00,2026-04-19 09:33:00,256,No,Closed,Reviewed and closed.
+ALT00309,Fortis Defense Systems,Medium,Misconfiguration,IoT Device,2026-04-19 05:31:00,2026-04-19 07:29:00,118,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00533,Indus Financial Services,High,Unauthorized Access,Network Device,2026-04-19 06:26:00,2026-04-19 06:30:00,4,No,Closed,No further action required.
+ALT00597,Jupiter Aviation Control,Low,Unauthorized Access,Cloud Workload,2026-04-19 11:22:00,2026-04-19 12:04:00,42,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00485,Himalayan Healthcare Network,Low,Insider Threat Indicator,Endpoint,2026-04-20 05:00:00,2026-04-20 09:13:00,253,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00464,Himalayan Healthcare Network,Low,Phishing,Cloud Workload,2026-04-20 08:35:00,2026-04-20 11:15:00,160,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00421,Ganga Oil & Gas,Low,DDoS,Endpoint,2026-04-20 15:24:00,2026-04-20 19:05:00,221,No,Closed,No further action required.
+ALT00239,Eastern Water Utility,Low,Misconfiguration,Server,2026-04-20 16:20:00,2026-04-20 18:24:00,124,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00633,Jupiter Aviation Control,Low,Phishing,Server,2026-04-20 17:04:00,2026-04-20 19:54:00,170,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00635,Jupiter Aviation Control,Low,DDoS,Cloud Workload,2026-04-20 19:54:00,2026-04-20 23:25:00,211,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00327,Fortis Defense Systems,High,Malware,Endpoint,2026-04-20 20:05:00,2026-04-21 02:09:00,364,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00109,Bharat Telecom Networks,Medium,DDoS,IoT Device,2026-04-21 04:15:00,2026-04-21 06:17:00,122,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00138,Continental Banking Corp,Low,Unauthorized Access,Database,2026-04-21 14:56:00,2026-04-21 15:00:00,4,No,Closed,Reviewed and closed.
+ALT00153,Continental Banking Corp,Critical,Insider Threat Indicator,Network Device,2026-04-22 00:29:00,2026-04-22 00:33:00,4,No,Closed,Closed as per standard procedure.
+ALT00081,Bharat Telecom Networks,Critical,Unauthorized Access,Database,2026-04-23 10:11:00,2026-04-23 13:09:00,178,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00108,Bharat Telecom Networks,Low,Malware,Server,2026-04-24 05:44:00,2026-04-24 09:00:00,196,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00298,Fortis Defense Systems,Medium,Misconfiguration,Cloud Workload,2026-04-25 11:25:00,2026-04-25 16:11:00,286,Yes,Closed,Closed as per standard procedure.
+ALT00585,Indus Financial Services,High,Unauthorized Access,Cloud Workload,2026-04-25 12:00:00,2026-04-25 12:01:00,1,No,Closed,False positive.
+ALT00180,Continental Banking Corp,Critical,Malware,Network Device,2026-04-25 19:00:00,2026-04-25 19:02:00,2,No,Closed,Closed as per standard procedure.
+ALT00593,Jupiter Aviation Control,Medium,Phishing,Database,2026-04-25 19:36:00,2026-04-25 22:34:00,178,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00513,Himalayan Healthcare Network,Low,DDoS,Database,2026-04-25 22:10:00,2026-04-26 01:33:00,203,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00454,Ganga Oil & Gas,Medium,Misconfiguration,IoT Device,2026-04-26 04:08:00,2026-04-26 09:00:00,292,Yes,Closed,False positive.
+ALT00484,Himalayan Healthcare Network,High,Misconfiguration,Cloud Workload,2026-04-26 10:39:00,2026-04-26 13:57:00,198,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00325,Fortis Defense Systems,Low,Misconfiguration,Endpoint,2026-04-27 00:27:00,2026-04-27 03:31:00,184,Yes,Closed,False positive.
+ALT00054,Apex Power Grid Ltd,Medium,DDoS,Cloud Workload,2026-04-27 04:51:00,2026-04-27 08:03:00,192,No,Closed,Closed as per standard procedure.
+ALT00052,Apex Power Grid Ltd,Medium,Phishing,IoT Device,2026-04-27 13:56:00,2026-04-27 17:42:00,226,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00137,Continental Banking Corp,Medium,Insider Threat Indicator,IoT Device,2026-04-27 16:38:00,2026-04-27 16:39:00,1,No,Closed,No further action required.
+ALT00340,Fortis Defense Systems,Low,Misconfiguration,IoT Device,2026-04-27 19:38:00,2026-04-27 21:37:00,119,Yes,Closed,Reviewed and closed.
+ALT00632,Jupiter Aviation Control,Medium,Malware,Server,2026-04-27 23:37:00,2026-04-28 02:40:00,183,No,Closed,Reviewed and closed.
+ALT00409,Ganga Oil & Gas,Medium,Misconfiguration,Cloud Workload,2026-04-28 08:13:00,2026-04-28 12:06:00,233,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00226,Eastern Water Utility,Medium,Misconfiguration,IoT Device,2026-04-28 17:21:00,2026-04-28 20:06:00,165,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00313,Fortis Defense Systems,High,Data Exfiltration Attempt,Cloud Workload,2026-04-28 18:47:00,2026-04-29 01:08:00,381,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00322,Fortis Defense Systems,High,Insider Threat Indicator,Server,2026-04-28 20:42:00,2026-04-29 05:29:00,527,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00062,Apex Power Grid Ltd,Low,Unauthorized Access,Endpoint,2026-04-29 05:03:00,2026-04-29 09:25:00,262,No,Closed,Closed as per standard procedure.
+ALT00621,Jupiter Aviation Control,Low,Malware,IoT Device,2026-04-29 05:27:00,2026-04-29 10:21:00,294,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00174,Continental Banking Corp,Medium,DDoS,Database,2026-04-29 09:49:00,2026-04-29 09:51:00,2,No,Closed,No further action required.
+ALT00159,Continental Banking Corp,Medium,Misconfiguration,Cloud Workload,2026-04-29 18:48:00,2026-04-29 18:51:00,3,No,Closed,False positive.
+ALT00201,Eastern Water Utility,Medium,Malware,Server,2026-04-30 17:08:00,2026-04-30 20:16:00,188,No,Closed,Closed as per standard procedure.
+ALT00578,Indus Financial Services,Medium,Misconfiguration,Database,2026-04-30 20:03:00,2026-04-30 20:06:00,3,No,Closed,Reviewed and closed.
+ALT00203,Eastern Water Utility,Low,Insider Threat Indicator,Cloud Workload,2026-04-30 21:33:00,2026-04-30 23:36:00,123,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00184,Eastern Water Utility,Medium,Unauthorized Access,Network Device,2026-05-01 01:40:00,2026-05-01 02:18:00,38,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00336,Fortis Defense Systems,Medium,Malware,Network Device,2026-05-01 02:01:00,2026-05-01 04:21:00,140,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00417,Ganga Oil & Gas,Low,Misconfiguration,Database,2026-05-01 06:32:00,2026-05-01 09:34:00,182,No,Closed,No further action required.
+ALT00493,Himalayan Healthcare Network,Low,Misconfiguration,Network Device,2026-05-01 14:56:00,2026-05-01 16:18:00,82,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00388,Fortis Defense Systems,High,Data Exfiltration Attempt,Database,2026-05-02 03:19:00,2026-05-02 12:57:00,578,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00133,Continental Banking Corp,Medium,DDoS,Server,2026-05-02 14:49:00,2026-05-02 14:53:00,4,No,Closed,Reviewed and closed.
+ALT00538,Indus Financial Services,Medium,Unauthorized Access,Network Device,2026-05-02 20:06:00,2026-05-02 20:09:00,3,No,Closed,False positive.
+ALT00059,Apex Power Grid Ltd,Low,Data Exfiltration Attempt,Database,2026-05-03 00:22:00,2026-05-03 02:44:00,142,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00486,Himalayan Healthcare Network,Medium,Unauthorized Access,Database,2026-05-03 14:28:00,2026-05-03 15:53:00,85,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00113,Bharat Telecom Networks,Medium,Unauthorized Access,Cloud Workload,2026-05-04 03:15:00,2026-05-04 06:16:00,181,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00496,Himalayan Healthcare Network,Medium,Phishing,Database,2026-05-04 19:00:00,2026-05-04 20:54:00,114,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00492,Himalayan Healthcare Network,Low,Phishing,Server,2026-05-05 07:04:00,2026-05-05 09:19:00,135,No,Closed,Closed as per standard procedure.
+ALT00419,Ganga Oil & Gas,Critical,Unauthorized Access,IoT Device,2026-05-05 10:40:00,2026-05-05 13:09:00,149,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00589,Jupiter Aviation Control,Medium,Malware,Cloud Workload,2026-05-05 22:44:00,2026-05-06 01:47:00,183,Yes,Closed,Closed as per standard procedure.
+ALT00606,Jupiter Aviation Control,Low,Unauthorized Access,IoT Device,2026-05-06 12:47:00,2026-05-06 16:17:00,210,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00442,Ganga Oil & Gas,High,Unauthorized Access,Endpoint,2026-05-07 05:04:00,2026-05-07 09:53:00,289,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00363,Fortis Defense Systems,High,Phishing,Network Device,2026-05-08 00:24:00,2026-05-08 04:13:00,229,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00444,Ganga Oil & Gas,Low,Data Exfiltration Attempt,IoT Device,2026-05-08 14:20:00,2026-05-08 14:59:00,39,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00343,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Cloud Workload,2026-05-08 14:32:00,2026-05-08 16:27:00,115,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00098,Bharat Telecom Networks,Medium,Unauthorized Access,Database,2026-05-08 22:18:00,2026-05-09 02:55:00,277,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00526,Himalayan Healthcare Network,Low,Phishing,Network Device,2026-05-08 23:12:00,2026-05-09 01:27:00,135,Yes,Closed,False positive.
+ALT00476,Himalayan Healthcare Network,High,Unauthorized Access,Cloud Workload,2026-05-09 03:18:00,2026-05-09 06:02:00,164,Yes,Closed,Closed as per standard procedure.
+ALT00015,Apex Power Grid Ltd,Critical,Insider Threat Indicator,IoT Device,2026-05-09 05:32:00,2026-05-09 10:04:00,272,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00530,Indus Financial Services,Critical,Insider Threat Indicator,Endpoint,2026-05-09 11:25:00,2026-05-09 11:29:00,4,Yes,Closed,Closed as per standard procedure.
+ALT00029,Apex Power Grid Ltd,Low,DDoS,Server,2026-05-09 16:10:00,2026-05-09 18:15:00,125,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00206,Eastern Water Utility,Medium,DDoS,Endpoint,2026-05-09 20:10:00,2026-05-09 22:07:00,117,No,Closed,False positive.
+ALT00347,Fortis Defense Systems,Low,Phishing,Cloud Workload,2026-05-09 21:57:00,2026-05-09 22:50:00,53,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00280,Fortis Defense Systems,Low,Data Exfiltration Attempt,Endpoint,2026-05-09 23:22:00,2026-05-10 00:30:00,68,No,Closed,Closed as per standard procedure.
+ALT00161,Continental Banking Corp,Medium,Malware,Server,2026-05-10 02:19:00,2026-05-10 02:22:00,3,No,Closed,Reviewed and closed.
+ALT00521,Himalayan Healthcare Network,Low,Unauthorized Access,Network Device,2026-05-10 03:35:00,2026-05-10 05:04:00,89,No,Closed,False positive.
+ALT00337,Fortis Defense Systems,High,Insider Threat Indicator,Database,2026-05-10 09:40:00,2026-05-10 15:16:00,336,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00047,Apex Power Grid Ltd,Medium,Data Exfiltration Attempt,IoT Device,2026-05-10 09:42:00,2026-05-10 12:43:00,181,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00453,Ganga Oil & Gas,Critical,Misconfiguration,Endpoint,2026-05-10 12:26:00,2026-05-10 16:46:00,260,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00271,Fortis Defense Systems,Low,Misconfiguration,IoT Device,2026-05-10 14:23:00,2026-05-10 19:00:00,277,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00452,Ganga Oil & Gas,Medium,Misconfiguration,Endpoint,2026-05-11 05:44:00,2026-05-11 07:07:00,83,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00169,Continental Banking Corp,Medium,Phishing,Endpoint,2026-05-11 11:01:00,2026-05-11 11:04:00,3,Yes,Closed,Closed as per standard procedure.
+ALT00471,Himalayan Healthcare Network,Low,Insider Threat Indicator,Cloud Workload,2026-05-12 02:06:00,2026-05-12 02:39:00,33,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00149,Continental Banking Corp,Medium,Unauthorized Access,IoT Device,2026-05-12 03:22:00,2026-05-12 03:26:00,4,No,Closed,False positive.
+ALT00211,Eastern Water Utility,Low,Data Exfiltration Attempt,Server,2026-05-12 17:06:00,2026-05-12 19:52:00,166,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00495,Himalayan Healthcare Network,Critical,Phishing,Cloud Workload,2026-05-13 08:24:00,2026-05-13 13:51:00,327,Yes,Closed,Closed as per standard procedure.
+ALT00470,Himalayan Healthcare Network,High,Data Exfiltration Attempt,Database,2026-05-13 11:32:00,2026-05-13 13:54:00,142,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00402,Fortis Defense Systems,Low,Insider Threat Indicator,Endpoint,2026-05-13 11:52:00,2026-05-13 12:55:00,63,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00619,Jupiter Aviation Control,Medium,Malware,Endpoint,2026-05-14 03:28:00,2026-05-14 08:23:00,295,No,Closed,Reviewed and closed.
+ALT00506,Himalayan Healthcare Network,Critical,Misconfiguration,Cloud Workload,2026-05-14 13:23:00,2026-05-14 19:02:00,339,Yes,Closed,Closed as per standard procedure.
+ALT00056,Apex Power Grid Ltd,Low,Data Exfiltration Attempt,Server,2026-05-14 15:40:00,2026-05-14 18:36:00,176,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00562,Indus Financial Services,Medium,Misconfiguration,Network Device,2026-05-14 21:13:00,2026-05-14 21:16:00,3,No,Closed,Reviewed and closed.
+ALT00636,Jupiter Aviation Control,Medium,Insider Threat Indicator,Endpoint,2026-05-14 23:40:00,2026-05-15 02:09:00,149,No,Closed,Reviewed and closed.
+ALT00546,Indus Financial Services,Low,Phishing,Server,2026-05-15 02:06:00,2026-05-15 02:10:00,4,No,Closed,No further action required.
+ALT00202,Eastern Water Utility,Medium,DDoS,Server,2026-05-15 13:49:00,2026-05-15 15:23:00,94,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00403,Fortis Defense Systems,Low,Insider Threat Indicator,Endpoint,2026-05-15 18:01:00,2026-05-15 19:00:00,59,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00223,Eastern Water Utility,Medium,Insider Threat Indicator,Database,2026-05-15 20:46:00,2026-05-15 22:31:00,105,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00335,Fortis Defense Systems,Critical,Phishing,Database,2026-05-16 00:23:00,2026-05-16 09:43:00,560,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00277,Fortis Defense Systems,Low,Insider Threat Indicator,IoT Device,2026-05-16 01:14:00,2026-05-16 05:47:00,273,Yes,Closed,False positive.
+ALT00013,Apex Power Grid Ltd,Critical,Malware,IoT Device,2026-05-16 08:35:00,2026-05-16 16:44:00,489,Yes,Closed,False positive.
+ALT00157,Continental Banking Corp,Critical,Unauthorized Access,Network Device,2026-05-16 16:12:00,2026-05-16 16:14:00,2,No,Closed,No further action required.
+ALT00118,Continental Banking Corp,Low,Phishing,Network Device,2026-05-16 16:58:00,2026-05-16 17:02:00,4,Yes,Closed,False positive.
+ALT00306,Fortis Defense Systems,Medium,DDoS,Database,2026-05-16 20:20:00,2026-05-16 21:48:00,88,No,Closed,No further action required.
+ALT00475,Himalayan Healthcare Network,High,Malware,IoT Device,2026-05-17 00:41:00,2026-05-17 07:40:00,419,Yes,Closed,False positive.
+ALT00295,Fortis Defense Systems,Critical,Misconfiguration,Database,2026-05-17 16:59:00,2026-05-17 23:37:00,398,Yes,Closed,Reviewed and closed.
+ALT00152,Continental Banking Corp,Medium,Insider Threat Indicator,IoT Device,2026-05-17 22:14:00,2026-05-17 22:17:00,3,No,Closed,Reviewed and closed.
+ALT00005,Apex Power Grid Ltd,Medium,DDoS,Network Device,2026-05-18 03:59:00,2026-05-18 07:34:00,215,No,Closed,Reviewed and closed.
+ALT00314,Fortis Defense Systems,High,DDoS,Endpoint,2026-05-19 01:48:00,2026-05-19 07:25:00,337,Yes,Closed,No further action required.
+ALT00249,Fortis Defense Systems,Critical,Data Exfiltration Attempt,Server,2026-05-19 01:59:00,2026-05-19 06:25:00,266,Yes,Closed,Closed as per standard procedure.
+ALT00022,Apex Power Grid Ltd,Critical,DDoS,Cloud Workload,2026-05-19 04:46:00,2026-05-19 10:48:00,362,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00592,Jupiter Aviation Control,Low,Misconfiguration,Endpoint,2026-05-19 18:09:00,2026-05-19 19:57:00,108,Yes,Closed,Closed as per standard procedure.
+ALT00019,Apex Power Grid Ltd,Low,Unauthorized Access,Database,2026-05-19 23:44:00,2026-05-20 03:25:00,221,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00038,Apex Power Grid Ltd,Medium,DDoS,Endpoint,2026-05-20 01:53:00,2026-05-20 06:03:00,250,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00191,Eastern Water Utility,Low,Unauthorized Access,IoT Device,2026-05-20 09:20:00,2026-05-20 12:21:00,181,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00269,Fortis Defense Systems,Critical,DDoS,IoT Device,2026-05-20 15:11:00,2026-05-20 17:41:00,150,Yes,Closed,Reviewed and closed.
+ALT00560,Indus Financial Services,Low,Insider Threat Indicator,Network Device,2026-05-20 15:11:00,2026-05-20 15:15:00,4,No,Closed,Reviewed and closed.
+ALT00278,Fortis Defense Systems,Low,Insider Threat Indicator,Network Device,2026-05-20 18:42:00,2026-05-20 19:20:00,38,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00127,Continental Banking Corp,Low,Unauthorized Access,Endpoint,2026-05-20 20:22:00,2026-05-20 20:23:00,1,Yes,Closed,Closed as per standard procedure.
+ALT00384,Fortis Defense Systems,Medium,DDoS,Database,2026-05-21 02:21:00,2026-05-21 03:06:00,45,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00629,Jupiter Aviation Control,Medium,Insider Threat Indicator,Endpoint,2026-05-21 08:39:00,2026-05-21 09:34:00,55,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00217,Eastern Water Utility,Critical,Misconfiguration,Cloud Workload,2026-05-21 08:52:00,2026-05-21 11:52:00,180,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00553,Indus Financial Services,Medium,DDoS,Database,2026-05-21 11:12:00,2026-05-21 11:16:00,4,No,Closed,Closed as per standard procedure.
+ALT00055,Apex Power Grid Ltd,Low,Insider Threat Indicator,Database,2026-05-21 14:57:00,2026-05-21 19:17:00,260,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00601,Jupiter Aviation Control,High,Phishing,IoT Device,2026-05-21 15:39:00,2026-05-21 23:36:00,477,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00563,Indus Financial Services,Low,Misconfiguration,Network Device,2026-05-21 16:07:00,2026-05-21 16:09:00,2,No,Closed,Reviewed and closed.
+ALT00448,Ganga Oil & Gas,High,Malware,Endpoint,2026-05-21 16:23:00,2026-05-21 22:35:00,372,Yes,Closed,Closed as per standard procedure.
+ALT00443,Ganga Oil & Gas,Medium,Phishing,Server,2026-05-21 20:24:00,2026-05-22 00:49:00,265,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00097,Bharat Telecom Networks,Low,Insider Threat Indicator,Server,2026-05-22 13:05:00,2026-05-22 17:31:00,266,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00455,Ganga Oil & Gas,Low,DDoS,IoT Device,2026-05-22 20:13:00,2026-05-22 23:11:00,178,No,Closed,No further action required.
+ALT00074,Bharat Telecom Networks,Critical,Malware,Endpoint,2026-05-23 00:33:00,2026-05-23 08:41:00,488,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00620,Jupiter Aviation Control,High,Malware,Endpoint,2026-05-23 12:33:00,2026-05-23 17:02:00,269,Yes,Closed,False positive.
+ALT00568,Indus Financial Services,Low,Data Exfiltration Attempt,IoT Device,2026-05-23 20:48:00,2026-05-23 20:50:00,2,No,Closed,Closed as per standard procedure.
+ALT00581,Indus Financial Services,Medium,Malware,IoT Device,2026-05-23 23:35:00,2026-05-23 23:38:00,3,No,Closed,Closed as per standard procedure.
+ALT00415,Ganga Oil & Gas,Critical,Misconfiguration,Server,2026-05-24 05:43:00,2026-05-24 09:36:00,233,Yes,Closed,False positive.
+ALT00311,Fortis Defense Systems,Medium,Misconfiguration,Database,2026-05-24 16:41:00,2026-05-24 20:43:00,242,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00468,Himalayan Healthcare Network,Low,Unauthorized Access,Database,2026-05-24 20:00:00,2026-05-24 22:33:00,153,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00410,Ganga Oil & Gas,Medium,Unauthorized Access,IoT Device,2026-05-24 20:38:00,2026-05-24 22:03:00,85,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00207,Eastern Water Utility,Critical,Malware,Server,2026-05-25 01:52:00,2026-05-25 09:20:00,448,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00245,Fortis Defense Systems,High,DDoS,Endpoint,2026-05-25 03:03:00,2026-05-25 09:56:00,413,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00221,Eastern Water Utility,High,Unauthorized Access,Network Device,2026-05-25 09:30:00,2026-05-25 17:14:00,464,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00371,Fortis Defense Systems,Medium,Phishing,Database,2026-05-26 18:09:00,2026-05-26 21:17:00,188,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00534,Indus Financial Services,High,Insider Threat Indicator,Server,2026-05-27 04:36:00,2026-05-27 04:39:00,3,No,Closed,Closed as per standard procedure.
+ALT00392,Fortis Defense Systems,Low,Data Exfiltration Attempt,IoT Device,2026-05-27 07:30:00,2026-05-27 08:17:00,47,No,Closed,No further action required.
+ALT00208,Eastern Water Utility,Medium,Data Exfiltration Attempt,IoT Device,2026-05-27 13:39:00,2026-05-27 16:37:00,178,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00576,Indus Financial Services,Medium,Data Exfiltration Attempt,Cloud Workload,2026-05-27 20:53:00,2026-05-27 20:56:00,3,No,Closed,No further action required.
+ALT00344,Fortis Defense Systems,Low,Misconfiguration,Cloud Workload,2026-05-27 21:46:00,2026-05-27 22:17:00,31,Yes,Closed,No further action required.
+ALT00091,Bharat Telecom Networks,High,Data Exfiltration Attempt,Cloud Workload,2026-05-28 01:48:00,2026-05-28 09:21:00,453,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00305,Fortis Defense Systems,Critical,Phishing,Network Device,2026-05-28 03:51:00,2026-05-28 08:37:00,286,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00420,Ganga Oil & Gas,High,Insider Threat Indicator,Server,2026-05-28 05:31:00,2026-05-28 08:37:00,186,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00474,Himalayan Healthcare Network,Low,Data Exfiltration Attempt,Database,2026-05-28 07:58:00,2026-05-28 11:55:00,237,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00509,Himalayan Healthcare Network,Medium,Data Exfiltration Attempt,IoT Device,2026-05-28 16:07:00,2026-05-28 18:22:00,135,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00256,Fortis Defense Systems,High,Unauthorized Access,Endpoint,2026-05-28 19:49:00,2026-05-29 00:23:00,274,No,Closed,No further action required.
+ALT00082,Bharat Telecom Networks,Low,Phishing,Cloud Workload,2026-05-28 20:43:00,2026-05-28 23:48:00,185,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00067,Bharat Telecom Networks,Critical,Data Exfiltration Attempt,IoT Device,2026-05-28 21:58:00,2026-05-29 01:39:00,221,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00353,Fortis Defense Systems,Low,Insider Threat Indicator,Database,2026-05-29 03:32:00,2026-05-29 04:40:00,68,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00488,Himalayan Healthcare Network,High,Phishing,Server,2026-05-29 18:25:00,2026-05-30 01:07:00,402,Yes,Closed,Closed as per standard procedure.
+ALT00565,Indus Financial Services,High,Malware,Server,2026-05-30 03:25:00,2026-05-30 03:29:00,4,No,Closed,No further action required.
+ALT00502,Himalayan Healthcare Network,High,Unauthorized Access,Endpoint,2026-05-30 05:39:00,2026-05-30 13:49:00,490,Yes,Closed,Reviewed and closed.
+ALT00368,Fortis Defense Systems,Low,Misconfiguration,Endpoint,2026-05-30 07:10:00,2026-05-30 09:56:00,166,No,Closed,Reviewed and closed.
+ALT00121,Continental Banking Corp,Medium,Unauthorized Access,Server,2026-05-30 12:52:00,2026-05-30 12:54:00,2,No,Closed,False positive.
+ALT00011,Apex Power Grid Ltd,Medium,Unauthorized Access,Endpoint,2026-05-30 13:57:00,2026-05-30 15:37:00,100,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00361,Fortis Defense Systems,Critical,Malware,Server,2026-05-30 18:16:00,2026-05-30 20:49:00,153,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00523,Himalayan Healthcare Network,Low,Malware,Database,2026-05-31 00:30:00,2026-05-31 02:52:00,142,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00519,Himalayan Healthcare Network,Low,Misconfiguration,Server,2026-05-31 06:33:00,2026-05-31 07:49:00,76,No,Closed,False positive.
+ALT00391,Fortis Defense Systems,Low,Data Exfiltration Attempt,Cloud Workload,2026-05-31 07:35:00,2026-05-31 11:39:00,244,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00112,Bharat Telecom Networks,Critical,Misconfiguration,Network Device,2026-05-31 09:40:00,2026-05-31 15:33:00,353,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00132,Continental Banking Corp,Low,Malware,Endpoint,2026-05-31 10:01:00,2026-05-31 10:05:00,4,No,Closed,Reviewed and closed.
+ALT00002,Apex Power Grid Ltd,Low,Phishing,Endpoint,2026-06-01 13:02:00,2026-06-01 17:50:00,288,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00304,Fortis Defense Systems,Low,Phishing,Endpoint,2026-06-01 13:24:00,2026-06-01 16:16:00,172,No,Closed,Reviewed and closed.
+ALT00549,Indus Financial Services,Medium,Misconfiguration,Cloud Workload,2026-06-01 19:29:00,2026-06-01 19:33:00,4,No,Closed,False positive.
+ALT00516,Himalayan Healthcare Network,High,Misconfiguration,Database,2026-06-02 01:49:00,2026-06-02 07:33:00,344,Yes,Closed,False positive.
+ALT00171,Continental Banking Corp,Low,Insider Threat Indicator,IoT Device,2026-06-02 12:09:00,2026-06-02 12:11:00,2,No,Closed,Reviewed and closed.
+ALT00182,Delta Rail Systems,Medium,DDoS,Endpoint,2026-06-02 17:01:00,2026-06-02 18:44:00,103,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00088,Bharat Telecom Networks,Medium,Unauthorized Access,Database,2026-06-02 23:52:00,2026-06-03 01:25:00,93,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00408,Ganga Oil & Gas,Low,Insider Threat Indicator,Network Device,2026-06-03 00:14:00,2026-06-03 03:04:00,170,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00066,Bharat Telecom Networks,High,Insider Threat Indicator,Endpoint,2026-06-05 19:47:00,2026-06-06 00:26:00,279,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00083,Bharat Telecom Networks,Medium,Insider Threat Indicator,Cloud Workload,2026-06-05 19:50:00,2026-06-05 23:34:00,224,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00144,Continental Banking Corp,High,Malware,Endpoint,2026-06-05 21:53:00,2026-06-05 21:56:00,3,No,Closed,False positive.
+ALT00577,Indus Financial Services,Low,Phishing,IoT Device,2026-06-05 22:04:00,2026-06-05 22:08:00,4,Yes,Closed,Reviewed and closed.
+ALT00438,Ganga Oil & Gas,High,Insider Threat Indicator,IoT Device,2026-06-06 00:55:00,2026-06-06 10:31:00,576,Yes,Closed,Reviewed and closed.
+ALT00122,Continental Banking Corp,Low,Insider Threat Indicator,Database,2026-06-06 07:41:00,2026-06-06 07:44:00,3,No,Closed,Reviewed and closed.
+ALT00574,Indus Financial Services,Medium,Unauthorized Access,Server,2026-06-06 09:20:00,2026-06-06 09:21:00,1,No,Closed,Reviewed and closed.
+ALT00220,Eastern Water Utility,Medium,DDoS,IoT Device,2026-06-06 10:10:00,2026-06-06 13:13:00,183,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00579,Indus Financial Services,Low,Malware,Network Device,2026-06-07 08:33:00,2026-06-07 08:34:00,1,Yes,Closed,Reviewed and closed.
+ALT00541,Indus Financial Services,Medium,Phishing,Endpoint,2026-06-07 09:29:00,2026-06-07 09:32:00,3,No,Closed,Closed as per standard procedure.
+ALT00598,Jupiter Aviation Control,Low,Malware,Endpoint,2026-06-07 14:39:00,2026-06-07 16:51:00,132,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00617,Jupiter Aviation Control,Low,Data Exfiltration Attempt,Endpoint,2026-06-07 15:44:00,2026-06-07 19:52:00,248,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00071,Bharat Telecom Networks,Medium,Data Exfiltration Attempt,IoT Device,2026-06-07 17:49:00,2026-06-07 20:36:00,167,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00107,Bharat Telecom Networks,Medium,Unauthorized Access,Endpoint,2026-06-08 02:15:00,2026-06-08 03:31:00,76,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00110,Bharat Telecom Networks,Medium,DDoS,Endpoint,2026-06-08 21:15:00,2026-06-08 23:43:00,148,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00065,Apex Power Grid Ltd,Low,Misconfiguration,Server,2026-06-09 04:15:00,2026-06-09 06:36:00,141,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00349,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Endpoint,2026-06-09 07:29:00,2026-06-09 10:04:00,155,Yes,Closed,Reviewed and closed.
+ALT00095,Bharat Telecom Networks,Medium,Malware,Endpoint,2026-06-09 15:40:00,2026-06-09 18:26:00,166,No,Closed,Closed as per standard procedure.
+ALT00061,Apex Power Grid Ltd,Critical,DDoS,Cloud Workload,2026-06-09 17:01:00,2026-06-10 00:40:00,459,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00303,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Database,2026-06-11 05:11:00,2026-06-11 05:55:00,44,No,Closed,Closed as per standard procedure.
+ALT00478,Himalayan Healthcare Network,High,Insider Threat Indicator,IoT Device,2026-06-12 04:19:00,2026-06-12 11:50:00,451,Yes,Closed,No further action required.
+ALT00092,Bharat Telecom Networks,Medium,Data Exfiltration Attempt,Network Device,2026-06-12 15:05:00,2026-06-12 18:19:00,194,No,Closed,False positive.
+ALT00426,Ganga Oil & Gas,Medium,Malware,Cloud Workload,2026-06-13 08:49:00,2026-06-13 09:43:00,54,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00411,Ganga Oil & Gas,Low,Misconfiguration,IoT Device,2026-06-13 10:55:00,2026-06-13 13:57:00,182,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00378,Fortis Defense Systems,Critical,Phishing,Network Device,2026-06-13 18:06:00,2026-06-14 02:27:00,501,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00014,Apex Power Grid Ltd,Low,Phishing,Database,2026-06-14 10:07:00,2026-06-14 10:38:00,31,No,Closed,False positive.
+ALT00330,Fortis Defense Systems,Low,DDoS,Server,2026-06-14 21:09:00,2026-06-14 23:03:00,114,No,Closed,No further action required.
+ALT00162,Continental Banking Corp,Medium,Data Exfiltration Attempt,Database,2026-06-15 02:39:00,2026-06-15 02:40:00,1,No,Closed,No further action required.
+ALT00261,Fortis Defense Systems,Medium,Unauthorized Access,Server,2026-06-15 02:59:00,2026-06-15 05:06:00,127,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00482,Himalayan Healthcare Network,Low,Malware,Network Device,2026-06-15 17:04:00,2026-06-15 18:24:00,80,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00460,Himalayan Healthcare Network,Low,Insider Threat Indicator,IoT Device,2026-06-15 17:24:00,2026-06-15 20:21:00,177,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00456,Ganga Oil & Gas,Medium,Misconfiguration,Network Device,2026-06-16 05:32:00,2026-06-16 07:01:00,89,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00407,Ganga Oil & Gas,Low,Insider Threat Indicator,IoT Device,2026-06-16 13:32:00,2026-06-16 14:06:00,34,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00489,Himalayan Healthcare Network,Medium,Insider Threat Indicator,Cloud Workload,2026-06-17 04:23:00,2026-06-17 07:21:00,178,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00230,Eastern Water Utility,Medium,Phishing,Cloud Workload,2026-06-17 08:47:00,2026-06-17 11:35:00,168,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00251,Fortis Defense Systems,Low,DDoS,Database,2026-06-17 11:07:00,2026-06-17 16:07:00,300,Yes,Closed,Reviewed and closed.
+ALT00241,Fortis Defense Systems,Low,Misconfiguration,Server,2026-06-17 11:44:00,2026-06-17 16:12:00,268,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00611,Jupiter Aviation Control,Low,Malware,Cloud Workload,2026-06-17 18:58:00,2026-06-17 20:28:00,90,Yes,Closed,No further action required.
+ALT00591,Jupiter Aviation Control,Low,Insider Threat Indicator,IoT Device,2026-06-17 19:59:00,2026-06-17 23:44:00,225,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00275,Fortis Defense Systems,Low,Data Exfiltration Attempt,Database,2026-06-17 20:48:00,2026-06-18 00:31:00,223,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00134,Continental Banking Corp,Medium,Malware,Server,2026-06-18 16:19:00,2026-06-18 16:23:00,4,No,Closed,Closed as per standard procedure.
+ALT00573,Indus Financial Services,Medium,DDoS,IoT Device,2026-06-18 17:52:00,2026-06-18 17:56:00,4,No,Closed,No further action required.
+ALT00451,Ganga Oil & Gas,Low,Data Exfiltration Attempt,Server,2026-06-18 18:32:00,2026-06-18 19:26:00,54,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00185,Eastern Water Utility,High,Misconfiguration,Network Device,2026-06-18 20:06:00,2026-06-18 23:14:00,188,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00006,Apex Power Grid Ltd,Low,Malware,Endpoint,2026-06-19 07:49:00,2026-06-19 09:10:00,81,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00387,Fortis Defense Systems,Medium,Malware,Server,2026-06-19 20:38:00,2026-06-19 22:53:00,135,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00111,Bharat Telecom Networks,High,Unauthorized Access,IoT Device,2026-06-20 00:57:00,2026-06-20 07:36:00,399,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00564,Indus Financial Services,Low,Data Exfiltration Attempt,Network Device,2026-06-20 06:07:00,2026-06-20 06:08:00,1,No,Closed,False positive.
+ALT00199,Eastern Water Utility,Low,DDoS,Network Device,2026-06-20 11:45:00,2026-06-20 14:48:00,183,No,Closed,No further action required.
+ALT00034,Apex Power Grid Ltd,Critical,Malware,Endpoint,2026-06-20 17:19:00,2026-06-20 21:34:00,255,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00270,Fortis Defense Systems,Low,Phishing,IoT Device,2026-06-21 01:48:00,2026-06-21 04:16:00,148,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00141,Continental Banking Corp,Medium,Misconfiguration,Database,2026-06-21 03:26:00,2026-06-21 03:27:00,1,Yes,Closed,False positive.
+ALT00440,Ganga Oil & Gas,Medium,Misconfiguration,Cloud Workload,2026-06-21 10:33:00,2026-06-21 11:51:00,78,No,Closed,Closed as per standard procedure.
+ALT00414,Ganga Oil & Gas,Low,Phishing,IoT Device,2026-06-21 11:32:00,2026-06-21 13:34:00,122,Yes,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00148,Continental Banking Corp,Medium,Data Exfiltration Attempt,Database,2026-06-22 02:17:00,2026-06-22 02:21:00,4,No,Closed,No further action required.
+ALT00051,Apex Power Grid Ltd,High,Phishing,Server,2026-06-22 09:14:00,2026-06-22 11:37:00,143,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00106,Bharat Telecom Networks,Critical,Misconfiguration,IoT Device,2026-06-22 17:24:00,2026-06-23 02:58:00,574,No,Closed,Reviewed and closed.
+ALT00307,Fortis Defense Systems,Low,DDoS,Cloud Workload,2026-06-22 22:51:00,2026-06-23 00:04:00,73,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00457,Ganga Oil & Gas,High,Unauthorized Access,Database,2026-06-22 23:57:00,2026-06-23 08:50:00,533,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00320,Fortis Defense Systems,Low,Misconfiguration,Network Device,2026-06-23 12:31:00,2026-06-23 16:33:00,242,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00195,Eastern Water Utility,Medium,Insider Threat Indicator,Server,2026-06-23 14:23:00,2026-06-23 16:03:00,100,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00048,Apex Power Grid Ltd,Low,DDoS,Network Device,2026-06-23 23:57:00,2026-06-24 03:54:00,237,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00324,Fortis Defense Systems,Low,Insider Threat Indicator,Database,2026-06-24 01:02:00,2026-06-24 01:40:00,38,Yes,Closed,Closed as per standard procedure.
+ALT00511,Himalayan Healthcare Network,Low,DDoS,Cloud Workload,2026-06-24 12:48:00,2026-06-24 17:25:00,277,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00394,Fortis Defense Systems,Critical,Misconfiguration,Endpoint,2026-06-24 13:12:00,2026-06-24 22:19:00,547,Yes,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00135,Continental Banking Corp,High,Data Exfiltration Attempt,Server,2026-06-25 03:31:00,2026-06-25 03:32:00,1,No,Closed,No further action required.
+ALT00209,Eastern Water Utility,Medium,Misconfiguration,Server,2026-06-25 12:19:00,2026-06-25 14:09:00,110,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00472,Himalayan Healthcare Network,Low,DDoS,IoT Device,2026-06-25 13:53:00,2026-06-25 18:05:00,252,No,Closed,No further action required.
+ALT00186,Eastern Water Utility,Medium,Phishing,Endpoint,2026-06-25 14:44:00,2026-06-25 15:46:00,62,No,Closed,Reviewed and closed.
+ALT00333,Fortis Defense Systems,High,Unauthorized Access,Endpoint,2026-06-26 00:54:00,2026-06-26 07:19:00,385,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00406,Fortis Defense Systems,Low,Malware,Endpoint,2026-06-26 02:18:00,2026-06-26 04:37:00,139,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00242,Fortis Defense Systems,Critical,Unauthorized Access,Network Device,2026-06-26 03:40:00,2026-06-26 10:54:00,434,Yes,Closed,Closed as per standard procedure.
+ALT00399,Fortis Defense Systems,High,Unauthorized Access,Network Device,2026-06-26 07:03:00,2026-06-26 09:13:00,130,Yes,Closed,False positive.
+ALT00459,Ganga Oil & Gas,High,Malware,Network Device,2026-06-26 09:13:00,2026-06-26 18:09:00,536,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00075,Bharat Telecom Networks,High,Data Exfiltration Attempt,Server,2026-06-26 15:41:00,2026-06-26 18:28:00,167,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00552,Indus Financial Services,Medium,Malware,Database,2026-06-26 15:48:00,2026-06-26 15:51:00,3,No,Closed,Reviewed and closed.
+ALT00222,Eastern Water Utility,Medium,Unauthorized Access,IoT Device,2026-06-26 20:01:00,2026-06-26 22:27:00,146,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00522,Himalayan Healthcare Network,Medium,Insider Threat Indicator,Endpoint,2026-06-27 14:24:00,2026-06-27 17:47:00,203,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00080,Bharat Telecom Networks,Critical,Data Exfiltration Attempt,Server,2026-06-28 04:40:00,2026-06-28 14:06:00,566,Yes,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00634,Jupiter Aviation Control,Low,DDoS,IoT Device,2026-06-28 06:39:00,2026-06-28 11:39:00,300,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00102,Bharat Telecom Networks,Medium,Insider Threat Indicator,Database,2026-06-28 07:36:00,2026-06-28 08:28:00,52,No,Closed,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated."
+ALT00096,Bharat Telecom Networks,Low,Misconfiguration,Cloud Workload,2026-06-28 15:07:00,2026-06-28 17:39:00,152,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00264,Fortis Defense Systems,Low,Phishing,Cloud Workload,2026-06-28 19:45:00,2026-06-28 22:59:00,194,No,Closed,"Performed forensic triage on affected host, isolated system, initiated containment protocol."
+ALT00276,Fortis Defense Systems,Medium,Data Exfiltration Attempt,IoT Device,2026-06-29 05:05:00,2026-06-29 08:24:00,199,No,Closed,Reviewed and closed.
+ALT00377,Fortis Defense Systems,Critical,Insider Threat Indicator,Cloud Workload,2026-06-29 18:25:00,2026-06-29 20:41:00,136,Yes,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
+ALT00404,Fortis Defense Systems,Medium,Data Exfiltration Attempt,Cloud Workload,2026-06-30 06:17:00,2026-06-30 10:10:00,233,No,Closed,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented."
+ALT00197,Eastern Water Utility,Critical,Unauthorized Access,IoT Device,2026-06-30 14:13:00,2026-07-01 00:02:00,589,No,Closed,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team."
