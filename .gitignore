@@ -228,6 +228,3 @@ dist/
 .env
 dataset/answer_key_INTERNAL_ONLY.csv
 *.zip
-
-# Experimental Android wrapper
-mobile-android/
