@@ -177,10 +177,29 @@ export default function DrillDownPage() {
             <p>Supervisory assessment and evidence documentation.</p>
           </div>
 
-          <div className={`drilldown-score-panel ${scoreClassStr}`}>
-            <span>RISK SCORE</span>
-            <strong>{Number(data.risk_score).toFixed(1)}</strong>
-            <small>/ 100</small>
+          <div className="drilldown-scores-container" style={{ display: 'flex', gap: '20px' }}>
+            <div className={`drilldown-score-panel ${scoreClassStr}`}>
+              <span>RISK SCORE</span>
+              <strong>{Number(data.risk_score).toFixed(1)}</strong>
+              <small>/ 100</small>
+            </div>
+            
+            {data.component_scores && (
+              <div className="drilldown-component-scores" style={{ display: 'flex', gap: '15px', background: 'rgba(255,255,255,0.02)', padding: '15px 20px', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#8e96a0', letterSpacing: '0.5px' }}>EXECUTION GAP</span>
+                  <strong style={{ fontSize: '1.2rem', color: '#f2f4f7' }}>{(data.component_scores.execution_gap || 0).toFixed(2)}</strong>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#8e96a0', letterSpacing: '0.5px' }}>NEGATIVE SPACE</span>
+                  <strong style={{ fontSize: '1.2rem', color: '#f2f4f7' }}>{(data.component_scores.negative_space || 0).toFixed(2)}</strong>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.75rem', color: '#8e96a0', letterSpacing: '0.5px' }}>ANOMALY</span>
+                  <strong style={{ fontSize: '1.2rem', color: '#f2f4f7' }}>{(data.component_scores.anomaly || 0).toFixed(2)}</strong>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -233,6 +252,17 @@ export default function DrillDownPage() {
                       <span>EVIDENCE INSTANCES</span>
                       <strong>{finding.evidence_count}</strong>
                     </div>
+                    {finding.evidence && finding.evidence.length > 0 && (
+                      <div className="finding-evidence-list" style={{ marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(255,255,255,0.05)', fontSize: '0.85rem', color: '#8e96a0', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        {finding.evidence.map((ev, i) => (
+                          <div key={i} style={{ display: 'flex', gap: '8px' }}>
+                            <span style={{ color: '#f2f4f7', whiteSpace: 'nowrap' }}>{ev.alert_id}</span>
+                            <span>-</span>
+                            <span>{ev.reason}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))
               )}

@@ -218,7 +218,7 @@ export default function DashboardPage() {
                               : (entity.risk_band || '').toLowerCase() === "low" 
                                 ? "No significant findings" 
                                 : entity.primary_driver || "Normal")
-                          : (entity.primary_driver || "Normal")}
+                          : entity.findings_summary.join(", ")}
                       </span>
                       <span className={`entity-score ${scoreClass}`}>
                         {Number(entity.risk_score).toFixed(1)}
