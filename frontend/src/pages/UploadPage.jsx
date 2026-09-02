@@ -11,6 +11,8 @@ export default function UploadPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadResult, setUploadResult] = useState(null);
   const [error, setError] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
+  const [previewData, setPreviewData] = useState({ headers: [], rows: [] });
 
   const handleFile = (selectedFile) => {
     setError("");
@@ -51,6 +53,7 @@ export default function UploadPage() {
     setFile(null);
     setUploadResult(null);
     setError("");
+    setShowPreview(false);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
@@ -89,6 +92,29 @@ export default function UploadPage() {
       setError(errorMessage);
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const openFile = async (event) => {
+    if (event.target.closest(".remove-file")) return;
+    if (!file) return;
+
+    try {
+      const text = await file.text();
+      const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+      if (lines.length > 0) {
+        const headers = lines[0]
+          .split(",")
+          .map((h) => h.replace(/^["']|["']$/g, "").trim());
+        const rows = lines.slice(1, 101).map((line) => {
+          const cells = line.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/);
+          return cells.map((cell) => cell.replace(/^["']|["']$/g, "").trim());
+        });
+        setPreviewData({ headers, rows });
+        setShowPreview(true);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -179,7 +205,12 @@ export default function UploadPage() {
           )}
 
           {file && !uploadResult && (
-            <div className="selected-file">
+            <div
+              className="selected-file"
+              onClick={openFile}
+              style={{ cursor: "pointer" }}
+              title={`Click to preview ${file.name}`}
+            >
               <div className="file-icon">
                 <FileText size={21} strokeWidth={1.5} />
               </div>
@@ -187,7 +218,7 @@ export default function UploadPage() {
               <div className="file-information">
                 <strong>{file.name}</strong>
                 <span>
-                  {(file.size / 1024).toFixed(1)} KB
+                  {(file.size / 1024).toFixed(1)} KB (Click to view preview)
                 </span>
               </div>
 
@@ -292,6 +323,173 @@ export default function UploadPage() {
           )}
         </div>
       </section>
+
+      {/* INLINE FILE PREVIEW MODAL */}
+      {showPreview && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.8)",
+            backdropFilter: "blur(6px)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+          onClick={() => setShowPreview(false)}
+        >
+          <div
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--line)",
+              borderRadius: "6px",
+              width: "92%",
+              maxWidth: "1000px",
+              maxHeight: "85vh",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.6)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              style={{
+                padding: "18px 24px",
+                borderBottom: "1px solid var(--line)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    color: "var(--accent)",
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    letterSpacing: "0.15em",
+                    marginBottom: "4px",
+                  }}
+                >
+                  FILE PREVIEW
+                </div>
+                <strong style={{ fontSize: "15px", color: "var(--text)" }}>
+                  {file.name}
+                </strong>
+                <span
+                  style={{
+                    fontSize: "11px",
+                    color: "var(--muted)",
+                    marginLeft: "12px",
+                  }}
+                >
+                  {(file.size / 1024).toFixed(1)} KB · Showing first{" "}
+                  {previewData.rows.length} rows
+                </span>
+              </div>
+              <button
+                onClick={() => setShowPreview(false)}
+                style={{
+                  background: "transparent",
+                  border: "1px solid var(--line)",
+                  color: "var(--text)",
+                  cursor: "pointer",
+                  padding: "6px 12px",
+                  borderRadius: "4px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  fontSize: "11px",
+                  fontWeight: "700",
+                }}
+              >
+                <X size={16} />
+                CLOSE
+              </button>
+            </div>
+
+            <div style={{ padding: "0", overflow: "auto", flex: 1 }}>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  fontSize: "11px",
+                  textAlign: "left",
+                }}
+              >
+                <thead>
+                  <tr
+                    style={{
+                      background: "rgba(255,255,255,0.03)",
+                      borderBottom: "1px solid var(--line)",
+                    }}
+                  >
+                    <th
+                      style={{
+                        padding: "12px 16px",
+                        color: "var(--muted)",
+                        fontSize: "9px",
+                        letterSpacing: "0.1em",
+                      }}
+                    >
+                      #
+                    </th>
+                    {previewData.headers.map((h, i) => (
+                      <th
+                        key={i}
+                        style={{
+                          padding: "12px 16px",
+                          color: "var(--accent)",
+                          fontSize: "9px",
+                          letterSpacing: "0.1em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {previewData.rows.map((row, rIdx) => (
+                    <tr
+                      key={rIdx}
+                      style={{
+                        borderBottom: "1px solid rgba(255,255,255,0.04)",
+                      }}
+                    >
+                      <td
+                        style={{
+                          padding: "10px 16px",
+                          color: "var(--muted)",
+                          fontSize: "10px",
+                        }}
+                      >
+                        {rIdx + 1}
+                      </td>
+                      {row.map((cell, cIdx) => (
+                        <td
+                          key={cIdx}
+                          style={{
+                            padding: "10px 16px",
+                            color: "#d0d5dc",
+                            whiteSpace: "nowrap",
+                          }}
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
