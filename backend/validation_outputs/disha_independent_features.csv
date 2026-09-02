@@ -1,0 +1,11 @@
+entity_name,alert_count,avg_closure_seconds,escalation_rate,critical_ratio,avg_note_length,unique_asset_types
+Apex Power Grid Ltd,65.0,13013.54,0.4154,0.1077,75.02,6.0
+Bharat Telecom Networks,50.0,13375.2,0.34,0.18,70.5,6.0
+Continental Banking Corp,65.0,148.62,0.1231,0.1231,22.51,6.0
+Delta Rail Systems,3.0,13300.0,0.6667,0.0,74.33,3.0
+Eastern Water Utility,57.0,13184.21,0.2807,0.1228,74.23,6.0
+Fortis Defense Systems,166.0,13941.69,0.512,0.1627,73.33,6.0
+Ganga Oil & Gas,53.0,12731.32,0.3962,0.0755,65.32,6.0
+Himalayan Healthcare Network,68.0,12840.88,0.5147,0.1029,71,6.0
+Indus Financial Services,60.0,169.0,0.0833,0.15,24.32,6.0
+Jupiter Aviation Control,52.0,12836.54,0.4423,0.0962,73.19,6.0
