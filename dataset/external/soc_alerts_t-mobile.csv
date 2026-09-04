@@ -1,7 +1,101 @@
 alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
-TMOB0001,T-Mobile,Medium,Unauthorized Access,Network Device,2026-02-01 07:00:00,2026-02-01 10:00:00,180,No,Closed,"SIM swap request flagged, customer identity verified via secondary channel."
-TMOB0002,T-Mobile,High,Phishing,Endpoint,2026-02-01 13:00:00,2026-02-01 16:30:00,210,Yes,Closed,"SMS phishing campaign identified, domain blocked across mobile gateway."
-TMOB0003,T-Mobile,Low,Misconfiguration,Server,2026-02-02 08:30:00,2026-02-02 11:00:00,150,No,Closed,Patched internal API gateway endpoint configuration.
-TMOB0004,T-Mobile,Critical,Data Exfiltration Attempt,Database,2026-02-02 14:00:00,2026-02-02 18:00:00,240,Yes,Closed,"Subscriber database query anomaly, session terminated, IP blocked."
-TMOB0005,T-Mobile,Medium,Malware,Cloud Workload,2026-02-03 09:00:00,2026-02-03 12:00:00,180,No,Closed,Container image vulnerability remediated.
-TMOB0006,T-Mobile,High,DDoS,Network Device,2026-02-04 02:00:00,2026-02-04 05:30:00,210,Yes,Closed,Cellular core network traffic throttled during volumetric anomaly.
+ALT00079,T-Mobile,Low,Insider Threat Indicator,Database,2026-01-01 13:32:00,2026-01-01 17:48:00,256,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00045,T-Mobile,Critical,Phishing Campaign,Network Device,2026-01-06 19:29:00,2026-01-07 00:42:00,313,No,Closed,"No further action required, false positive."
+ALT00071,T-Mobile,Low,Data Exfiltration Attempt,Web Application,2026-01-07 23:47:00,2026-01-08 06:04:00,377,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00044,T-Mobile,Medium,DDoS Attempt,Server,2026-01-12 18:55:00,2026-01-12 23:05:00,250,No,Closed,User account temporarily suspended pending review.
+ALT00067,T-Mobile,Medium,Phishing Campaign,Network Device,2026-01-12 21:08:00,2026-01-12 22:49:00,101,No,Closed,"Confirmed benign, closed after log review."
+ALT00051,T-Mobile,Medium,Privilege Escalation,Network Device,2026-01-13 04:34:00,,,No,In Progress,Escalated to threat hunting team for deeper investigation.
+ALT00087,T-Mobile,Low,Insider Threat Indicator,Database,2026-01-15 01:37:00,2026-01-15 02:45:00,68,No,Closed,"Confirmed benign, closed after log review."
+ALT00037,T-Mobile,Critical,Privilege Escalation,Cloud Storage,2026-01-17 14:27:00,2026-01-17 20:03:00,336,No,Closed,User account temporarily suspended pending review.
+ALT00077,T-Mobile,Critical,Insider Threat Indicator,Endpoint,2026-01-18 09:54:00,2026-01-18 11:05:00,71,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00084,T-Mobile,Low,Credential Stuffing,Cloud Storage,2026-01-24 02:59:00,2026-01-24 04:47:00,108,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00011,T-Mobile,Low,Phishing Campaign,Cloud Storage,2026-01-25 14:19:00,2026-01-25 17:44:00,205,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00020,T-Mobile,High,Phishing Campaign,Network Device,2026-01-28 11:18:00,2026-01-28 17:03:00,345,No,Closed,"Confirmed benign, closed after log review."
+ALT00070,T-Mobile,Medium,Unauthorized Access,Network Device,2026-02-01 20:12:00,2026-02-01 23:08:00,176,No,Closed,
+ALT00003,T-Mobile,Low,Insider Threat Indicator,Web Application,2026-02-02 19:33:00,2026-02-02 22:05:00,152,Yes,Closed,User account temporarily suspended pending review.
+ALT00057,T-Mobile,Medium,Insider Threat Indicator,Cloud Storage,2026-02-06 14:23:00,,,Yes,Open,"No further action required, false positive."
+ALT00016,T-Mobile,Low,Data Exfiltration Attempt,Network Device,2026-02-08 07:38:00,2026-02-08 11:36:00,238,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00055,T-Mobile,Medium,DDoS Attempt,Web Application,2026-02-14 04:56:00,2026-02-14 06:16:00,80,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00062,T-Mobile,Medium,Phishing Campaign,Server,2026-02-17 06:06:00,2026-02-17 08:36:00,150,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00028,T-Mobile,Medium,Credential Stuffing,Cloud Storage,2026-02-19 11:18:00,2026-02-19 11:30:00,12,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00089,T-Mobile,Low,Misconfiguration Alert,Database,2026-02-19 14:51:00,,,No,In Progress,"Reviewed and closed, no malicious activity confirmed."
+ALT00030,T-Mobile,Low,Malware Detection,Cloud Storage,2026-02-25 21:46:00,,,No,Open,"Blocked at firewall, source IP added to watchlist."
+ALT00074,T-Mobile,Medium,Malware Detection,Network Device,2026-02-26 00:48:00,2026-02-26 05:06:00,258,No,Closed,User account temporarily suspended pending review.
+ALT00042,T-Mobile,Low,DDoS Attempt,Server,2026-03-01 11:57:00,2026-03-01 15:55:00,238,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00038,T-Mobile,Low,Credential Stuffing,Network Device,2026-03-02 23:44:00,2026-03-02 23:48:00,4,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00022,T-Mobile,Medium,Insider Threat Indicator,Cloud Storage,2026-03-03 10:18:00,2026-03-03 13:22:00,184,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00004,T-Mobile,Low,Privilege Escalation,Cloud Storage,2026-03-05 02:23:00,,,No,In Progress,
+ALT00018,T-Mobile,Medium,Data Exfiltration Attempt,Cloud Storage,2026-03-06 22:15:00,2026-03-07 00:26:00,131,No,Closed,"Confirmed benign, closed after log review."
+ALT00049,T-Mobile,Medium,Data Exfiltration Attempt,Database,2026-03-09 05:38:00,2026-03-09 07:04:00,86,Yes,Closed,User account temporarily suspended pending review.
+ALT00027,T-Mobile,Critical,DDoS Attempt,Database,2026-03-10 11:07:00,,,Yes,Open,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00065,T-Mobile,High,DDoS Attempt,Cloud Storage,2026-03-12 08:30:00,2026-03-12 09:54:00,84,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00061,T-Mobile,High,DDoS Attempt,Web Application,2026-03-15 16:30:00,2026-03-15 18:52:00,142,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00019,T-Mobile,High,Privilege Escalation,Endpoint,2026-03-18 06:26:00,2026-03-18 12:09:00,343,No,Closed,
+ALT00066,T-Mobile,Medium,Data Exfiltration Attempt,Database,2026-03-20 21:23:00,2026-03-21 01:48:00,265,Yes,Closed,
+ALT00100,T-Mobile,High,Ransomware Indicator,Endpoint,2026-03-23 05:44:00,2026-03-23 06:28:00,44,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00093,T-Mobile,Medium,Privilege Escalation,Cloud Storage,2026-03-25 12:52:00,2026-03-25 17:08:00,256,No,Closed,User account temporarily suspended pending review.
+ALT00015,T-Mobile,Low,Privilege Escalation,Endpoint,2026-03-26 13:09:00,2026-03-26 14:20:00,71,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00092,T-Mobile,Medium,Data Exfiltration Attempt,Server,2026-03-29 22:49:00,2026-03-30 04:25:00,336,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00029,T-Mobile,High,Privilege Escalation,Network Device,2026-03-31 21:09:00,2026-03-31 22:52:00,103,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00040,T-Mobile,Low,Misconfiguration Alert,Cloud Storage,2026-04-05 01:36:00,2026-04-05 07:54:00,378,No,Closed,"Confirmed benign, closed after log review."
+ALT00090,T-Mobile,High,Malware Detection,Cloud Storage,2026-04-06 03:55:00,2026-04-06 07:41:00,226,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00047,T-Mobile,High,Privilege Escalation,Database,2026-04-07 05:40:00,2026-04-07 08:36:00,176,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00091,T-Mobile,Medium,Insider Threat Indicator,Server,2026-04-08 04:20:00,,,No,In Progress,"Blocked at firewall, source IP added to watchlist."
+ALT00021,T-Mobile,Low,Credential Stuffing,Endpoint,2026-04-13 22:03:00,2026-04-14 03:42:00,339,Yes,Closed,"No further action required, false positive."
+ALT00098,T-Mobile,Medium,Misconfiguration Alert,Cloud Storage,2026-04-14 11:42:00,2026-04-14 15:35:00,233,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00083,T-Mobile,High,Misconfiguration Alert,Web Application,2026-04-15 11:32:00,2026-04-15 14:06:00,154,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00080,T-Mobile,High,Unauthorized Access,Web Application,2026-04-16 22:49:00,2026-04-17 03:41:00,292,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00006,T-Mobile,Low,Unauthorized Access,Server,2026-04-18 16:16:00,2026-04-18 17:09:00,53,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00031,T-Mobile,Critical,Unauthorized Access,Network Device,2026-04-22 07:21:00,2026-04-22 11:58:00,277,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00053,T-Mobile,Low,Credential Stuffing,Server,2026-04-22 18:54:00,2026-04-22 21:55:00,181,No,Closed,User account temporarily suspended pending review.
+ALT00068,T-Mobile,Critical,Ransomware Indicator,Cloud Storage,2026-04-28 14:52:00,2026-04-28 16:14:00,82,Yes,Closed,User account temporarily suspended pending review.
+ALT00060,T-Mobile,Medium,Misconfiguration Alert,Cloud Storage,2026-05-03 05:08:00,2026-05-03 11:11:00,363,No,Closed,"No further action required, false positive."
+ALT00010,T-Mobile,Medium,DDoS Attempt,Database,2026-05-03 14:21:00,2026-05-03 15:08:00,47,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00076,T-Mobile,Low,Insider Threat Indicator,Network Device,2026-05-05 00:02:00,2026-05-05 05:52:00,350,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00048,T-Mobile,High,Misconfiguration Alert,Server,2026-05-11 01:16:00,2026-05-11 06:22:00,306,No,Closed,
+ALT00041,T-Mobile,Low,Ransomware Indicator,Web Application,2026-05-13 08:09:00,2026-05-13 11:25:00,196,No,Closed,"No further action required, false positive."
+ALT00059,T-Mobile,Medium,DDoS Attempt,Network Device,2026-05-15 18:57:00,,,Yes,In Progress,"No further action required, false positive."
+ALT00033,T-Mobile,Medium,Credential Stuffing,Cloud Storage,2026-05-20 10:05:00,2026-05-20 11:58:00,113,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00078,T-Mobile,Low,Unauthorized Access,Database,2026-05-23 02:46:00,,,No,In Progress,"No further action required, false positive."
+ALT00024,T-Mobile,High,Malware Detection,Database,2026-05-24 12:55:00,,,No,In Progress,"No further action required, false positive."
+ALT00009,T-Mobile,High,Misconfiguration Alert,Server,2026-05-25 07:39:00,2026-05-25 09:33:00,114,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00063,T-Mobile,Medium,Unauthorized Access,Server,2026-05-27 03:19:00,2026-05-27 03:34:00,15,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00064,T-Mobile,Medium,Insider Threat Indicator,Web Application,2026-05-31 04:33:00,2026-05-31 07:22:00,169,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00017,T-Mobile,Low,Data Exfiltration Attempt,Web Application,2026-06-02 21:35:00,2026-06-03 02:14:00,279,Yes,Closed,"No further action required, false positive."
+ALT00036,T-Mobile,High,DDoS Attempt,Network Device,2026-06-08 15:38:00,,,No,Open,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00085,T-Mobile,Critical,Insider Threat Indicator,Endpoint,2026-06-08 21:58:00,,,Yes,In Progress,User account temporarily suspended pending review.
+ALT00013,T-Mobile,Low,Insider Threat Indicator,Database,2026-06-09 12:40:00,2026-06-09 18:57:00,377,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00058,T-Mobile,High,Credential Stuffing,Cloud Storage,2026-06-12 07:07:00,2026-06-12 09:45:00,158,No,Closed,"Confirmed benign, closed after log review."
+ALT00050,T-Mobile,Medium,Ransomware Indicator,Database,2026-06-12 14:09:00,2026-06-12 20:39:00,390,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00099,T-Mobile,High,Insider Threat Indicator,Web Application,2026-06-14 09:00:00,,,No,Open,"Reviewed and closed, no malicious activity confirmed."
+ALT00043,T-Mobile,High,Insider Threat Indicator,Web Application,2026-06-18 04:29:00,2026-06-18 10:27:00,358,No,Closed,User account temporarily suspended pending review.
+ALT00025,T-Mobile,Critical,Credential Stuffing,Network Device,2026-06-19 23:33:00,2026-06-20 02:19:00,166,No,Closed,"Confirmed benign, closed after log review."
+ALT00069,T-Mobile,Low,Insider Threat Indicator,Database,2026-06-22 13:21:00,2026-06-22 14:10:00,49,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00073,T-Mobile,Low,Privilege Escalation,Server,2026-06-23 23:04:00,2026-06-24 05:09:00,365,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00095,T-Mobile,Medium,Data Exfiltration Attempt,Server,2026-06-24 08:03:00,2026-06-24 09:16:00,73,No,Closed,User account temporarily suspended pending review.
+ALT00039,T-Mobile,High,Malware Detection,Server,2026-06-27 18:01:00,2026-06-27 18:48:00,47,No,Closed,
+ALT00046,T-Mobile,High,Insider Threat Indicator,Endpoint,2026-06-27 21:58:00,,,No,Open,"Blocked at firewall, source IP added to watchlist."
+ALT00032,T-Mobile,Medium,Malware Detection,Web Application,2026-06-28 20:10:00,2026-06-29 02:16:00,366,Yes,Closed,
+ALT00001,T-Mobile,Critical,Credential Stuffing,Web Application,2026-06-28 23:52:00,,,No,In Progress,"Reviewed and closed, no malicious activity confirmed."
+ALT00012,T-Mobile,Medium,Privilege Escalation,Database,2026-06-29 19:40:00,2026-06-30 01:20:00,340,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00088,T-Mobile,Low,Insider Threat Indicator,Server,2026-07-02 01:59:00,2026-07-02 02:11:00,12,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00075,T-Mobile,High,Insider Threat Indicator,Endpoint,2026-07-02 21:02:00,,,No,In Progress,"Reviewed and closed, no malicious activity confirmed."
+ALT00034,T-Mobile,Medium,DDoS Attempt,Server,2026-07-03 10:11:00,,,No,Open,
+ALT00014,T-Mobile,High,Malware Detection,Cloud Storage,2026-07-05 23:34:00,2026-07-06 02:19:00,165,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00035,T-Mobile,Low,Phishing Campaign,Database,2026-07-06 22:46:00,2026-07-07 02:06:00,200,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00008,T-Mobile,Low,Credential Stuffing,Network Device,2026-07-11 02:11:00,2026-07-11 06:00:00,229,No,Closed,"Confirmed benign, closed after log review."
+ALT00026,T-Mobile,Low,Unauthorized Access,Endpoint,2026-07-12 05:26:00,2026-07-12 05:35:00,9,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00005,T-Mobile,High,Malware Detection,Server,2026-07-13 16:56:00,2026-07-13 20:53:00,237,No,Closed,"Confirmed benign, closed after log review."
+ALT00007,T-Mobile,Low,Insider Threat Indicator,Cloud Storage,2026-07-16 03:45:00,2026-07-16 07:03:00,198,Yes,Closed,User account temporarily suspended pending review.
+ALT00054,T-Mobile,Critical,Credential Stuffing,Network Device,2026-07-16 14:47:00,2026-07-16 19:21:00,274,No,Closed,
+ALT00086,T-Mobile,Low,Privilege Escalation,Database,2026-07-23 04:02:00,,,No,Open,"Reviewed and closed, no malicious activity confirmed."
+ALT00052,T-Mobile,High,Ransomware Indicator,Endpoint,2026-07-23 04:30:00,2026-07-23 10:10:00,340,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00072,T-Mobile,Low,Phishing Campaign,Server,2026-07-26 18:54:00,,,No,In Progress,Escalated to threat hunting team for deeper investigation.
+ALT00082,T-Mobile,Low,Phishing Campaign,Network Device,2026-07-27 19:49:00,2026-07-27 23:22:00,213,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00023,T-Mobile,Low,Ransomware Indicator,Endpoint,2026-07-31 22:59:00,,,Yes,Open,"Blocked at firewall, source IP added to watchlist."
+ALT00081,T-Mobile,Low,Misconfiguration Alert,Web Application,2026-08-02 17:47:00,2026-08-02 20:08:00,141,No,Closed,User account temporarily suspended pending review.
+ALT00097,T-Mobile,High,Data Exfiltration Attempt,Database,2026-08-02 22:35:00,,,Yes,In Progress,
+ALT00002,T-Mobile,Medium,Credential Stuffing,Network Device,2026-08-12 21:07:00,2026-08-13 01:19:00,252,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00056,T-Mobile,High,DDoS Attempt,Database,2026-08-13 17:13:00,2026-08-13 18:27:00,74,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00094,T-Mobile,High,Data Exfiltration Attempt,Endpoint,2026-08-18 13:22:00,,,No,Open,"Confirmed benign, closed after log review."
+ALT00096,T-Mobile,High,Privilege Escalation,Cloud Storage,2026-08-23 04:42:00,2026-08-23 06:47:00,125,Yes,Closed,"No further action required, false positive."

@@ -1,9 +1,101 @@
 alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
-EQX00001,Equifax,High,Unauthorized Access,Database,2026-02-01 09:00:00,2026-02-01 12:30:00,210,Yes,Closed,"Investigated database query logs, revoked temporary key, notified security team."
-EQX00002,Equifax,Critical,Data Exfiltration Attempt,Server,2026-02-01 14:15:00,2026-02-01 18:45:00,270,Yes,Closed,"Identified outbound egress spike, blocked destination IP on edge firewall."
-EQX00003,Equifax,Medium,Phishing,Endpoint,2026-02-02 08:00:00,2026-02-02 09:30:00,90,No,Closed,Reviewed email headers and removed malicious attachment.
-EQX00004,Equifax,Low,Misconfiguration,Cloud Workload,2026-02-02 11:00:00,2026-02-02 11:45:00,45,No,Closed,Updated IAM policy to restrict public access.
-EQX00005,Equifax,Critical,Malware,Server,2026-02-03 01:20:00,2026-02-03 06:20:00,300,Yes,Closed,"Isolated host from network, initiated memory dump analysis."
-EQX00006,Equifax,Low,Insider Threat Indicator,Endpoint,2026-02-03 10:00:00,,,No,Open,
-EQX00007,Equifax,Medium,DDoS,Network Device,2026-02-04 15:30:00,2026-02-04 17:30:00,120,No,Closed,Mitigated rate-limiting threshold violation.
-EQX00008,Equifax,High,Unauthorized Access,Database,2026-02-05 03:10:00,2026-02-05 07:10:00,240,Yes,Closed,"Correlated logs, reset compromised admin credentials."
+ALT00015,Equifax,Medium,Credential Stuffing,Server,2026-01-02 08:17:00,2026-01-02 11:47:00,210,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00031,Equifax,High,Credential Stuffing,Cloud Storage,2026-01-03 17:01:00,2026-01-03 20:46:00,225,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00025,Equifax,Critical,Data Exfiltration Attempt,Endpoint,2026-01-07 03:53:00,,,No,In Progress,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00048,Equifax,Medium,DDoS Attempt,Database,2026-01-07 21:26:00,,,No,Open,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00085,Equifax,Medium,Privilege Escalation,Endpoint,2026-01-15 08:38:00,2026-01-15 14:30:00,352,No,Closed,User account temporarily suspended pending review.
+ALT00089,Equifax,Critical,DDoS Attempt,Endpoint,2026-01-16 22:18:00,2026-01-17 03:00:00,282,Yes,Closed,"No further action required, false positive."
+ALT00003,Equifax,Medium,Misconfiguration Alert,Server,2026-01-22 01:44:00,2026-01-22 03:20:00,96,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00041,Equifax,High,Misconfiguration Alert,Server,2026-01-28 19:34:00,2026-01-29 00:43:00,309,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00076,Equifax,High,Malware Detection,Server,2026-01-30 11:11:00,2026-01-30 15:38:00,267,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00083,Equifax,Low,Malware Detection,Cloud Storage,2026-01-31 12:38:00,2026-01-31 15:48:00,190,No,Closed,User account temporarily suspended pending review.
+ALT00051,Equifax,High,Malware Detection,Endpoint,2026-02-01 06:06:00,2026-02-01 10:00:00,234,No,Closed,User account temporarily suspended pending review.
+ALT00016,Equifax,High,Insider Threat Indicator,Web Application,2026-02-01 15:07:00,2026-02-01 16:29:00,82,Yes,Closed,"No further action required, false positive."
+ALT00019,Equifax,Low,Malware Detection,Cloud Storage,2026-02-08 15:12:00,2026-02-08 15:48:00,36,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00001,Equifax,Low,Privilege Escalation,Network Device,2026-02-13 17:45:00,2026-02-13 23:25:00,340,No,Closed,User account temporarily suspended pending review.
+ALT00022,Equifax,Critical,Insider Threat Indicator,Web Application,2026-02-15 12:14:00,2026-02-15 17:42:00,328,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00090,Equifax,Medium,Privilege Escalation,Database,2026-02-17 07:06:00,2026-02-17 10:56:00,230,No,Closed,
+ALT00017,Equifax,High,Data Exfiltration Attempt,Web Application,2026-02-18 21:58:00,2026-02-18 23:12:00,74,Yes,Closed,User account temporarily suspended pending review.
+ALT00005,Equifax,High,DDoS Attempt,Web Application,2026-02-19 16:27:00,,,No,Open,"No further action required, false positive."
+ALT00006,Equifax,Critical,Unauthorized Access,Network Device,2026-02-23 02:37:00,2026-02-23 04:40:00,123,No,Closed,
+ALT00042,Equifax,Medium,Privilege Escalation,Server,2026-02-23 21:10:00,2026-02-24 00:44:00,214,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00029,Equifax,Low,Unauthorized Access,Cloud Storage,2026-02-26 07:43:00,,,No,Open,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00097,Equifax,Medium,Malware Detection,Database,2026-02-26 16:43:00,2026-02-26 20:52:00,249,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00011,Equifax,Low,Credential Stuffing,Cloud Storage,2026-02-28 00:05:00,2026-02-28 02:10:00,125,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00057,Equifax,High,Phishing Campaign,Server,2026-03-01 00:32:00,2026-03-01 03:58:00,206,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00055,Equifax,Low,Unauthorized Access,Database,2026-03-01 23:39:00,2026-03-02 01:18:00,99,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00045,Equifax,High,Privilege Escalation,Server,2026-03-03 20:21:00,2026-03-04 01:49:00,328,No,Closed,
+ALT00059,Equifax,Medium,Data Exfiltration Attempt,Web Application,2026-03-06 03:44:00,2026-03-06 06:27:00,163,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00023,Equifax,High,Malware Detection,Network Device,2026-03-08 14:15:00,2026-03-08 16:03:00,108,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00037,Equifax,Low,Insider Threat Indicator,Server,2026-03-11 11:12:00,2026-03-11 12:35:00,83,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00012,Equifax,High,Data Exfiltration Attempt,Endpoint,2026-03-12 10:17:00,2026-03-12 16:31:00,374,No,Closed,User account temporarily suspended pending review.
+ALT00009,Equifax,Low,Credential Stuffing,Server,2026-03-20 02:49:00,2026-03-20 07:18:00,269,No,Closed,"Confirmed benign, closed after log review."
+ALT00086,Equifax,Medium,Ransomware Indicator,Web Application,2026-03-20 18:42:00,2026-03-20 19:05:00,23,Yes,Closed,"No further action required, false positive."
+ALT00095,Equifax,Medium,Unauthorized Access,Server,2026-03-22 12:35:00,2026-03-22 13:14:00,39,No,Closed,"Confirmed benign, closed after log review."
+ALT00010,Equifax,Medium,Unauthorized Access,Server,2026-03-22 14:12:00,2026-03-22 19:53:00,341,Yes,Closed,"No further action required, false positive."
+ALT00062,Equifax,Low,Malware Detection,Server,2026-03-23 12:12:00,2026-03-23 17:32:00,320,No,Closed,User account temporarily suspended pending review.
+ALT00061,Equifax,Low,Privilege Escalation,Network Device,2026-03-24 04:12:00,2026-03-24 10:11:00,359,No,Closed,"Confirmed benign, closed after log review."
+ALT00039,Equifax,Low,DDoS Attempt,Endpoint,2026-03-26 04:32:00,,,No,Open,"Blocked at firewall, source IP added to watchlist."
+ALT00071,Equifax,Low,DDoS Attempt,Cloud Storage,2026-03-27 07:36:00,2026-03-27 10:52:00,196,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00093,Equifax,Low,DDoS Attempt,Cloud Storage,2026-03-28 09:17:00,,,No,In Progress,"Reviewed and closed, no malicious activity confirmed."
+ALT00043,Equifax,Medium,Unauthorized Access,Endpoint,2026-03-28 11:05:00,2026-03-28 17:31:00,386,No,Closed,"No further action required, false positive."
+ALT00066,Equifax,Low,Misconfiguration Alert,Database,2026-03-28 17:33:00,2026-03-28 19:43:00,130,No,Closed,User account temporarily suspended pending review.
+ALT00075,Equifax,Low,Data Exfiltration Attempt,Database,2026-03-30 12:00:00,2026-03-30 12:06:00,6,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00070,Equifax,Low,Insider Threat Indicator,Endpoint,2026-04-08 03:32:00,2026-04-08 07:49:00,257,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00034,Equifax,High,Phishing Campaign,Server,2026-04-09 07:24:00,,,No,In Progress,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00063,Equifax,High,Data Exfiltration Attempt,Cloud Storage,2026-04-09 14:37:00,2026-04-09 18:13:00,216,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00079,Equifax,Medium,Credential Stuffing,Server,2026-04-10 12:40:00,2026-04-10 18:11:00,331,Yes,Closed,"No further action required, false positive."
+ALT00054,Equifax,High,Misconfiguration Alert,Cloud Storage,2026-04-13 05:15:00,2026-04-13 07:21:00,126,Yes,Closed,
+ALT00026,Equifax,Critical,DDoS Attempt,Database,2026-04-23 06:28:00,,,No,Open,Escalated to threat hunting team for deeper investigation.
+ALT00065,Equifax,High,Malware Detection,Web Application,2026-04-27 14:34:00,2026-04-27 18:05:00,211,Yes,Closed,
+ALT00091,Equifax,Critical,Credential Stuffing,Server,2026-05-03 17:27:00,2026-05-03 18:01:00,34,Yes,Closed,
+ALT00024,Equifax,Low,Ransomware Indicator,Network Device,2026-05-05 17:44:00,2026-05-05 23:55:00,371,Yes,Closed,
+ALT00004,Equifax,High,Misconfiguration Alert,Server,2026-05-06 19:26:00,2026-05-07 00:50:00,324,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00058,Equifax,Medium,DDoS Attempt,Web Application,2026-05-07 05:05:00,2026-05-07 08:47:00,222,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00020,Equifax,Critical,Data Exfiltration Attempt,Network Device,2026-05-10 15:35:00,2026-05-10 20:33:00,298,No,Closed,"Confirmed benign, closed after log review."
+ALT00002,Equifax,Medium,Data Exfiltration Attempt,Web Application,2026-05-16 17:39:00,,,No,Open,User account temporarily suspended pending review.
+ALT00084,Equifax,Low,Unauthorized Access,Cloud Storage,2026-05-18 16:30:00,,,Yes,In Progress,"Reviewed and closed, no malicious activity confirmed."
+ALT00018,Equifax,Medium,Insider Threat Indicator,Network Device,2026-05-20 04:29:00,2026-05-20 08:23:00,234,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00049,Equifax,Low,Phishing Campaign,Server,2026-05-20 18:11:00,,,No,Open,"No further action required, false positive."
+ALT00021,Equifax,Low,Unauthorized Access,Network Device,2026-05-22 02:50:00,2026-05-22 08:47:00,357,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00068,Equifax,Critical,Ransomware Indicator,Network Device,2026-05-24 14:29:00,,,No,In Progress,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00078,Equifax,High,Phishing Campaign,Network Device,2026-05-29 00:54:00,2026-05-29 06:51:00,357,Yes,Closed,"No further action required, false positive."
+ALT00008,Equifax,Low,Phishing Campaign,Cloud Storage,2026-05-31 17:39:00,,,No,In Progress,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00056,Equifax,Low,DDoS Attempt,Endpoint,2026-06-01 20:55:00,2026-06-01 23:17:00,142,No,Closed,"Confirmed benign, closed after log review."
+ALT00040,Equifax,Low,Insider Threat Indicator,Web Application,2026-06-03 06:51:00,2026-06-03 08:56:00,125,No,Closed,
+ALT00094,Equifax,Medium,Unauthorized Access,Endpoint,2026-06-06 20:53:00,2026-06-07 01:54:00,301,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00007,Equifax,Critical,Malware Detection,Network Device,2026-06-13 23:30:00,2026-06-14 04:59:00,329,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00092,Equifax,Critical,Misconfiguration Alert,Database,2026-06-14 23:52:00,2026-06-15 05:37:00,345,No,Closed,"No further action required, false positive."
+ALT00046,Equifax,Low,Unauthorized Access,Server,2026-06-19 09:39:00,2026-06-19 10:28:00,49,No,Closed,"Confirmed benign, closed after log review."
+ALT00013,Equifax,Low,Malware Detection,Web Application,2026-06-24 06:01:00,2026-06-24 10:01:00,240,Yes,Closed,
+ALT00098,Equifax,Medium,Malware Detection,Network Device,2026-06-28 19:38:00,2026-06-28 21:04:00,86,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00073,Equifax,Low,Credential Stuffing,Server,2026-07-04 17:59:00,2026-07-04 23:47:00,348,No,Closed,"No further action required, false positive."
+ALT00033,Equifax,Low,Data Exfiltration Attempt,Web Application,2026-07-08 03:18:00,,,No,Open,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00072,Equifax,High,Phishing Campaign,Endpoint,2026-07-09 06:53:00,2026-07-09 07:19:00,26,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00014,Equifax,Medium,Phishing Campaign,Web Application,2026-07-09 07:16:00,,,No,Open,User account temporarily suspended pending review.
+ALT00036,Equifax,Low,Data Exfiltration Attempt,Database,2026-07-09 15:22:00,2026-07-09 21:54:00,392,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00052,Equifax,Low,Credential Stuffing,Network Device,2026-07-10 02:49:00,2026-07-10 04:41:00,112,Yes,Closed,User account temporarily suspended pending review.
+ALT00082,Equifax,Medium,Privilege Escalation,Server,2026-07-10 08:48:00,2026-07-10 14:23:00,335,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00044,Equifax,Medium,Insider Threat Indicator,Database,2026-07-10 10:43:00,2026-07-10 15:34:00,291,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00027,Equifax,Low,Unauthorized Access,Network Device,2026-07-10 22:43:00,2026-07-11 00:26:00,103,No,Closed,"Confirmed benign, closed after log review."
+ALT00067,Equifax,Low,Misconfiguration Alert,Network Device,2026-07-12 02:42:00,2026-07-12 05:27:00,165,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00050,Equifax,Low,Insider Threat Indicator,Web Application,2026-07-12 15:37:00,2026-07-12 19:35:00,238,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00096,Equifax,Critical,Malware Detection,Server,2026-07-16 22:59:00,2026-07-17 02:33:00,214,No,Closed,
+ALT00099,Equifax,Low,Data Exfiltration Attempt,Cloud Storage,2026-07-19 15:07:00,2026-07-19 20:45:00,338,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00074,Equifax,High,Privilege Escalation,Server,2026-07-25 12:49:00,2026-07-25 14:21:00,92,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00038,Equifax,Low,Ransomware Indicator,Server,2026-07-26 07:26:00,,,No,In Progress,"Confirmed benign, closed after log review."
+ALT00060,Equifax,Low,Unauthorized Access,Server,2026-07-28 13:54:00,,,No,Open,Escalated to threat hunting team for deeper investigation.
+ALT00035,Equifax,Low,Misconfiguration Alert,Network Device,2026-07-29 19:45:00,,,No,In Progress,User account temporarily suspended pending review.
+ALT00087,Equifax,Medium,DDoS Attempt,Endpoint,2026-08-01 07:01:00,2026-08-01 07:26:00,25,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00081,Equifax,High,DDoS Attempt,Server,2026-08-04 00:52:00,2026-08-04 06:36:00,344,No,Closed,"No further action required, false positive."
+ALT00053,Equifax,Critical,Insider Threat Indicator,Cloud Storage,2026-08-05 15:39:00,2026-08-05 17:46:00,127,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00100,Equifax,Critical,Misconfiguration Alert,Network Device,2026-08-07 11:17:00,2026-08-07 15:30:00,253,No,Closed,
+ALT00047,Equifax,High,Privilege Escalation,Network Device,2026-08-07 23:57:00,,,No,In Progress,User account temporarily suspended pending review.
+ALT00028,Equifax,Medium,Insider Threat Indicator,Cloud Storage,2026-08-08 08:18:00,2026-08-08 14:38:00,380,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00080,Equifax,High,Misconfiguration Alert,Endpoint,2026-08-09 06:43:00,2026-08-09 11:13:00,270,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00077,Equifax,Medium,Malware Detection,Web Application,2026-08-15 00:28:00,,,Yes,Open,"Blocked at firewall, source IP added to watchlist."
+ALT00088,Equifax,High,Insider Threat Indicator,Endpoint,2026-08-15 01:59:00,,,No,Open,User account temporarily suspended pending review.
+ALT00064,Equifax,Low,DDoS Attempt,Database,2026-08-19 15:46:00,2026-08-19 19:28:00,222,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00069,Equifax,Low,Insider Threat Indicator,Cloud Storage,2026-08-20 23:27:00,2026-08-21 01:23:00,116,No,Closed,
+ALT00030,Equifax,Critical,Credential Stuffing,Cloud Storage,2026-08-24 12:46:00,2026-08-24 18:01:00,315,Yes,Closed,"No further action required, false positive."
+ALT00032,Equifax,Low,Insider Threat Indicator,Endpoint,2026-08-24 21:05:00,2026-08-25 00:43:00,218,No,Closed,

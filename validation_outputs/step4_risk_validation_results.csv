@@ -1,0 +1,6 @@
+company,production_eg,independent_eg,eg_difference,production_ns,independent_ns,ns_difference,production_anomaly,independent_anomaly,anomaly_difference,production_weighted_score,independent_weighted_score,weighted_difference,soft_floor_value,production_final_score,independent_final_score,final_score_difference,production_risk_band,independent_risk_band,production_primary_driver,independent_primary_driver,soft_floor_active,overall_status
+Equifax,0.514286,0.514286,0.0,0.0,0.0,0.0,0.021352,0.021352,0.0,0.211052,0.211052,0.0,0.437143,43.7,43.7,0.0,medium,medium,execution_gap,execution_gap,True,PASS
+JPMorgan Chase,0.530769,0.530769,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.212308,0.212308,0.0,0.451154,45.1,45.1,0.0,high,high,execution_gap,execution_gap,True,PASS
+MGM Resorts,0.490909,0.490909,0.0,0.0,0.0,0.0,0.007808,0.007808,0.0,0.198316,0.198316,0.0,0.417273,41.7,41.7,0.0,medium,medium,execution_gap,execution_gap,True,PASS
+Microsoft,0.525,0.525,0.0,0.0,0.0,0.0,1.0,1.0,0.0,0.46,0.46,0.0,0.85,85.0,85.0,0.0,critical,critical,anomaly,anomaly,True,PASS
+T-Mobile,0.45,0.45,0.0,0.0,0.0,0.0,0.078023,0.078023,0.0,0.199506,0.199506,0.0,0.3825,38.2,38.2,0.0,medium,medium,execution_gap,execution_gap,True,PASS
