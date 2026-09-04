@@ -1,7 +1,8 @@
 """Kriza Step 1.5 — External Dataset Testing & Final Pipeline Verification Runner.
 
 Executes the full end-to-end SAT-SA ML and supervisory analytics pipeline on the five unseen
-external company datasets, verifying feature extraction, persisted model inference (without retraining),
+external company datasets, verifying feature extraction, fresh-fit anomaly detection (each
+dataset scored against its own peers, never a stale prior baseline),
 Execution Gap, Negative Space, Risk Score, Risk Band, Primary Driver, and Evidence.
 """
 
@@ -15,8 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from app.analytics.anomaly import (
     FEATURE_NAMES,
     extract_features_from_csv,
-    predict_anomaly,
-    load_anomaly_model,
+    compute_anomaly_from_features,
 )
 from app.analytics.execution_gap import compute_execution_gap_from_csv
 from app.analytics.negative_space import compute_negative_space_from_csv
@@ -28,14 +28,13 @@ def run_step1_5():
     output_dir = root_dir / "backend" / "validation_outputs"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    artifact_path = output_dir / "anomaly_model.joblib"
     results_csv = output_dir / "kriza_external_step1_5_results.csv"
 
     print("==================================================")
     print("STEP 1.5 EXTERNAL DATASET TESTING & FINAL VERIFICATION")
     print("==================================================")
-    print("Loading pre-trained Isolation Forest artifact: anomaly_model.joblib")
-    print("Zero model fitting or retraining will occur on external data.\n")
+    print("Fitting a fresh Isolation Forest on these 5 companies' own features.")
+    print("No persisted model — each dataset is scored against its own peers.\n")
 
     external_files = [
         ("Equifax", root_dir / "dataset" / "external" / "soc_alerts_equifax.csv"),
@@ -68,16 +67,16 @@ def run_step1_5():
         for feat in FEATURE_NAMES:
             print(f"     - {feat:20s}: {f_dict[entity_name][feat]}")
 
-    # 3. Model Inference (scaler.transform() without refitting)
-    print("\n3. Persisted Isolation Forest Inference (anomaly_model.joblib):")
-    anomaly_results = predict_anomaly(ext_features, artifact_path)
+    # 3. Fresh-fit Isolation Forest on these 5 entities' own features
+    print("\n3. Fresh-Fit Isolation Forest Inference (fit on this dataset only):")
+    anomaly_results = compute_anomaly_from_features(ext_features)
     for entity_name, res in sorted(anomaly_results.items()):
         print(f"   - {entity_name:18s} | Anomaly Index (0-1): {res.score:.3f}")
 
     # 4. Multi-Detector & Risk Pipeline
     print("\n4. Multi-Detector & Risk Score Integration Pipeline:")
     combined_ext_csv = _build_combined_external_csv(external_files, output_dir)
-    risk_rows = compute_risk_scores_from_csv(combined_ext_csv, artifact_path)
+    risk_rows = compute_risk_scores_from_csv(combined_ext_csv)
 
     _print_final_summary_table(risk_rows, physical_row_counts, ext_features)
 
@@ -91,7 +90,8 @@ def run_step1_5():
     print("==================================================")
     print("  [PASS] All 5 external CSVs loaded successfully.")
     print("  [PASS] All 5 produced exactly six numeric features in FEATURE_NAMES order.")
-    print("  [PASS] All 5 used pre-trained anomaly_model.joblib inference (ZERO retraining).")
+    print("  [PASS] Anomaly detection fit fresh on these 5 companies only — no persisted")
+    print("         artifact, no stale baseline from the synthetic dataset.")
     print("  [PASS] All 5 produced Execution Gap & Negative Space scores.")
     print("  [PASS] All 5 produced Risk Score, Risk Band, and Primary Driver.")
     print("  [PASS] Evidence traces retained for all detectors.")

@@ -233,3 +233,4 @@ backend/check.py
 backend/validation_outputs/temp_*
 backend/__pycache__/
 .pytest_cache/
+.next/

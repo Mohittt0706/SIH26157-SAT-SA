@@ -17,13 +17,11 @@ Fully offline — no network calls, no external models.
 
 from __future__ import annotations
 
-import joblib
 import statistics
 from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
-import joblib
 import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
@@ -271,23 +269,21 @@ def _fmt(val: float) -> str:
 # Core computation
 # ---------------------------------------------------------------------------
 
-def _compute_anomaly_matrix(
-    by_entity: dict[str, list[Alert]],
+def _fit_and_score(
+    entity_names: list[str],
+    feature_vectors: list[dict[str, float]],
 ) -> dict[str, AnomalyResult]:
-    """Fit IsolationForest on the entity×feature matrix and return results.
+    """Fit a fresh StandardScaler + IsolationForest on the given feature vectors.
 
-    This is the internal implementation shared by the DB and CLI paths.
+    The single fit-and-score implementation shared by every entry point into
+    this detector — DB-backed and CSV-backed alike. There is no persisted
+    model: every call retrains from scratch on whatever dataset it's given.
+    A saved scaler/model would carry the mean/std of whichever dataset it was
+    fit on, so scoring a different upload against it — different entity
+    count, different scale — would answer "unusual compared to a stale prior
+    dataset", not "unusual within this dataset", which is the only question
+    this detector is meant to answer.
     """
-    entity_names = sorted(by_entity.keys())
-
-    if not entity_names:
-        return {}
-
-    # Build feature matrix — one row per entity, columns in FEATURE_NAMES order.
-    feature_vectors: list[dict[str, float]] = []
-    for name in entity_names:
-        feature_vectors.append(_extract_features(by_entity[name]))
-
     X = np.array([[fv[f] for f in FEATURE_NAMES] for fv in feature_vectors])
 
     # Scale features so that alert_count (hundreds) doesn't dominate
@@ -302,14 +298,6 @@ def _compute_anomaly_matrix(
         n_estimators=IFOREST_N_ESTIMATORS,
     )
     raw_scores = clf.fit(X_scaled).decision_function(X_scaled)
-    joblib.dump(
-       {
-           "clf": clf,
-           "scaler": scaler,
-           "feature_names": FEATURE_NAMES,
-       },
-       "anomaly_model.joblib",
-    )
 
     # Convert to 0.0–1.0 (higher = more anomalous).
     converted = _convert_scores(raw_scores)
@@ -330,103 +318,30 @@ def _compute_anomaly_matrix(
     return results
 
 
-# ---------------------------------------------------------------------------
-# Model Persistence & Inference APIs (Step 1.2)
-# ---------------------------------------------------------------------------
-
-def save_anomaly_model(
-    scaler: StandardScaler,
-    clf: IsolationForest,
-    feature_vectors: list[dict[str, float]],
-    entity_names: list[str],
-    artifact_path: str | Path,
-) -> str:
-    """Persist fitted StandardScaler and IsolationForest ensemble to a joblib artifact."""
-    path = Path(artifact_path)
-    path.parent.mkdir(parents=True, exist_ok=True)
-
-    model_dict = {
-        "scaler": scaler,
-        "clf": clf,
-        "feature_names": FEATURE_NAMES,
-        "training_feature_vectors": feature_vectors,
-        "training_entities": entity_names,
-        "hyperparameters": {
-            "n_estimators": getattr(clf, "n_estimators", 200),
-            "contamination": getattr(clf, "contamination", 0.2),
-            "random_state": getattr(clf, "random_state", 42),
-        },
-    }
-    joblib.dump(model_dict, path)
-    return str(path.resolve())
-
-
-def load_anomaly_model(artifact_path: str | Path) -> dict:
-    """Load persisted anomaly model dictionary from a joblib artifact."""
-    path = Path(artifact_path)
-    if not path.exists():
-        raise FileNotFoundError(f"Model artifact not found at {path}")
-    model_dict = joblib.load(path)
-    if "scaler" not in model_dict or "clf" not in model_dict:
-        raise ValueError(f"Invalid model artifact structure in {path}")
-    return model_dict
-
-
-def train_synthetic_model(
-    synthetic_csv_path: str | Path,
-    artifact_path: str | Path,
+def _compute_anomaly_matrix(
+    by_entity: dict[str, list[Alert]],
 ) -> dict[str, AnomalyResult]:
-    """Train Isolation Forest on synthetic features and persist anomaly_model.joblib."""
-    syn_features = extract_features_from_csv(synthetic_csv_path)
-    entity_names = sorted(syn_features.keys())
-    feature_vectors = [syn_features[name] for name in entity_names]
+    """Extract features from Alert rows and fit fresh. Shared by the DB and CLI paths."""
+    entity_names = sorted(by_entity.keys())
 
-    X = np.array([[fv[f] for f in FEATURE_NAMES] for fv in feature_vectors])
+    if not entity_names:
+        return {}
 
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-
-    clf = IsolationForest(
-        random_state=IFOREST_RANDOM_STATE,
-        contamination=IFOREST_CONTAMINATION,
-        n_estimators=IFOREST_N_ESTIMATORS,
-    )
-    raw_scores = clf.fit(X_scaled).decision_function(X_scaled)
-
-    save_anomaly_model(scaler, clf, feature_vectors, entity_names, artifact_path)
-
-    converted = _convert_scores(raw_scores)
-
-    results: dict[str, AnomalyResult] = {}
-    for i, name in enumerate(entity_names):
-        score = float(converted[i])
-        metrics = {feat: round(float(X[i][j]), 2) for j, feat in enumerate(FEATURE_NAMES)}
-        evidence = _build_evidence(feature_vectors[i], i, feature_vectors, entity_names)
-
-        results[name] = AnomalyResult(
-            entity_name=name,
-            score=round(score, 3),
-            metrics=metrics,
-            evidence=evidence,
-        )
-
-    return results
+    feature_vectors = [_extract_features(by_entity[name]) for name in entity_names]
+    return _fit_and_score(entity_names, feature_vectors)
 
 
-def predict_anomaly(
+def compute_anomaly_from_features(
     features_by_entity: dict[str, dict[str, float]],
-    artifact_path: str | Path,
 ) -> dict[str, AnomalyResult]:
-    """Execute inference on entity feature vectors using a loaded joblib model artifact.
+    """Fit fresh on an already-extracted entity -> feature-vector map.
 
-    Transforms input features using the PRE-FITTED scaler without retraining,
-    calculates Isolation Forest decision_function scores, and computes MAD evidence.
+    The CSV-driven entry point (used by risk_score.py's *_from_csv helpers
+    and the CLI's --csv mode) — the counterpart to _compute_anomaly_matrix
+    for callers that already have feature dicts instead of Alert rows.
+    Validates every feature vector before fitting so a malformed input fails
+    with a clear KeyError/ValueError instead of a confusing sklearn error.
     """
-    model_dict = load_anomaly_model(artifact_path)
-    scaler: StandardScaler = model_dict["scaler"]
-    clf: IsolationForest = model_dict["clf"]
-    expected_features: list[str] = model_dict.get("feature_names", FEATURE_NAMES)
-
     entity_names = sorted(features_by_entity.keys())
     if not entity_names:
         return {}
@@ -434,7 +349,7 @@ def predict_anomaly(
     feature_vectors: list[dict[str, float]] = []
     for name in entity_names:
         fv = features_by_entity[name]
-        for feat in expected_features:
+        for feat in FEATURE_NAMES:
             if feat not in fv:
                 raise KeyError(f"Feature '{feat}' missing for entity '{name}'")
             val = fv[feat]
@@ -442,29 +357,7 @@ def predict_anomaly(
                 raise ValueError(f"Invalid/NaN feature value for '{name}.{feat}': {val}")
         feature_vectors.append(fv)
 
-    X = np.array([[fv[f] for f in expected_features] for fv in feature_vectors])
-
-    # Transform ONLY using fitted scaler — DO NOT FIT!
-    X_scaled = scaler.transform(X)
-
-    # Decision function from fitted Isolation Forest
-    raw_scores = clf.decision_function(X_scaled)
-    converted = _convert_scores(raw_scores)
-
-    results: dict[str, AnomalyResult] = {}
-    for i, name in enumerate(entity_names):
-        score = float(converted[i])
-        metrics = {feat: round(float(X[i][j]), 2) for j, feat in enumerate(expected_features)}
-        evidence = _build_evidence(feature_vectors[i], i, feature_vectors, entity_names)
-
-        results[name] = AnomalyResult(
-            entity_name=name,
-            score=round(score, 3),
-            metrics=metrics,
-            evidence=evidence,
-        )
-
-    return results
+    return _fit_and_score(entity_names, feature_vectors)
 
 
 # ---------------------------------------------------------------------------
@@ -578,27 +471,13 @@ def _run_cli() -> None:
 
 
 def _run_from_csv(csv_path: Path) -> None:
-    """Run the detector by reading alerts directly from a CSV file.
-
-    Uses the persisted model artifact for inference — does NOT retrain.
-    """
-    import csv as csv_mod
-    from pathlib import Path
-
-    # Locate artifact relative to this file
-    artifact_path = Path(__file__).resolve().parent.parent.parent / "anomaly_model.joblib"
-    if not artifact_path.exists():
-        print(f"Error: Model artifact not found at {artifact_path}", file=sys.stderr)
-        sys.exit(1)
-
-    # Extract features from CSV
+    """Run the detector by reading alerts directly from a CSV file, fitting fresh."""
     features_by_entity = extract_features_from_csv(csv_path)
     if not features_by_entity:
         print("No entities found in CSV.", file=sys.stderr)
         sys.exit(1)
 
-    # Run inference using persisted model — NO retraining
-    results = predict_anomaly(features_by_entity, artifact_path)
+    results = compute_anomaly_from_features(features_by_entity)
     _print_results(results)
 
 

@@ -115,10 +115,13 @@ def compute_risk_scores(db: Session) -> list[dict]:
     return rows
 
 
-def compute_risk_scores_from_csv(csv_path, model_artifact_path) -> list[dict]:
-    """Combine execution_gap, negative_space, and anomaly from a CSV file into risk score rows."""
-    from pathlib import Path
-    from app.analytics.anomaly import extract_features_from_csv, predict_anomaly
+def compute_risk_scores_from_csv(csv_path) -> list[dict]:
+    """Combine execution_gap, negative_space, and anomaly from a CSV file into risk score rows.
+
+    Anomaly detection fits fresh on this CSV's own entities — there is no
+    persisted model to load, so no artifact path is needed here.
+    """
+    from app.analytics.anomaly import compute_anomaly_from_features, extract_features_from_csv
     from app.analytics.execution_gap import compute_execution_gap_from_csv
     from app.analytics.negative_space import compute_negative_space_from_csv
 
@@ -126,8 +129,7 @@ def compute_risk_scores_from_csv(csv_path, model_artifact_path) -> list[dict]:
     ns_dict = compute_negative_space_from_csv(csv_path)
     feat_map = extract_features_from_csv(csv_path)
 
-    # Predict anomaly using the joblib model artifact
-    anomaly_obj = predict_anomaly(feat_map, model_artifact_path)
+    anomaly_obj = compute_anomaly_from_features(feat_map)
     an_dict = {
         name: {
             "score": res.score,

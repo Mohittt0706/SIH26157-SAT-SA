@@ -62,10 +62,8 @@ SIH26157-SAT-SA/
 ├── frontend/
 ├── dataset/
 ├── docs/
-├── project.md
-└── CLAUDE.md
+└── project.md
 ```
-project.md sits at the repo root alongside CLAUDE.md.
 
 ## Current status
 - `database.py`, `models.py`, `schemas.py`, `main.py` — **done**

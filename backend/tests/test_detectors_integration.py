@@ -3,7 +3,7 @@
 import pytest
 from pathlib import Path
 
-from app.analytics.anomaly import _CsvAlert, extract_features_from_csv, predict_anomaly
+from app.analytics.anomaly import _CsvAlert, extract_features_from_csv
 from app.analytics.execution_gap import (
     FAST_CLOSURE_WEIGHT,
     NO_ESCALATION_WEIGHT,

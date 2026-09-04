@@ -14,8 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from app.analytics.anomaly import (
     extract_features_from_csv,
-    predict_anomaly,
-    load_anomaly_model,
+    compute_anomaly_from_features,
 )
 from app.analytics.execution_gap import compute_execution_gap_from_csv
 from app.analytics.negative_space import compute_negative_space_from_csv
@@ -27,7 +26,6 @@ def run_step1_3():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     synthetic_csv = root_dir / "dataset" / "soc_alerts_synthetic_dataset.csv"
-    artifact_path = output_dir / "anomaly_model.joblib"
     integrated_output_csv = output_dir / "kriza_integrated_detectors.csv"
 
     print("==================================================")
@@ -35,7 +33,7 @@ def run_step1_3():
     print("==================================================")
 
     syn_features = extract_features_from_csv(synthetic_csv)
-    syn_anomaly = predict_anomaly(syn_features, artifact_path)
+    syn_anomaly = compute_anomaly_from_features(syn_features)
     syn_eg = compute_execution_gap_from_csv(synthetic_csv)
     syn_ns = compute_negative_space_from_csv(synthetic_csv)
 
@@ -72,7 +70,7 @@ def run_step1_3():
     combined_external_csv = _build_combined_external_csv(external_files, output_dir)
     ext_ns_combined = compute_negative_space_from_csv(combined_external_csv)
 
-    ext_anomaly = predict_anomaly(ext_features_combined, artifact_path)
+    ext_anomaly = compute_anomaly_from_features(ext_features_combined)
 
     _print_detector_table("EXTERNAL DATASETS (5 Companies)", ext_anomaly, ext_eg_combined, ext_ns_combined)
 

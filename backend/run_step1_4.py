@@ -31,7 +31,6 @@ def run_step1_4():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     synthetic_csv = root_dir / "dataset" / "soc_alerts_synthetic_dataset.csv"
-    artifact_path = output_dir / "anomaly_model.joblib"
     output_csv = output_dir / "kriza_risk_scores.csv"
 
     print("==================================================")
@@ -41,7 +40,7 @@ def run_step1_4():
     print(f"Soft Floor Rule   : max(weighted_sum, highest_score * {FLOOR_ATTENUATION}) * 100")
     print(f"Risk Bands        : Critical (>= {RISK_BAND_CRITICAL_THRESHOLD}), High (>= {RISK_BAND_HIGH_THRESHOLD}), Medium (>= {RISK_BAND_MEDIUM_THRESHOLD}), Low (< {RISK_BAND_MEDIUM_THRESHOLD})\n")
 
-    syn_risk_rows = compute_risk_scores_from_csv(synthetic_csv, artifact_path)
+    syn_risk_rows = compute_risk_scores_from_csv(synthetic_csv)
 
     _print_risk_table("SYNTHETIC DATASET (10 Entities)", syn_risk_rows)
 
@@ -62,7 +61,7 @@ def run_step1_4():
     ext_risk_rows_all: list[dict] = []
     # Build a combined external CSV so Negative Space peer baseline operates across all external entities
     combined_ext_csv = _build_combined_external_csv(external_files, output_dir)
-    ext_risk_rows_all = compute_risk_scores_from_csv(combined_ext_csv, artifact_path)
+    ext_risk_rows_all = compute_risk_scores_from_csv(combined_ext_csv)
 
     _print_risk_table("EXTERNAL DATASETS (5 Companies)", ext_risk_rows_all)
 

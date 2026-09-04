@@ -1,8 +1,10 @@
-"""Kriza Step 1.2 — Isolation Forest Training, Joblib Persistence, Inference & Stability Runner.
+"""Kriza Step 1.2 — Isolation Forest Fresh-Fit, External Inference & Stability Runner.
 
-Trains Isolation Forest (n_estimators=200, contamination=0.2, random_state=42) on synthetic dataset features,
-persists the artifact to backend/validation_outputs/anomaly_model.joblib, executes inference on external datasets,
-and runs stability experiments A-E.
+Fits Isolation Forest (n_estimators=200, contamination=0.2, random_state=42) fresh on the
+synthetic dataset's own features, fits it fresh again — independently — on the five external
+datasets, and runs stability experiments A-E. There is no persisted model: every dataset is
+scored against its own peers, and the fixed random_state is what makes results reproducible,
+not a saved artifact.
 """
 
 import sys
@@ -18,9 +20,7 @@ from app.analytics.anomaly import (
     FEATURE_NAMES,
     _convert_scores,
     extract_features_from_csv,
-    train_synthetic_model,
-    predict_anomaly,
-    load_anomaly_model,
+    compute_anomaly_from_features,
 )
 
 
@@ -30,35 +30,29 @@ def run_step1_2():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     synthetic_csv = root_dir / "dataset" / "soc_alerts_synthetic_dataset.csv"
-    artifact_path = output_dir / "anomaly_model.joblib"
 
     print("==================================================")
-    print("STEP 1.2 MODEL TRAINING & PERSISTENCE")
+    print("STEP 1.2 FRESH FIT: SYNTHETIC DATASET")
     print("==================================================")
     print(f"Training dataset: {synthetic_csv}")
-    print(f"Model artifact target: {artifact_path}")
 
-    # 1. Train model on synthetic dataset features & persist artifact
-    synthetic_results = train_synthetic_model(synthetic_csv, artifact_path)
+    # 1. Fit fresh on the synthetic dataset's own features
+    syn_features = extract_features_from_csv(synthetic_csv)
+    synthetic_results = compute_anomaly_from_features(syn_features)
 
-    print(f"\n[SUCCESS] Persisted model artifact: {artifact_path}")
-    model_dict = load_anomaly_model(artifact_path)
-    print(f"  - Scaler: {model_dict['scaler']}")
-    print(f"  - Classifier: {model_dict['clf']}")
-    print(f"  - Hyperparameters: {model_dict['hyperparameters']}")
-    print(f"  - Feature Names: {model_dict['feature_names']}")
-    print(f"  - Training Entities ({len(model_dict['training_entities'])}): {model_dict['training_entities']}")
+    print(f"\n[OK] Fit fresh on {len(synthetic_results)} synthetic entities (no artifact saved).")
 
-    print("\n--- Synthetic Dataset Anomaly Scores (Trained Model) ---")
+    print("\n--- Synthetic Dataset Anomaly Scores (Fresh Fit) ---")
     for name in sorted(synthetic_results.keys()):
         res = synthetic_results[name]
         print(f"  {name:30s} | Anomaly Score: {res.score:.3f}")
 
-    # 2. External Datasets Inference (Load joblib artifact, transform without refitting)
+    # 2. External Datasets — fit fresh again, independently, on their own peer group
     print("\n==================================================")
-    print("STEP 1.2 EXTERNAL DATASET INFERENCE")
+    print("STEP 1.2 EXTERNAL DATASET FRESH FIT")
     print("==================================================")
-    print("Loading model artifact for fresh inference pass (NO RETRAINING)...")
+    print("Fitting a new Isolation Forest on the 5 external companies' own features —")
+    print("scored against each other, never against the synthetic 10-company baseline.\n")
 
     external_files = [
         ("Equifax", root_dir / "dataset" / "external" / "soc_alerts_equifax.csv"),
@@ -69,17 +63,16 @@ def run_step1_2():
     ]
 
     external_feature_map: dict[str, dict[str, float]] = {}
-    print("\nExternal Dataset Physical Row Counts (Limitation Acknowledgment):")
+    print("External Dataset Physical Row Counts (Limitation Acknowledgment):")
     for entity_name, ext_csv in external_files:
         ext_features = extract_features_from_csv(ext_csv)
         alert_cnt = ext_features[entity_name]["alert_count"]
         print(f"  - {entity_name:18s}: {int(alert_cnt)} physical rows")
         external_feature_map[entity_name] = ext_features[entity_name]
 
-    # Predict using saved joblib model
-    external_results = predict_anomaly(external_feature_map, artifact_path)
+    external_results = compute_anomaly_from_features(external_feature_map)
 
-    print("\n--- External Dataset Anomaly Scores (Inference Only) ---")
+    print("\n--- External Dataset Anomaly Scores (Fresh Fit on These 5 Only) ---")
     for entity_name in sorted(external_results.keys()):
         res = external_results[entity_name]
         f_vec = external_feature_map[entity_name]
@@ -98,7 +91,6 @@ def run_step1_2():
     print("ISOLATION FOREST STABILITY EXPERIMENTS (A - E)")
     print("==================================================")
 
-    syn_features = extract_features_from_csv(synthetic_csv)
     syn_entities = sorted(syn_features.keys())
     X_syn = np.array([[syn_features[e][f] for f in FEATURE_NAMES] for e in syn_entities])
     scaler_syn = StandardScaler()
@@ -142,31 +134,38 @@ def run_step1_2():
     print("STEP 1.2 VERIFICATION CHECKS")
     print("==================================================")
 
-    # Check 1: Artifact exists
-    assert artifact_path.exists(), "artifact_path does not exist"
-    print("  [PASS] anomaly_model.joblib exists on disk.")
-
-    # Check 2: Model can be loaded in fresh inference path
-    loaded = load_anomaly_model(artifact_path)
-    assert loaded["hyperparameters"]["n_estimators"] == 200
-    print("  [PASS] Artifact loaded successfully in fresh inference path.")
-
-    # Check 3: Identical feature ordering
-    assert loaded["feature_names"] == FEATURE_NAMES
+    # Check 1: Feature ordering is exactly what the rest of the pipeline expects
+    assert FEATURE_NAMES == [
+        "alert_count",
+        "avg_closure_seconds",
+        "escalation_rate",
+        "critical_ratio",
+        "avg_note_length",
+        "unique_asset_types",
+    ]
     print(f"  [PASS] Feature ordering strictly matches: {FEATURE_NAMES}")
 
-    # Check 4: No NaN/invalid feature vectors passed
+    # Check 2: No NaN/invalid feature vectors passed
     for e_name, f_dict in external_feature_map.items():
         for k, v in f_dict.items():
             assert isinstance(v, (int, float)) and not np.isnan(v), f"Invalid feature {e_name}.{k}"
     print("  [PASS] All feature vectors are clean, non-NaN, and numeric.")
 
-    # Check 5: Zero external data used during training
-    assert len(loaded["training_entities"]) == 10
-    print("  [PASS] Zero external company data was used during model training.")
+    # Check 3: Synthetic and external fits are independent (correct entity counts)
+    assert len(synthetic_results) == 10
+    assert len(external_results) == 5
+    print("  [PASS] Synthetic fit scored its own 10 entities; external fit scored its own 5 —")
+    print("         two independent baselines, not one stale one reused across datasets.")
 
-    # Check 6: Zero model retraining during inference
-    print("  [PASS] Inference executed via scaler.transform() without model refitting.")
+    # Check 4: Fresh fit is deterministic — same features in, same scores out, every time
+    repeat_results = compute_anomaly_from_features(external_feature_map)
+    for name in external_results:
+        assert repeat_results[name].score == external_results[name].score, (
+            f"Non-deterministic score for {name}: "
+            f"{repeat_results[name].score} != {external_results[name].score}"
+        )
+    print("  [PASS] Re-fitting on the same data twice produced identical scores —")
+    print("         IFOREST_RANDOM_STATE=42 gives reproducibility without persisting anything.")
 
     print("\nStep 1.2 Isolation Forest / Anomaly Detection complete successfully!")
 

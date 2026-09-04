@@ -16,7 +16,6 @@ from app.analytics.risk_score import (
     _apply_max_detector_floor,
     compute_risk_scores_from_csv,
 )
-from app.analytics.anomaly import train_synthetic_model
 
 
 @pytest.fixture
@@ -27,16 +26,6 @@ def root_dir() -> Path:
 @pytest.fixture
 def synthetic_csv(root_dir: Path) -> Path:
     return root_dir / "dataset" / "soc_alerts_synthetic_dataset.csv"
-
-
-@pytest.fixture
-def model_artifact_path(tmp_path: Path) -> Path:
-    p = tmp_path / "anomaly_model.joblib"
-    train_synthetic_model(
-        Path(__file__).resolve().parents[2] / "dataset" / "soc_alerts_synthetic_dataset.csv",
-        p,
-    )
-    return p
 
 
 def test_weights_sum():
@@ -96,9 +85,9 @@ def test_zero_detector_scores():
     assert res["risk_band"] == "low"
 
 
-def test_csv_risk_pipeline(synthetic_csv: Path, model_artifact_path: Path):
+def test_csv_risk_pipeline(synthetic_csv: Path):
     """Test full CSV risk pipeline integration."""
-    rows = compute_risk_scores_from_csv(synthetic_csv, model_artifact_path)
+    rows = compute_risk_scores_from_csv(synthetic_csv)
     assert len(rows) == 10
     for r in rows:
         assert "risk_score" in r

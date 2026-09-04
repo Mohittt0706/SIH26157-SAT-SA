@@ -3,7 +3,7 @@
 import pytest
 from pathlib import Path
 
-from app.analytics.anomaly import extract_features_from_csv, predict_anomaly, train_synthetic_model
+from app.analytics.anomaly import extract_features_from_csv
 from app.analytics.execution_gap import compute_execution_gap_from_csv
 from app.analytics.negative_space import compute_negative_space_from_csv
 from app.analytics.risk_score import compute_risk_scores_from_csv
@@ -17,13 +17,6 @@ def root_dir() -> Path:
 @pytest.fixture
 def synthetic_csv(root_dir: Path) -> Path:
     return root_dir / "dataset" / "soc_alerts_synthetic_dataset.csv"
-
-
-@pytest.fixture
-def model_artifact_path(tmp_path: Path, synthetic_csv: Path) -> Path:
-    p = tmp_path / "anomaly_model.joblib"
-    train_synthetic_model(synthetic_csv, p)
-    return p
 
 
 @pytest.fixture
@@ -47,7 +40,7 @@ def test_external_datasets_exist_and_load(external_files: list[tuple[str, Path]]
         assert len(feats[entity_name]) == 6
 
 
-def test_end_to_end_external_pipeline(external_files: list[tuple[str, Path]], model_artifact_path: Path, root_dir: Path):
+def test_end_to_end_external_pipeline(external_files: list[tuple[str, Path]], root_dir: Path):
     """Test full end-to-end pipeline execution on external datasets."""
     # Combine external files to run peer baseline negative space
     output_dir = root_dir / "backend" / "validation_outputs"
@@ -65,7 +58,7 @@ def test_end_to_end_external_pipeline(external_files: list[tuple[str, Path]], mo
                     if line.strip():
                         out_f.write(line)
 
-    risk_rows = compute_risk_scores_from_csv(combined_csv, model_artifact_path)
+    risk_rows = compute_risk_scores_from_csv(combined_csv)
     assert len(risk_rows) == 5
 
     for row in risk_rows:
