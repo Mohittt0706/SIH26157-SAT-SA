@@ -1,0 +1,6 @@
+company,eg_score,eg_fast_closure_rate,eg_no_escalation_rate,eg_template_notes_rate,ns_score,ns_total_alerts,ns_peer_mean,ns_z_score,ns_missing_severities,overall_status
+Equifax,0.514286,0.0,0.714286,1.0,0.0,100,0.0,1.0,,PASS
+JPMorgan Chase,0.530769,0.0,0.769231,1.0,0.0,100,0.0,1.0,,PASS
+MGM Resorts,0.490909,0.0,0.636364,1.0,0.0,100,0.0,1.0,,PASS
+Microsoft,0.525,0.0,0.75,1.0,0.0,100,0.0,1.0,,PASS
+T-Mobile,0.45,0.0,0.5,1.0,0.0,100,0.0,1.0,,PASS

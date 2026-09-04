@@ -1,5 +1,101 @@
 alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
-MGM00001,MGM Resorts,Low,Phishing,Endpoint,2026-02-01 10:00:00,2026-02-01 13:00:00,180,No,Closed,"User clicked phishing link, workstation isolated, credentials reset."
-MGM00002,MGM Resorts,Low,Misconfiguration,Server,2026-02-02 11:00:00,2026-02-02 14:00:00,180,No,Closed,Fixed open port configuration on external web server.
-MGM00003,MGM Resorts,Low,Unauthorized Access,Endpoint,2026-02-03 09:30:00,2026-02-03 12:30:00,180,No,Closed,"Failed login attempt threshold exceeded, account locked temporarily."
-MGM00004,MGM Resorts,Low,DDoS,Network Device,2026-02-04 14:00:00,2026-02-04 17:00:00,180,Yes,Closed,"Volumetric spike detected, diverted traffic to scrubbing provider."
+ALT00056,MGM Resorts,High,DDoS Attempt,Cloud Storage,2026-01-01 15:06:00,2026-01-01 18:04:00,178,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00060,MGM Resorts,Low,Credential Stuffing,Cloud Storage,2026-01-05 03:16:00,2026-01-05 05:04:00,108,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00093,MGM Resorts,High,Data Exfiltration Attempt,Cloud Storage,2026-01-05 08:23:00,2026-01-05 09:28:00,65,No,Closed,
+ALT00009,MGM Resorts,Medium,DDoS Attempt,Network Device,2026-01-07 22:01:00,2026-01-08 04:13:00,372,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00015,MGM Resorts,Low,Misconfiguration Alert,Database,2026-01-09 15:03:00,,,No,In Progress,
+ALT00004,MGM Resorts,Low,Unauthorized Access,Cloud Storage,2026-01-11 03:02:00,2026-01-11 08:10:00,308,No,Closed,"No further action required, false positive."
+ALT00092,MGM Resorts,Low,Insider Threat Indicator,Server,2026-01-12 05:27:00,2026-01-12 07:11:00,104,No,Closed,"Confirmed benign, closed after log review."
+ALT00099,MGM Resorts,Low,Credential Stuffing,Server,2026-01-14 01:23:00,2026-01-14 04:04:00,161,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00045,MGM Resorts,Medium,Misconfiguration Alert,Cloud Storage,2026-01-19 12:23:00,2026-01-19 16:02:00,219,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00072,MGM Resorts,Medium,Insider Threat Indicator,Endpoint,2026-01-21 18:08:00,2026-01-21 20:37:00,149,No,Closed,"No further action required, false positive."
+ALT00073,MGM Resorts,Medium,Data Exfiltration Attempt,Web Application,2026-01-27 22:50:00,2026-01-28 01:11:00,141,No,Closed,
+ALT00074,MGM Resorts,Low,Misconfiguration Alert,Endpoint,2026-01-28 21:41:00,2026-01-29 02:54:00,313,No,Closed,"No further action required, false positive."
+ALT00095,MGM Resorts,Low,Misconfiguration Alert,Web Application,2026-01-30 13:09:00,,,Yes,In Progress,"Reviewed and closed, no malicious activity confirmed."
+ALT00030,MGM Resorts,High,Data Exfiltration Attempt,Network Device,2026-01-30 15:05:00,2026-01-30 15:47:00,42,No,Closed,User account temporarily suspended pending review.
+ALT00002,MGM Resorts,Critical,Insider Threat Indicator,Server,2026-01-31 02:41:00,2026-01-31 09:08:00,387,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00023,MGM Resorts,Low,Data Exfiltration Attempt,Network Device,2026-02-02 06:45:00,2026-02-02 12:55:00,370,Yes,Closed,
+ALT00007,MGM Resorts,Low,DDoS Attempt,Database,2026-02-07 14:10:00,2026-02-07 16:00:00,110,No,Closed,"No further action required, false positive."
+ALT00090,MGM Resorts,High,Ransomware Indicator,Network Device,2026-02-09 07:51:00,,,Yes,Open,User account temporarily suspended pending review.
+ALT00014,MGM Resorts,Medium,Phishing Campaign,Endpoint,2026-02-20 22:31:00,,,Yes,Open,"Reviewed and closed, no malicious activity confirmed."
+ALT00100,MGM Resorts,High,Malware Detection,Database,2026-02-23 03:28:00,2026-02-23 05:57:00,149,Yes,Closed,User account temporarily suspended pending review.
+ALT00034,MGM Resorts,Low,Privilege Escalation,Database,2026-02-25 01:11:00,2026-02-25 04:35:00,204,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00032,MGM Resorts,Low,Insider Threat Indicator,Endpoint,2026-02-28 02:48:00,2026-02-28 06:13:00,205,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00035,MGM Resorts,High,Insider Threat Indicator,Network Device,2026-03-02 03:11:00,2026-03-02 08:13:00,302,No,Closed,
+ALT00054,MGM Resorts,Medium,Credential Stuffing,Cloud Storage,2026-03-03 17:23:00,2026-03-03 18:16:00,53,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00067,MGM Resorts,Low,Misconfiguration Alert,Web Application,2026-03-03 19:13:00,,,No,Open,User account temporarily suspended pending review.
+ALT00008,MGM Resorts,Low,Unauthorized Access,Web Application,2026-03-04 03:04:00,2026-03-04 07:07:00,243,No,Closed,
+ALT00022,MGM Resorts,Low,Phishing Campaign,Server,2026-03-05 03:52:00,2026-03-05 08:21:00,269,No,Closed,"No further action required, false positive."
+ALT00088,MGM Resorts,Critical,DDoS Attempt,Network Device,2026-03-05 16:12:00,2026-03-05 20:27:00,255,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00053,MGM Resorts,Medium,Misconfiguration Alert,Database,2026-03-06 15:23:00,2026-03-06 16:20:00,57,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00077,MGM Resorts,Low,Privilege Escalation,Endpoint,2026-03-07 22:29:00,2026-03-08 04:57:00,388,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00078,MGM Resorts,Low,Misconfiguration Alert,Server,2026-03-12 09:54:00,2026-03-12 10:47:00,53,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00069,MGM Resorts,Low,Ransomware Indicator,Cloud Storage,2026-03-13 08:25:00,2026-03-13 14:33:00,368,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00018,MGM Resorts,Low,Credential Stuffing,Database,2026-03-20 23:43:00,2026-03-21 00:16:00,33,No,Closed,
+ALT00042,MGM Resorts,Medium,Unauthorized Access,Endpoint,2026-03-27 03:27:00,2026-03-27 09:03:00,336,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00075,MGM Resorts,High,Misconfiguration Alert,Network Device,2026-03-28 13:24:00,2026-03-28 14:48:00,84,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00081,MGM Resorts,Critical,Credential Stuffing,Endpoint,2026-03-29 11:25:00,2026-03-29 17:48:00,383,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00038,MGM Resorts,Critical,Phishing Campaign,Network Device,2026-03-30 06:09:00,2026-03-30 12:22:00,373,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00051,MGM Resorts,Low,Privilege Escalation,Server,2026-04-02 08:22:00,2026-04-02 14:02:00,340,No,Closed,
+ALT00055,MGM Resorts,Low,Data Exfiltration Attempt,Server,2026-04-02 14:04:00,2026-04-02 15:20:00,76,Yes,Closed,"No further action required, false positive."
+ALT00031,MGM Resorts,Medium,Phishing Campaign,Network Device,2026-04-03 18:01:00,2026-04-03 21:07:00,186,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00043,MGM Resorts,Low,Malware Detection,Network Device,2026-04-04 18:07:00,2026-04-04 23:19:00,312,Yes,Closed,
+ALT00050,MGM Resorts,Medium,DDoS Attempt,Cloud Storage,2026-04-22 08:58:00,2026-04-22 09:34:00,36,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00066,MGM Resorts,Low,Misconfiguration Alert,Server,2026-04-24 20:47:00,2026-04-24 22:41:00,114,Yes,Closed,
+ALT00027,MGM Resorts,Medium,Data Exfiltration Attempt,Web Application,2026-04-26 08:39:00,2026-04-26 14:16:00,337,No,Closed,User account temporarily suspended pending review.
+ALT00044,MGM Resorts,Medium,Malware Detection,Network Device,2026-04-29 09:02:00,2026-04-29 10:16:00,74,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00052,MGM Resorts,High,Ransomware Indicator,Server,2026-04-30 21:11:00,2026-05-01 03:32:00,381,No,Closed,
+ALT00020,MGM Resorts,Low,Ransomware Indicator,Network Device,2026-05-01 14:56:00,2026-05-01 18:36:00,220,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00006,MGM Resorts,Low,Credential Stuffing,Cloud Storage,2026-05-03 20:08:00,2026-05-03 22:02:00,114,No,Closed,"No further action required, false positive."
+ALT00079,MGM Resorts,Critical,Credential Stuffing,Server,2026-05-05 13:52:00,2026-05-05 20:16:00,384,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00029,MGM Resorts,Medium,Malware Detection,Database,2026-05-06 01:35:00,2026-05-06 05:58:00,263,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00019,MGM Resorts,Low,Phishing Campaign,Cloud Storage,2026-05-06 03:23:00,,,No,Open,"Reviewed and closed, no malicious activity confirmed."
+ALT00016,MGM Resorts,Low,Misconfiguration Alert,Server,2026-05-09 11:02:00,2026-05-09 17:41:00,399,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00094,MGM Resorts,Critical,Misconfiguration Alert,Endpoint,2026-05-10 03:57:00,2026-05-10 05:17:00,80,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00087,MGM Resorts,High,Ransomware Indicator,Cloud Storage,2026-05-17 01:29:00,2026-05-17 05:06:00,217,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00025,MGM Resorts,Low,Insider Threat Indicator,Cloud Storage,2026-05-20 07:05:00,2026-05-20 10:40:00,215,No,Closed,"No further action required, false positive."
+ALT00098,MGM Resorts,Low,Credential Stuffing,Server,2026-05-22 16:40:00,2026-05-22 19:30:00,170,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00062,MGM Resorts,Medium,DDoS Attempt,Endpoint,2026-05-22 17:56:00,2026-05-22 21:31:00,215,Yes,Closed,User account temporarily suspended pending review.
+ALT00057,MGM Resorts,Medium,Misconfiguration Alert,Cloud Storage,2026-05-25 05:25:00,2026-05-25 10:07:00,282,No,Closed,"Confirmed benign, closed after log review."
+ALT00048,MGM Resorts,High,Data Exfiltration Attempt,Endpoint,2026-05-26 02:35:00,2026-05-26 06:54:00,259,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00021,MGM Resorts,Medium,Phishing Campaign,Server,2026-05-26 11:10:00,2026-05-26 12:06:00,56,No,Closed,User account temporarily suspended pending review.
+ALT00041,MGM Resorts,Low,Unauthorized Access,Network Device,2026-05-28 15:18:00,2026-05-28 21:22:00,364,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00076,MGM Resorts,Low,Unauthorized Access,Endpoint,2026-05-29 00:33:00,2026-05-29 02:56:00,143,Yes,Closed,User account temporarily suspended pending review.
+ALT00089,MGM Resorts,High,Privilege Escalation,Web Application,2026-05-31 17:09:00,,,Yes,In Progress,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00033,MGM Resorts,Low,Unauthorized Access,Cloud Storage,2026-06-01 02:12:00,2026-06-01 06:30:00,258,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00013,MGM Resorts,Low,Phishing Campaign,Server,2026-06-01 22:05:00,2026-06-02 04:22:00,377,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00091,MGM Resorts,High,Privilege Escalation,Network Device,2026-06-02 00:23:00,2026-06-02 06:42:00,379,No,Closed,
+ALT00065,MGM Resorts,Medium,Malware Detection,Endpoint,2026-06-02 11:18:00,2026-06-02 17:37:00,379,Yes,Closed,
+ALT00086,MGM Resorts,Low,Insider Threat Indicator,Web Application,2026-06-05 01:48:00,2026-06-05 05:27:00,219,No,Closed,
+ALT00046,MGM Resorts,Critical,Phishing Campaign,Endpoint,2026-06-07 08:30:00,2026-06-07 13:18:00,288,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00061,MGM Resorts,Medium,Unauthorized Access,Server,2026-06-07 19:38:00,2026-06-07 23:19:00,221,No,Closed,
+ALT00003,MGM Resorts,Medium,DDoS Attempt,Network Device,2026-06-09 05:40:00,2026-06-09 08:15:00,155,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00080,MGM Resorts,Medium,Privilege Escalation,Network Device,2026-06-13 19:49:00,2026-06-14 01:46:00,357,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00070,MGM Resorts,Medium,Insider Threat Indicator,Cloud Storage,2026-06-18 04:48:00,2026-06-18 08:22:00,214,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00085,MGM Resorts,High,Ransomware Indicator,Network Device,2026-06-20 11:20:00,2026-06-20 17:52:00,392,No,Closed,"Confirmed benign, closed after log review."
+ALT00040,MGM Resorts,Critical,Credential Stuffing,Database,2026-06-23 06:05:00,2026-06-23 08:44:00,159,No,Closed,User account temporarily suspended pending review.
+ALT00082,MGM Resorts,Low,Credential Stuffing,Web Application,2026-06-25 10:36:00,,,No,Open,
+ALT00012,MGM Resorts,Medium,Data Exfiltration Attempt,Endpoint,2026-06-26 06:10:00,2026-06-26 09:31:00,201,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00071,MGM Resorts,Low,Unauthorized Access,Web Application,2026-06-29 18:30:00,2026-06-29 23:27:00,297,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00083,MGM Resorts,Low,Misconfiguration Alert,Network Device,2026-06-30 04:51:00,2026-06-30 10:24:00,333,No,Closed,User account temporarily suspended pending review.
+ALT00064,MGM Resorts,Medium,Data Exfiltration Attempt,Web Application,2026-07-03 02:30:00,2026-07-03 03:59:00,89,No,Closed,"No further action required, false positive."
+ALT00058,MGM Resorts,Medium,Unauthorized Access,Web Application,2026-07-06 11:56:00,2026-07-06 12:03:00,7,No,Closed,
+ALT00096,MGM Resorts,Low,Malware Detection,Database,2026-07-09 07:03:00,2026-07-09 10:20:00,197,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00049,MGM Resorts,Critical,Credential Stuffing,Endpoint,2026-07-10 13:54:00,2026-07-10 19:42:00,348,Yes,Closed,"No further action required, false positive."
+ALT00037,MGM Resorts,High,Misconfiguration Alert,Server,2026-07-10 22:58:00,2026-07-10 23:21:00,23,No,Closed,"No further action required, false positive."
+ALT00039,MGM Resorts,High,DDoS Attempt,Cloud Storage,2026-07-11 15:45:00,2026-07-11 20:54:00,309,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00084,MGM Resorts,Medium,Privilege Escalation,Network Device,2026-07-15 09:19:00,,,Yes,In Progress,
+ALT00001,MGM Resorts,Critical,Phishing Campaign,Web Application,2026-07-17 07:25:00,2026-07-17 10:16:00,171,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00028,MGM Resorts,Low,Misconfiguration Alert,Web Application,2026-07-20 05:24:00,,,No,Open,"No further action required, false positive."
+ALT00063,MGM Resorts,High,Phishing Campaign,Web Application,2026-07-27 01:36:00,2026-07-27 07:08:00,332,No,Closed,"No further action required, false positive."
+ALT00011,MGM Resorts,Medium,Privilege Escalation,Database,2026-07-28 19:41:00,2026-07-28 22:19:00,158,Yes,Closed,"No further action required, false positive."
+ALT00059,MGM Resorts,Medium,Unauthorized Access,Cloud Storage,2026-07-29 01:31:00,,,No,In Progress,"Blocked at firewall, source IP added to watchlist."
+ALT00068,MGM Resorts,High,Data Exfiltration Attempt,Network Device,2026-08-04 13:51:00,2026-08-04 14:03:00,12,Yes,Closed,User account temporarily suspended pending review.
+ALT00047,MGM Resorts,High,Malware Detection,Web Application,2026-08-06 19:04:00,2026-08-06 21:17:00,133,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00017,MGM Resorts,Low,Malware Detection,Endpoint,2026-08-15 00:16:00,2026-08-15 03:16:00,180,No,Closed,"No further action required, false positive."
+ALT00097,MGM Resorts,Medium,Data Exfiltration Attempt,Database,2026-08-15 17:21:00,2026-08-15 20:09:00,168,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00024,MGM Resorts,Low,Insider Threat Indicator,Cloud Storage,2026-08-18 09:11:00,2026-08-18 09:16:00,5,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00026,MGM Resorts,Medium,Insider Threat Indicator,Cloud Storage,2026-08-21 21:20:00,2026-08-22 01:22:00,242,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00036,MGM Resorts,Critical,Data Exfiltration Attempt,Server,2026-08-21 22:35:00,2026-08-22 00:45:00,130,No,Closed,"No further action required, false positive."
+ALT00010,MGM Resorts,Medium,Data Exfiltration Attempt,Network Device,2026-08-23 00:12:00,2026-08-23 04:22:00,250,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00005,MGM Resorts,Low,DDoS Attempt,Network Device,2026-08-25 02:22:00,2026-08-25 07:43:00,321,No,Closed,"Reviewed and closed, no malicious activity confirmed."
