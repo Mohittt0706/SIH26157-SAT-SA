@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, AlertTriangle, FileText, CheckCircle2 } from "lucide-react";
+import usePageMetadata from "../hooks/usePageMetadata";
 import {
   ResponsiveContainer,
   BarChart,
@@ -15,6 +16,12 @@ import { getEntityDetails } from "../lib/api";
 export default function DrillDownPage() {
   const { entityName: paramEntityName } = useParams();
   const entityName = decodeURIComponent(paramEntityName || "");
+
+  usePageMetadata({
+    title: `${entityName} | VEIL Supervisory Assessment`,
+    description: `Supervisory assessment and evidence documentation for ${entityName}.`,
+    path: `/entities/${paramEntityName}`,
+  });
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -52,7 +59,7 @@ export default function DrillDownPage() {
     return (
       <main className="drilldown-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand">
+          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
             <div className="dashboard-brand-mark">V</div>
             <div>
               <div className="dashboard-brand-name">VEIL</div>
@@ -71,11 +78,26 @@ export default function DrillDownPage() {
             OFFLINE MODE
           </div>
         </nav>
-        <div className="loading-state">
-          <div className="spinner" />
-          <h3>Retrieving entity dossier...</h3>
-          <p>Analyzing signals and benchmark data for {entityName}.</p>
-        </div>
+        <section className="drilldown-page" style={{ paddingTop: "20px" }}>
+          <div className="drilldown-header-container" style={{ marginBottom: "20px" }}>
+            <div className="drilldown-title">
+               <div className="skeleton skeleton-text" style={{ width: "120px" }} />
+               <div className="skeleton skeleton-title" style={{ width: "300px", height: "40px", marginTop: "10px" }} />
+               <div className="skeleton skeleton-text" style={{ width: "350px", marginTop: "10px" }} />
+            </div>
+            <div className="drilldown-scores-container" style={{ display: "flex", gap: "20px" }}>
+               <div className="skeleton skeleton-card" style={{ width: "180px", height: "90px" }} />
+               <div className="skeleton skeleton-card" style={{ width: "250px", height: "90px" }} />
+            </div>
+          </div>
+          
+          <div className="skeleton skeleton-card" style={{ height: "70px", marginBottom: "30px" }} />
+
+          <div className="drilldown-main-grid">
+            <div className="skeleton skeleton-card" style={{ height: "400px" }} />
+            <div className="skeleton skeleton-card" style={{ height: "400px" }} />
+          </div>
+        </section>
       </main>
     );
   }
@@ -84,7 +106,7 @@ export default function DrillDownPage() {
     return (
       <main className="drilldown-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand">
+          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
             <div className="dashboard-brand-mark">V</div>
             <div>
               <div className="dashboard-brand-name">VEIL</div>
@@ -171,7 +193,7 @@ export default function DrillDownPage() {
     <main className="drilldown-shell">
       {/* NAVBAR */}
       <nav className="dashboard-nav">
-        <Link to="/" className="dashboard-brand">
+        <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
           <div className="dashboard-brand-mark">V</div>
           <div>
             <div className="dashboard-brand-name">VEIL</div>
@@ -194,7 +216,7 @@ export default function DrillDownPage() {
       <section className="drilldown-page">
         {/* BACK BUTTON */}
         <div className="drilldown-back">
-          <Link to="/dashboard">
+          <Link to="/dashboard" aria-label="Back to overview">
             <ArrowLeft size={15} />
             BACK TO OVERVIEW
           </Link>
@@ -318,7 +340,8 @@ export default function DrillDownPage() {
               {!data.findings || data.findings.length === 0 ? (
                 <div className="empty-state" style={{ minHeight: "150px" }}>
                   <CheckCircle2 size={24} color="var(--green)" />
-                  <p>No anomalous findings detected for this entity.</p>
+                  <h3>No Review Signals</h3>
+                  <p>No anomalous findings detected for this entity. Operational patterns are within expected baselines.</p>
                 </div>
               ) : (
                 data.findings.map((finding, idx) => (
@@ -393,11 +416,12 @@ export default function DrillDownPage() {
                 className="empty-state"
                 style={{ minHeight: "150px", marginTop: "20px" }}
               >
-                <p>Peer benchmark data unavailable.</p>
+                <h3>No Benchmark Data</h3>
+                <p>Peer benchmark data is currently unavailable for this entity. Check back after next data ingestion.</p>
               </div>
             ) : (
               <>
-                <div className="peer-chart-container">
+                <div className="peer-chart-container" role="img" aria-label={`Bar chart comparing ${entityName} metrics to peer medians`}>
                   <ResponsiveContainer width="100%" height={250}>
                     <BarChart
                       data={benchmarkArray}

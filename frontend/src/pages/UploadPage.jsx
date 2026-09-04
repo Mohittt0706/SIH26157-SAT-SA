@@ -2,8 +2,14 @@ import { useRef, useState } from "react";
 import { Upload, FileText, X, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { uploadCSV } from "../lib/api";
+import usePageMetadata from "../hooks/usePageMetadata";
 
 export default function UploadPage() {
+  usePageMetadata({
+    title: "Data Ingestion | VEIL",
+    description: "Upload structured SOC operational records to begin supervisory analysis.",
+    path: "/upload",
+  });
   const fileInputRef = useRef(null);
 
   const [file, setFile] = useState(null);
@@ -85,7 +91,7 @@ export default function UploadPage() {
         } else if (typeof detail === "string") {
           errorMessage = detail;
         } else {
-          errorMessage = JSON.stringify(detail);
+          errorMessage = "An unexpected error occurred during analysis. Please check your data format.";
         }
       }
 
@@ -121,7 +127,7 @@ export default function UploadPage() {
   return (
     <main className="upload-shell">
       <nav className="upload-nav">
-        <Link to="/" className="upload-brand">
+        <Link to="/" className="upload-brand" aria-label="VEIL Home">
           <div className="upload-brand-mark">V</div>
 
           <div>
@@ -251,9 +257,10 @@ export default function UploadPage() {
               </div>
 
               <button
-                className="analyze-button"
+                className={`analyze-button ${isUploading ? "loading" : ""}`}
                 onClick={uploadFile}
                 disabled={!file || isUploading}
+                aria-label={isUploading ? "Analyzing dataset" : "Validate and analyze"}
               >
                 {isUploading ? "ANALYZING..." : "VALIDATE & ANALYZE"}
                 <ArrowRight size={17} />
