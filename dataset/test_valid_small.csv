@@ -1,0 +1,40 @@
+alert_id,entity_name,severity,created_time,closed_time,escalated,investigation_notes,asset_type
+ALT00001,Meridian Power Ltd,medium,2026-08-01 09:17:00,2026-08-01 14:42:29,yes,"Reviewed source IP against internal threat intel, no IOC match. Confirmed legitimate VPN session with user.",server
+ALT00002,Meridian Power Ltd,high,2026-08-01 09:34:00,2026-08-01 11:06:22,yes,"Reviewed source IP against internal threat intel, no IOC match. Confirmed legitimate VPN session with user.",network_device
+ALT00003,Meridian Power Ltd,low,2026-08-01 09:51:00,2026-08-01 11:07:54,yes,Traffic pattern matched scheduled backup window. Verified with infrastructure team. Closing as benign.,server
+ALT00004,Meridian Power Ltd,low,2026-08-01 10:08:00,2026-08-01 11:39:26,no,"Reviewed source IP against internal threat intel, no IOC match. Confirmed legitimate VPN session with user.",network_device
+ALT00005,Meridian Power Ltd,low,2026-08-01 10:25:00,2026-08-01 15:50:23,yes,Investigated outbound connection. Destination resolved to approved vendor SaaS endpoint. No action required.,server
+ALT00006,Meridian Power Ltd,high,2026-08-01 10:42:00,2026-08-01 14:28:33,yes,Correlated with authentication logs. Failed logins traced to expired service account credential. Rotated and verified.,server
+ALT00007,Meridian Power Ltd,high,2026-08-01 10:59:00,2026-08-01 16:00:05,yes,Traffic pattern matched scheduled backup window. Verified with infrastructure team. Closing as benign.,endpoint
+ALT00008,Meridian Power Ltd,high,2026-08-01 11:16:00,2026-08-01 12:54:49,no,Investigated outbound connection. Destination resolved to approved vendor SaaS endpoint. No action required.,identity
+ALT00009,Meridian Power Ltd,low,2026-08-01 11:33:00,2026-08-01 13:07:48,no,Correlated with authentication logs. Failed logins traced to expired service account credential. Rotated and verified.,firewall
+ALT00010,Meridian Power Ltd,low,2026-08-01 11:50:00,2026-08-01 15:26:14,no,Investigated outbound connection. Destination resolved to approved vendor SaaS endpoint. No action required.,server
+ALT00011,Meridian Power Ltd,high,2026-08-01 12:07:00,2026-08-01 14:09:54,no,Investigated outbound connection. Destination resolved to approved vendor SaaS endpoint. No action required.,database
+ALT00012,Meridian Power Ltd,medium,2026-08-01 12:24:00,2026-08-01 15:37:48,no,Traffic pattern matched scheduled backup window. Verified with infrastructure team. Closing as benign.,firewall
+ALT00013,Meridian Power Ltd,medium,2026-08-01 12:41:00,2026-08-01 14:55:30,no,Correlated with authentication logs. Failed logins traced to expired service account credential. Rotated and verified.,server
+ALT00014,Meridian Power Ltd,high,2026-08-01 12:58:00,2026-08-01 15:26:39,no,Endpoint isolated for inspection. Full disk scan clean. Restored to network after verification with asset owner.,identity
+ALT00015,Coastal Freight Systems,medium,2026-08-01 13:15:00,2026-08-01 15:40:17,no,"Reviewed source IP against internal threat intel, no IOC match. Confirmed legitimate VPN session with user.",server
+ALT00016,Coastal Freight Systems,high,2026-08-01 13:32:00,2026-08-01 16:32:50,yes,Endpoint isolated for inspection. Full disk scan clean. Restored to network after verification with asset owner.,endpoint
+ALT00017,Coastal Freight Systems,medium,2026-08-01 13:49:00,2026-08-01 16:50:49,yes,"Reviewed source IP against internal threat intel, no IOC match. Confirmed legitimate VPN session with user.",network_device
+ALT00018,Coastal Freight Systems,high,2026-08-01 14:06:00,2026-08-01 18:48:08,no,Endpoint isolated for inspection. Full disk scan clean. Restored to network after verification with asset owner.,firewall
+ALT00019,Coastal Freight Systems,critical,2026-08-01 14:23:00,2026-08-01 17:05:17,no,Investigated outbound connection. Destination resolved to approved vendor SaaS endpoint. No action required.,database
+ALT00020,Coastal Freight Systems,low,2026-08-01 14:40:00,2026-08-01 19:36:02,yes,Endpoint isolated for inspection. Full disk scan clean. Restored to network after verification with asset owner.,database
+ALT00021,Coastal Freight Systems,critical,2026-08-01 14:57:00,2026-08-01 19:05:01,yes,Endpoint isolated for inspection. Full disk scan clean. Restored to network after verification with asset owner.,identity
+ALT00022,Coastal Freight Systems,high,2026-08-01 15:14:00,2026-08-01 19:26:41,no,Endpoint isolated for inspection. Full disk scan clean. Restored to network after verification with asset owner.,identity
+ALT00023,Coastal Freight Systems,medium,2026-08-01 15:31:00,2026-08-01 20:39:53,no,"Reviewed source IP against internal threat intel, no IOC match. Confirmed legitimate VPN session with user.",database
+ALT00024,Coastal Freight Systems,medium,2026-08-01 15:48:00,2026-08-01 17:40:33,no,Traffic pattern matched scheduled backup window. Verified with infrastructure team. Closing as benign.,server
+ALT00025,Coastal Freight Systems,low,2026-08-01 16:05:00,2026-08-01 20:41:26,yes,Correlated with authentication logs. Failed logins traced to expired service account credential. Rotated and verified.,database
+ALT00026,Coastal Freight Systems,medium,2026-08-01 16:22:00,2026-08-01 21:39:01,no,"Reviewed source IP against internal threat intel, no IOC match. Confirmed legitimate VPN session with user.",endpoint
+ALT00027,Sable Trust Bank,medium,2026-08-01 16:39:00,2026-08-01 16:41:27,no,"checked, ok",network_device
+ALT00028,Sable Trust Bank,high,2026-08-01 16:56:00,2026-08-01 16:57:20,no,"checked, ok",database
+ALT00029,Sable Trust Bank,high,2026-08-01 17:13:00,2026-08-01 17:16:45,no,"checked, ok",database
+ALT00030,Sable Trust Bank,high,2026-08-01 17:30:00,2026-08-01 17:33:39,no,"checked, ok",database
+ALT00031,Sable Trust Bank,critical,2026-08-01 17:47:00,2026-08-01 17:48:23,no,"checked, ok",server
+ALT00032,Sable Trust Bank,critical,2026-08-01 18:04:00,2026-08-01 18:05:23,no,"checked, ok",endpoint
+ALT00033,Sable Trust Bank,critical,2026-08-01 18:21:00,2026-08-01 18:21:48,no,"checked, ok",database
+ALT00034,Sable Trust Bank,critical,2026-08-01 18:38:00,2026-08-01 18:39:52,no,"checked, ok",firewall
+ALT00035,Sable Trust Bank,critical,2026-08-01 18:55:00,2026-08-01 18:56:22,no,"checked, ok",database
+ALT00036,Sable Trust Bank,high,2026-08-01 19:12:00,2026-08-01 19:15:21,no,"checked, ok",network_device
+ALT00037,Sable Trust Bank,high,2026-08-01 19:29:00,2026-08-01 19:30:17,no,"checked, ok",identity
+ALT00038,Sable Trust Bank,critical,2026-08-01 19:46:00,2026-08-01 19:48:41,no,"checked, ok",identity
+ALT00039,Sable Trust Bank,medium,2026-08-01 20:03:00,2026-08-01 20:05:26,no,"checked, ok",database

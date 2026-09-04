@@ -1170,6 +1170,46 @@ button.loading::after {
   letter-spacing: 0.1em;
 }
 
+.success-status.warning {
+  color: var(--amber);
+}
+
+.success-status.warning span {
+  background: var(--amber);
+}
+
+.upload-warning {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(229, 173, 90, 0.06);
+  color: #d7dce2;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.upload-warning svg {
+  color: var(--amber);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.upload-warning strong,
+.upload-warning code {
+  color: var(--amber);
+}
+
+.upload-warning code {
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.result-grid strong.skipped-highlight {
+  color: var(--amber);
+}
+
 .result-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

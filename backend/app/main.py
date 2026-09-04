@@ -17,6 +17,14 @@ ALLOWED_ORIGINS: list[str] = [
     "http://localhost:3000",
 ]
 
+ALLOWED_ORIGIN_REGEX: str = r"http://(localhost|127\.0\.0\.1):\d+"
+"""Vite picks the next free port (5174, 5175, ...) whenever 5173 is already
+taken by a leftover dev server, and a hardcoded origin list breaks the moment
+that happens — the request gets rejected by CORS with a misleading "backend
+not running" message in the UI, even though the backend is fine. Matching any
+localhost/127.0.0.1 port covers local dev regardless of which port Vite
+actually lands on, without opening this up to non-local origins."""
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -30,6 +38,7 @@ app = FastAPI(title="SAT-SA API", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
+    allow_origin_regex=ALLOWED_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

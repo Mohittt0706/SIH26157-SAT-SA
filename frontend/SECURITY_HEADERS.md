@@ -23,8 +23,9 @@ add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
 
 # 5. Content-Security-Policy (CSP)
 # Baseline CSP for this Vite React application.
-# Note: You may need to adjust `connect-src` if your API is hosted on a different domain.
-add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://your-api-domain.com;" always;
+# NOTE: connect-src below is a placeholder — the deploying operator must set
+# this to wherever the backend API actually runs in their environment.
+add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' <backend-api-origin>;" always;
 
 # 6. X-Frame-Options (Clickjacking Protection)
 # Prevents the site from being embedded in an iframe on other domains.
@@ -33,7 +34,9 @@ add_header X-Frame-Options "SAMEORIGIN" always;
 
 ## Environment Configuration
 
-For production deployment, ensure the following environment variables are set in your `.env.production` or CI/CD pipeline:
+For deployment, set the following in your `.env.production` or CI/CD pipeline.
+These have no default suitable for production — the deploying operator must
+fill them in for their own environment:
 
-- `VITE_API_BASE_URL`: The absolute URL of your production backend API (e.g., `https://api.example.com/api`).
-- `VITE_SITE_URL`: The absolute URL where this frontend is deployed (e.g., `https://veil.example.com`). This is used for Open Graph, Canonical URLs, and the Sitemap.
+- `VITE_API_BASE_URL`: The URL of the backend API for this deployment
+  (defaults to `http://localhost:8000/api` for local/offline use).

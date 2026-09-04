@@ -1,0 +1,9 @@
+alert_id,entity_name,severity,created_time,closed_time,escalated,investigation_notes,asset_type
+ALT9001,Rivera Logistics,CRITICAL,2026-08-02 10:00:00,2026-08-02 10:02:00,YES,,server
+ALT9002,Rivera Logistics,Critical,2026-08-02 11:00:00,2026-08-02 14:30:00,No,   ,endpoint
+ALT9003,rivera logistics,high,2026-08-02 12:00:00,,true,"Under active investigation, pending vendor response.",firewall
+ALT9001,Rivera Logistics,low,2026-08-02 13:00:00,2026-08-02 13:40:00,0,Duplicate alert id on purpose.,server
+ALT9004,Vantage Health Group,medium,NOT A DATE,2026-08-02 15:00:00,1,"Bad created_time, should be skipped.",database
+,Vantage Health Group,low,2026-08-02 16:00:00,2026-08-02 17:00:00,no,"Missing alert_id, should be skipped.",server
+ALT9005,,medium,2026-08-02 18:00:00,2026-08-02 19:00:00,no,"Missing entity, should be skipped.",endpoint
+ALT9006,Vantage Health Group,HIGH,2026-08-03 09:00:00,2026-08-03 12:15:00,Yes,Reviewed and escalated to L2 after confirming lateral movement indicators.,identity

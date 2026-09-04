@@ -1,8 +1,12 @@
 import { useRef, useState } from "react";
-import { Upload, FileText, X, ArrowRight } from "lucide-react";
+import { Upload, FileText, X, ArrowRight, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { uploadCSV } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
+
+// A skip rate at or above this share of received rows is surfaced as a
+// prominent warning rather than left as a quiet number in the stat grid.
+const SIGNIFICANT_SKIP_RATIO = 0.2;
 
 export default function UploadPage() {
   usePageMetadata({
@@ -123,6 +127,13 @@ export default function UploadPage() {
       console.error(err);
     }
   };
+
+  const hasIngestedRows = uploadResult ? uploadResult.rows_inserted > 0 : false;
+  const skipRatio =
+    uploadResult && uploadResult.rows_received > 0
+      ? uploadResult.rows_skipped / uploadResult.rows_received
+      : 0;
+  const hasSignificantSkips = hasIngestedRows && skipRatio >= SIGNIFICANT_SKIP_RATIO;
 
   return (
     <main className="upload-shell">
@@ -273,17 +284,47 @@ export default function UploadPage() {
               <div className="success-top">
                 <div>
                   <div className="success-label">
-                    INGESTION COMPLETE
+                    {hasIngestedRows ? "INGESTION COMPLETE" : "NO RECORDS INGESTED"}
                   </div>
 
-                  <h2>Dataset ready for analysis.</h2>
+                  <h2>
+                    {hasIngestedRows
+                      ? "Dataset ready for analysis."
+                      : "No records ingested."}
+                  </h2>
                 </div>
 
-                <div className="success-status">
+                <div className={`success-status${hasIngestedRows ? "" : " warning"}`}>
                   <span />
-                  SUCCESS
+                  {hasIngestedRows ? "SUCCESS" : "WARNING"}
                 </div>
               </div>
+
+              {!hasIngestedRows && (
+                <div className="upload-warning">
+                  <AlertTriangle size={16} />
+                  <span>
+                    The file parsed correctly but contained no usable alert rows.
+                    Check that the CSV has data rows below the header, and that each
+                    row has an <code>alert_id</code>, <code>entity_name</code>, and a
+                    valid <code>created_time</code>.
+                  </span>
+                </div>
+              )}
+
+              {hasSignificantSkips && (
+                <div className="upload-warning">
+                  <AlertTriangle size={16} />
+                  <span>
+                    <strong>{uploadResult.rows_skipped}</strong> of{" "}
+                    {uploadResult.rows_received} rows ({Math.round(skipRatio * 100)}%)
+                    were skipped during ingestion. Rows missing alert_id, entity_name,
+                    or a valid created_time — or duplicate (entity_name, alert_id)
+                    pairs within the file — are dropped. Review the source data before
+                    trusting these results.
+                  </span>
+                </div>
+              )}
 
               <div className="result-grid">
                 <div>
@@ -305,7 +346,9 @@ export default function UploadPage() {
 
                 <div>
                   <span>ROWS SKIPPED</span>
-                  <strong>{uploadResult.rows_skipped}</strong>
+                  <strong className={hasSignificantSkips ? "skipped-highlight" : ""}>
+                    {uploadResult.rows_skipped}
+                  </strong>
                 </div>
               </div>
 
@@ -319,13 +362,17 @@ export default function UploadPage() {
                 </strong>
               </div>
 
-              <Link
-                to="/dashboard"
-                className="dashboard-button"
-              >
-                VIEW DASHBOARD
-                <ArrowRight size={17} />
-              </Link>
+              {hasIngestedRows ? (
+                <Link to="/dashboard" className="dashboard-button">
+                  VIEW DASHBOARD
+                  <ArrowRight size={17} />
+                </Link>
+              ) : (
+                <button className="dashboard-button" onClick={removeFile}>
+                  UPLOAD A DIFFERENT FILE
+                  <ArrowRight size={17} />
+                </button>
+              )}
             </div>
           )}
         </div>

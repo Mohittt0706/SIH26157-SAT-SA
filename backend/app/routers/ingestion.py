@@ -5,6 +5,7 @@ before the new file's rows are inserted.
 """
 
 import io
+import re
 from typing import Optional
 
 import pandas as pd
@@ -58,6 +59,31 @@ def _clean_required_str(value: object) -> Optional[str]:
     return text or None
 
 
+def _canonicalize_column(values: "pd.Series", empty_value: Optional[str] = None) -> "pd.Series":
+    """Strip/collapse whitespace and canonicalize a column case-insensitively.
+
+    Every case/whitespace variant of the same name maps to whichever spelling
+    appeared *first* in the file — e.g. "Rivera Logistics" and later
+    "rivera   logistics" both become "Rivera Logistics", so the same company
+    doesn't split into two entities with half the alerts each (which would
+    corrupt the peer median for negative_space). Missing/blank values become
+    *empty_value*.
+    """
+    canonical_by_key: dict[str, str] = {}
+    result: list[Optional[str]] = []
+    for raw in values:
+        if pd.isna(raw):
+            result.append(empty_value)
+            continue
+        normalized = re.sub(r"\s+", " ", str(raw).strip())
+        if not normalized:
+            result.append(empty_value)
+            continue
+        key = normalized.casefold()
+        result.append(canonical_by_key.setdefault(key, normalized))
+    return pd.Series(result, index=values.index)
+
+
 @router.post("/upload")
 async def upload_alerts(
     file: UploadFile = File(...),
@@ -77,7 +103,7 @@ async def upload_alerts(
     rows_received = len(df)
 
     df["alert_id"] = df["alert_id"].apply(_clean_required_str)
-    df["entity_name"] = df["entity_name"].apply(_clean_required_str)
+    df["entity_name"] = _canonicalize_column(df["entity_name"])
     df["severity"] = df["severity"].apply(
         lambda v: str(v).strip().lower() if pd.notna(v) else ""
     )
@@ -85,9 +111,7 @@ async def upload_alerts(
     df["created_time"] = pd.to_datetime(df["created_time"], errors="coerce")
     df["closed_time"] = pd.to_datetime(df["closed_time"], errors="coerce")
     df["investigation_notes"] = df["investigation_notes"].apply(_clean_notes)
-    df["asset_type"] = df["asset_type"].apply(
-        lambda v: str(v).strip() if pd.notna(v) else ""
-    )
+    df["asset_type"] = _canonicalize_column(df["asset_type"], empty_value="")
 
     invalid_mask = (
         df["alert_id"].isna() | df["entity_name"].isna() | df["created_time"].isna()
@@ -98,6 +122,10 @@ async def upload_alerts(
     # alert_id alone is not globally unique: each company's CSV restarts its
     # own alert_id series, so "ALT001" from one entity and "ALT001" from
     # another are different alerts, not duplicates. Dedupe on the pair.
+    # entity_name is already canonicalized above, so "Rivera Logistics" and
+    # "rivera logistics" collapse to the same key here too — a same-company
+    # case variant with a repeated alert_id correctly dedupes instead of
+    # silently becoming two separate composite-PK rows.
     duplicate_mask = df_valid.duplicated(subset=["entity_name", "alert_id"], keep="first")
     duplicate_count = int(duplicate_mask.sum())
     df_clean = df_valid.loc[~duplicate_mask].copy()
