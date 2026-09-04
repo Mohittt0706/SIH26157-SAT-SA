@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import usePageMetadata from "../hooks/usePageMetadata";
 
 const capabilities = [
   {
@@ -47,6 +48,11 @@ const entities = [
 ];
 
 export default function LandingPage() {
+  usePageMetadata({
+    title: "VEIL | Supervisory Intelligence",
+    description: "Evidence-backed signals for human review — not definitive security verdicts.",
+    path: "/",
+  });
   return (
     <main className="site-shell">
       {/* NAVBAR */}
@@ -318,9 +324,10 @@ export default function LandingPage() {
         </div>
 
         <div className="footer-meta">
-          <span>SIH26157</span>
-          <span>NTRO</span>
-          <span>OFFLINE / AIR-GAPPED</span>
+          <Link to="/privacy">Privacy Policy</Link>
+          <Link to="/terms">Terms of Use</Link>
+          <Link to="/security">Security Disclosure</Link>
+          <Link to="/accessibility">Accessibility</Link>
         </div>
       </footer>
     </main>

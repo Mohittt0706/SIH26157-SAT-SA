@@ -8,8 +8,14 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import { getRiskScores } from "../lib/api";
+import usePageMetadata from "../hooks/usePageMetadata";
 
 export default function DashboardPage() {
+  usePageMetadata({
+    title: "Supervisory Overview | VEIL",
+    description: "Assessment results generated from structured SOC operational data.",
+    path: "/dashboard",
+  });
   const [entities, setEntities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,10 +29,11 @@ export default function DashboardPage() {
         setEntities(data || []);
       } catch (err) {
         console.error(err);
-        setError(
-          err.response?.data?.detail ||
-            "Failed to load risk scores. Please ensure the backend server is running."
-        );
+        let safeError = "Failed to load risk scores. Please ensure the backend server is running.";
+        if (err.response?.data?.detail && typeof err.response.data.detail === "string") {
+          safeError = err.response.data.detail;
+        }
+        setError(safeError);
       } finally {
         setLoading(false);
       }
@@ -38,7 +45,7 @@ export default function DashboardPage() {
     return (
       <main className="dashboard-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand">
+          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
             <div className="dashboard-brand-mark">V</div>
             <div>
               <div className="dashboard-brand-name">VEIL</div>
@@ -56,11 +63,24 @@ export default function DashboardPage() {
             OFFLINE MODE
           </div>
         </nav>
-        <div className="loading-state">
-          <div className="spinner" />
-          <h3>Fetching entity risk assessments...</h3>
-          <p>Please wait while we process the active dataset.</p>
-        </div>
+        <section className="dashboard-page" style={{ paddingTop: "20px" }}>
+          <div className="dashboard-header" style={{ marginBottom: "20px" }}>
+            <div>
+              <div className="skeleton skeleton-text" style={{ width: "150px" }} />
+              <div className="skeleton skeleton-title" style={{ width: "250px", height: "40px", marginTop: "10px" }} />
+              <div className="skeleton skeleton-text" style={{ width: "350px", marginTop: "10px" }} />
+            </div>
+          </div>
+          <div className="dashboard-metrics" style={{ marginBottom: "40px" }}>
+            <div className="skeleton skeleton-card" style={{ height: "90px" }} />
+            <div className="skeleton skeleton-card" style={{ height: "90px" }} />
+            <div className="skeleton skeleton-card" style={{ height: "90px" }} />
+          </div>
+          <div className="dashboard-main-grid">
+            <div className="skeleton skeleton-card" style={{ height: "300px" }} />
+            <div className="skeleton skeleton-card" style={{ height: "300px" }} />
+          </div>
+        </section>
       </main>
     );
   }
@@ -69,7 +89,7 @@ export default function DashboardPage() {
     return (
       <main className="dashboard-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand">
+          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
             <div className="dashboard-brand-mark">V</div>
             <div>
               <div className="dashboard-brand-name">VEIL</div>
@@ -129,7 +149,7 @@ export default function DashboardPage() {
     <main className="dashboard-shell">
       {/* NAVBAR */}
       <nav className="dashboard-nav">
-        <Link to="/" className="dashboard-brand">
+        <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
           <div className="dashboard-brand-mark">V</div>
           <div>
             <div className="dashboard-brand-name">VEIL</div>
@@ -223,10 +243,10 @@ export default function DashboardPage() {
                 <span />
               </div>
               {entities.length === 0 ? (
-                <div className="empty-state" style={{ minHeight: "200px" }}>
+                <div className="empty-state" style={{ minHeight: "200px", gridColumn: "1 / -1" }}>
                   <ShieldAlert size={24} />
                   <h3>No Entities</h3>
-                  <p>No entities were found in the active dataset.</p>
+                  <p>No entities were found in the active dataset. Please upload a new dataset containing entity records.</p>
                 </div>
               ) : (
                 [...entities]
