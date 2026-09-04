@@ -228,3 +228,8 @@ dist/
 .env
 dataset/answer_key_INTERNAL_ONLY.csv
 *.zip
+*.joblib
+backend/check.py
+backend/validation_outputs/temp_*
+backend/__pycache__/
+.pytest_cache/
