@@ -1,0 +1,11 @@
+alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
+JPM00001,JPMorgan Chase,Critical,Unauthorized Access,Server,2026-02-01 04:00:00,2026-02-01 04:03:00,3,No,Closed,Reviewed and closed.
+JPM00002,JPMorgan Chase,High,Data Exfiltration Attempt,Database,2026-02-01 06:10:00,2026-02-01 06:14:00,4,No,Closed,No action needed.
+JPM00003,JPMorgan Chase,Critical,Malware,Server,2026-02-02 09:00:00,2026-02-02 09:02:00,2,No,Closed,Closed as per procedure.
+JPM00004,JPMorgan Chase,Medium,Phishing,Endpoint,2026-02-02 11:30:00,2026-02-02 11:35:00,5,No,Closed,False positive.
+JPM00005,JPMorgan Chase,Low,Misconfiguration,Cloud Workload,2026-02-03 14:00:00,2026-02-03 14:04:00,4,No,Closed,No action needed.
+JPM00006,JPMorgan Chase,High,DDoS,Network Device,2026-02-04 01:10:00,2026-02-04 01:13:00,3,No,Closed,Reviewed and closed.
+JPM00007,JPMorgan Chase,Critical,Insider Threat Indicator,Database,2026-02-05 08:00:00,2026-02-05 08:05:00,5,No,Closed,False positive.
+JPM00008,JPMorgan Chase,Low,Unauthorized Access,IoT Device,2026-02-05 10:00:00,2026-02-05 10:02:00,2,No,Closed,Closed as per procedure.
+JPM00009,JPMorgan Chase,Medium,Malware,Endpoint,2026-02-06 12:00:00,2026-02-06 12:05:00,5,No,Closed,Reviewed and closed.
+JPM00010,JPMorgan Chase,High,Data Exfiltration Attempt,Cloud Workload,2026-02-06 15:00:00,2026-02-06 15:04:00,4,No,Closed,No action needed.

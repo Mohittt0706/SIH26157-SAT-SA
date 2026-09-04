@@ -1,0 +1,16 @@
+dataset_type,entity_name,anomaly_score,execution_gap_score,negative_space_score
+synthetic,Apex Power Grid Ltd,0.007,0.09956043956043954,0.0
+synthetic,Bharat Telecom Networks,0.193,0.22066666666666665,0.0
+synthetic,Continental Banking Corp,0.66,0.6844230769230769,0.0
+synthetic,Delta Rail Systems,1.0,0.0,0.8
+synthetic,Eastern Water Utility,0.05,0.11203007518796991,0.0
+synthetic,Fortis Defense Systems,0.527,0.08293172690763052,0.0
+synthetic,Ganga Oil & Gas,0.299,0.022641509433962263,0.0
+synthetic,Himalayan Healthcare Network,0.068,0.03529411764705882,0.0
+synthetic,Indus Financial Services,0.679,0.7266666666666668,0.0
+synthetic,Jupiter Aviation Control,0.0,0.13153846153846155,0.0
+external,Equifax,0.139,0.0375,0.0
+external,JPMorgan Chase,0.611,0.7833333333333333,0.0
+external,MGM Resorts,1.0,0.0,0.9
+external,Microsoft,0.0,0.024999999999999998,0.0
+external,T-Mobile,0.0,0.0,0.0

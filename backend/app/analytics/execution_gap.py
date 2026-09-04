@@ -96,6 +96,42 @@ def compute_execution_gap(db: Session) -> dict[str, dict]:
     }
 
 
+def compute_execution_gap_from_csv(csv_path) -> dict[str, dict]:
+    """Compute Execution Gap results directly from a CSV file."""
+    import csv as csv_mod
+    from pathlib import Path
+    from app.analytics.anomaly import _CsvAlert
+
+    p = Path(csv_path)
+    if not p.exists():
+        raise FileNotFoundError(f"CSV file not found at {p}")
+
+    alerts_data: list[dict[str, str]] = []
+    with open(p, newline="", encoding="utf-8") as fh:
+        reader = csv_mod.DictReader(fh)
+        for row in reader:
+            alerts_data.append(row)
+
+    by_entity: dict[str, list[_CsvAlert]] = {}
+    for row in alerts_data:
+        entity = row.get("entity_name", "").strip()
+        if entity:
+            by_entity.setdefault(entity, []).append(_CsvAlert(row))
+
+    entity_duplicate_rates: dict[str, float] = {
+        entity_name: _duplicate_rate(entity_alerts)
+        for entity_name, entity_alerts in by_entity.items()
+    }
+
+    return {
+        entity_name: _to_contract_dict(
+            _compute_for_entity(entity_name, entity_alerts, entity_duplicate_rates)
+        )
+        for entity_name, entity_alerts in by_entity.items()
+    }
+
+
+
 def _to_contract_dict(result: ExecutionGapResult) -> dict:
     """Serialize an ExecutionGapResult into the shared detector contract shape."""
     evidence = [
@@ -152,7 +188,7 @@ def _compute_for_entity(
 def _fast_closure_rule(alerts: list[Alert]) -> tuple[float, list[RuleEvidence]]:
     """Rate of critical/high alerts closed under FAST_CLOSURE_THRESHOLD_SECONDS."""
     candidates = [
-        a for a in alerts if a.severity in FAST_CLOSURE_SEVERITIES and a.closed_time is not None
+        a for a in alerts if a.severity and a.severity.lower() in FAST_CLOSURE_SEVERITIES and a.closed_time is not None
     ]
     hits = [
         a
@@ -176,7 +212,7 @@ def _fast_closure_rule(alerts: list[Alert]) -> tuple[float, list[RuleEvidence]]:
 
 def _no_escalation_rule(alerts: list[Alert]) -> tuple[float, list[RuleEvidence]]:
     """Rate of critical alerts left un-escalated."""
-    candidates = [a for a in alerts if a.severity in NO_ESCALATION_SEVERITIES]
+    candidates = [a for a in alerts if a.severity and a.severity.lower() in NO_ESCALATION_SEVERITIES]
     hits = [a for a in candidates if not a.escalated]
     rate = len(hits) / len(candidates) if candidates else 0.0
 

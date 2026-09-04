@@ -354,6 +354,45 @@ def compute_negative_space(db: Session) -> dict[str, dict]:
     return {entity_name: _to_contract_dict(result) for entity_name, result in objects.items()}
 
 
+def compute_negative_space_from_csv(csv_path) -> dict[str, dict]:
+    """Compute Negative Space results directly from a CSV file."""
+    import csv as csv_mod
+    from pathlib import Path
+
+    p = Path(csv_path)
+    if not p.exists():
+        raise FileNotFoundError(f"CSV file not found at {p}")
+
+    alerts_data: list[dict[str, str]] = []
+    with open(p, newline="", encoding="utf-8") as fh:
+        reader = csv_mod.DictReader(fh)
+        for row in reader:
+            alerts_data.append(row)
+
+    by_entity: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for row in alerts_data:
+        entity = row.get("entity_name", "").strip()
+        if entity:
+            by_entity[entity].append(row)
+
+    entity_alert_counts: dict[str, int] = {
+        name: len(rows) for name, rows in by_entity.items()
+    }
+    entity_severity_sets: dict[str, set[str]] = {
+        name: {row["severity"].strip().lower() for row in rows if row.get("severity")}
+        for name, rows in by_entity.items()
+    }
+
+    results: dict[str, NegativeSpaceResult] = {}
+    for entity_name, entity_rows in by_entity.items():
+        results[entity_name] = _compute_for_entity_csv(
+            entity_name, entity_rows, entity_alert_counts, entity_severity_sets
+        )
+
+    return {entity_name: _to_contract_dict(res) for entity_name, res in results.items()}
+
+
+
 def _to_contract_dict(result: NegativeSpaceResult) -> dict:
     """Serialize a NegativeSpaceResult into the shared detector contract shape."""
     return {

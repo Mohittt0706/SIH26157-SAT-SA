@@ -20,7 +20,9 @@ from __future__ import annotations
 import statistics
 from collections import defaultdict
 from dataclasses import dataclass, field
+from pathlib import Path
 
+import joblib
 import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
@@ -39,7 +41,7 @@ IFOREST_RANDOM_STATE: int = 42
 IFOREST_CONTAMINATION: float = 0.2
 """Expected fraction of anomalous entities in the training set."""
 
-IFOREST_N_ESTIMATORS: int = 100
+IFOREST_N_ESTIMATORS: int = 200
 """Number of trees in the forest."""
 
 MAX_EVIDENCE_ITEMS: int = 3
@@ -78,40 +80,40 @@ class AnomalyResult:
 # Feature extraction
 # ---------------------------------------------------------------------------
 
-def _extract_features(alerts: list[Alert]) -> dict[str, float]:
+def _extract_features(alerts: list[Alert | _CsvAlert]) -> dict[str, float]:
     """Compute the six-feature vector for one entity's alerts.
 
     Returns a dict with keys matching ``FEATURE_NAMES``.
     """
     total = len(alerts)
 
-    # alert_count
+    # 1. alert_count
     alert_count = float(total)
 
-    # avg_closure_seconds — exclude open alerts (closed_time is None)
+    # 2. avg_closure_seconds — exclude open alerts (closure_seconds is None)
     closure_vals = [
         a.closure_seconds for a in alerts
-        if a.closed_time is not None and a.closure_seconds is not None
+        if a.closure_seconds is not None
     ]
     avg_closure_seconds = statistics.mean(closure_vals) if closure_vals else 0.0
 
-    # escalation_rate
+    # 3. escalation_rate
     escalated_count = sum(1 for a in alerts if a.escalated)
     escalation_rate = escalated_count / total if total else 0.0
 
-    # critical_ratio
-    critical_count = sum(1 for a in alerts if a.severity.lower() == "critical")
+    # 4. critical_ratio
+    critical_count = sum(1 for a in alerts if a.severity and a.severity.lower() == "critical")
     critical_ratio = critical_count / total if total else 0.0
 
-    # avg_note_length — None notes count as length 0
+    # 5. avg_note_length — None notes count as length 0
     note_lengths = [
         len(a.investigation_notes) if a.investigation_notes else 0
         for a in alerts
     ]
     avg_note_length = statistics.mean(note_lengths) if note_lengths else 0.0
 
-    # unique_asset_types
-    unique_asset_types = float(len({a.asset_type for a in alerts}))
+    # 6. unique_asset_types
+    unique_asset_types = float(len({a.asset_type for a in alerts if a.asset_type and a.asset_type.strip()}))
 
     return {
         "alert_count": alert_count,
@@ -121,6 +123,38 @@ def _extract_features(alerts: list[Alert]) -> dict[str, float]:
         "avg_note_length": avg_note_length,
         "unique_asset_types": unique_asset_types,
     }
+
+
+def extract_entity_features(alerts: list[Alert | _CsvAlert]) -> dict[str, float]:
+    """Public API for extracting the six-feature vector for an entity's alerts."""
+    return _extract_features(alerts)
+
+
+def extract_features_from_csv(csv_path: str | Path) -> dict[str, dict[str, float]]:
+    """Extract entity-level six-feature vectors directly from a CSV file."""
+    import csv as csv_mod
+    from pathlib import Path
+    p = Path(csv_path)
+    if not p.exists():
+        raise FileNotFoundError(f"CSV file not found: {p}")
+
+    alerts_data: list[dict[str, str]] = []
+    with open(p, newline="", encoding="utf-8") as fh:
+        reader = csv_mod.DictReader(fh)
+        for row in reader:
+            alerts_data.append(row)
+
+    by_entity: dict[str, list[_CsvAlert]] = defaultdict(list)
+    for row in alerts_data:
+        entity = row.get("entity_name", "").strip()
+        if entity:
+            by_entity[entity].append(_CsvAlert(row))
+
+    return {
+        entity: _extract_features(alerts)
+        for entity, alerts in sorted(by_entity.items())
+    }
+
 
 
 # ---------------------------------------------------------------------------
@@ -288,8 +322,146 @@ def _compute_anomaly_matrix(
 
 
 # ---------------------------------------------------------------------------
+# Model Persistence & Inference APIs (Step 1.2)
+# ---------------------------------------------------------------------------
+
+def save_anomaly_model(
+    scaler: StandardScaler,
+    clf: IsolationForest,
+    feature_vectors: list[dict[str, float]],
+    entity_names: list[str],
+    artifact_path: str | Path,
+) -> str:
+    """Persist fitted StandardScaler and IsolationForest ensemble to a joblib artifact."""
+    path = Path(artifact_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    model_dict = {
+        "scaler": scaler,
+        "clf": clf,
+        "feature_names": FEATURE_NAMES,
+        "training_feature_vectors": feature_vectors,
+        "training_entities": entity_names,
+        "hyperparameters": {
+            "n_estimators": getattr(clf, "n_estimators", 200),
+            "contamination": getattr(clf, "contamination", 0.2),
+            "random_state": getattr(clf, "random_state", 42),
+        },
+    }
+    joblib.dump(model_dict, path)
+    return str(path.resolve())
+
+
+def load_anomaly_model(artifact_path: str | Path) -> dict:
+    """Load persisted anomaly model dictionary from a joblib artifact."""
+    path = Path(artifact_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Model artifact not found at {path}")
+    model_dict = joblib.load(path)
+    if "scaler" not in model_dict or "clf" not in model_dict:
+        raise ValueError(f"Invalid model artifact structure in {path}")
+    return model_dict
+
+
+def train_synthetic_model(
+    synthetic_csv_path: str | Path,
+    artifact_path: str | Path,
+) -> dict[str, AnomalyResult]:
+    """Train Isolation Forest on synthetic features and persist anomaly_model.joblib."""
+    syn_features = extract_features_from_csv(synthetic_csv_path)
+    entity_names = sorted(syn_features.keys())
+    feature_vectors = [syn_features[name] for name in entity_names]
+
+    X = np.array([[fv[f] for f in FEATURE_NAMES] for fv in feature_vectors])
+
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    clf = IsolationForest(
+        random_state=IFOREST_RANDOM_STATE,
+        contamination=IFOREST_CONTAMINATION,
+        n_estimators=IFOREST_N_ESTIMATORS,
+    )
+    raw_scores = clf.fit(X_scaled).decision_function(X_scaled)
+
+    save_anomaly_model(scaler, clf, feature_vectors, entity_names, artifact_path)
+
+    converted = _convert_scores(raw_scores)
+
+    results: dict[str, AnomalyResult] = {}
+    for i, name in enumerate(entity_names):
+        score = float(converted[i])
+        metrics = {feat: round(float(X[i][j]), 2) for j, feat in enumerate(FEATURE_NAMES)}
+        evidence = _build_evidence(feature_vectors[i], i, feature_vectors, entity_names)
+
+        results[name] = AnomalyResult(
+            entity_name=name,
+            score=round(score, 3),
+            metrics=metrics,
+            evidence=evidence,
+        )
+
+    return results
+
+
+def predict_anomaly(
+    features_by_entity: dict[str, dict[str, float]],
+    artifact_path: str | Path,
+) -> dict[str, AnomalyResult]:
+    """Execute inference on entity feature vectors using a loaded joblib model artifact.
+
+    Transforms input features using the PRE-FITTED scaler without retraining,
+    calculates Isolation Forest decision_function scores, and computes MAD evidence.
+    """
+    model_dict = load_anomaly_model(artifact_path)
+    scaler: StandardScaler = model_dict["scaler"]
+    clf: IsolationForest = model_dict["clf"]
+    expected_features: list[str] = model_dict.get("feature_names", FEATURE_NAMES)
+
+    entity_names = sorted(features_by_entity.keys())
+    if not entity_names:
+        return {}
+
+    feature_vectors: list[dict[str, float]] = []
+    for name in entity_names:
+        fv = features_by_entity[name]
+        for feat in expected_features:
+            if feat not in fv:
+                raise KeyError(f"Feature '{feat}' missing for entity '{name}'")
+            val = fv[feat]
+            if not isinstance(val, (int, float)) or (isinstance(val, float) and np.isnan(val)):
+                raise ValueError(f"Invalid/NaN feature value for '{name}.{feat}': {val}")
+        feature_vectors.append(fv)
+
+    X = np.array([[fv[f] for f in expected_features] for fv in feature_vectors])
+
+    # Transform ONLY using fitted scaler — DO NOT FIT!
+    X_scaled = scaler.transform(X)
+
+    # Decision function from fitted Isolation Forest
+    raw_scores = clf.decision_function(X_scaled)
+    converted = _convert_scores(raw_scores)
+
+    results: dict[str, AnomalyResult] = {}
+    for i, name in enumerate(entity_names):
+        score = float(converted[i])
+        metrics = {feat: round(float(X[i][j]), 2) for j, feat in enumerate(expected_features)}
+        evidence = _build_evidence(feature_vectors[i], i, feature_vectors, entity_names)
+
+        results[name] = AnomalyResult(
+            entity_name=name,
+            score=round(score, 3),
+            metrics=metrics,
+            evidence=evidence,
+        )
+
+    return results
+
+
+# ---------------------------------------------------------------------------
 # Public API — integrates with SQLAlchemy (matches negative_space.py pattern)
 # ---------------------------------------------------------------------------
+
 
 def compute_anomaly(db: Session) -> dict[str, dict]:
     """Compute Isolation Forest anomaly scores for every entity.
@@ -423,26 +595,52 @@ class _CsvAlert:
     """Lightweight stand-in for an Alert ORM object, built from a CSV row."""
 
     def __init__(self, row: dict[str, str]) -> None:
-        from datetime import datetime
-
-        self.alert_id: str = row.get("alert_id", "")
-        self.entity_name: str = row.get("entity_name", "")
-        self.severity: str = row.get("severity", "")
+        self.alert_id: str = row.get("alert_id", "").strip()
+        self.entity_name: str = row.get("entity_name", "").strip()
+        self.severity: str = row.get("severity", "").strip()
         self.escalated: bool = row.get("escalated", "").strip().lower() in ("yes", "true", "1")
-        self.investigation_notes: str | None = row.get("investigation_notes") or None
-        self.asset_type: str = row.get("asset_type", "")
+        self.investigation_notes: str | None = row.get("investigation_notes") if row.get("investigation_notes") else None
+        self.asset_type: str = row.get("asset_type", "").strip()
 
-        # Parse timestamps.
+        # 1. Check direct closure_duration_minutes from CSV row
+        dur_str = row.get("closure_duration_minutes", "").strip()
+        self._csv_closure_seconds: float | None = None
+        if dur_str:
+            try:
+                val = float(dur_str)
+                if val >= 0:
+                    self._csv_closure_seconds = val * 60.0
+            except ValueError:
+                pass
+
+        # 2. Parse timestamps flexibly
         ct = row.get("created_time", "").strip()
         clt = row.get("closed_time", "").strip()
-        self.created_time = datetime.strptime(ct, "%Y-%m-%d %H:%M:%S") if ct else None
-        self.closed_time = datetime.strptime(clt, "%Y-%m-%d %H:%M:%S") if clt else None
+        self.created_time = _parse_dt(ct)
+        self.closed_time = _parse_dt(clt)
 
     @property
     def closure_seconds(self) -> float | None:
+        if self._csv_closure_seconds is not None:
+            return self._csv_closure_seconds
         if self.created_time is None or self.closed_time is None:
             return None
-        return (self.closed_time - self.created_time).total_seconds()
+        diff = (self.closed_time - self.created_time).total_seconds()
+        return diff if diff >= 0 else None
+
+
+def _parse_dt(dt_str: str):
+    """Parse datetime string with format fallback."""
+    from datetime import datetime
+    if not dt_str:
+        return None
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M"):
+        try:
+            return datetime.strptime(dt_str, fmt)
+        except ValueError:
+            pass
+    return None
+
 
 
 def _print_results(results: dict[str, AnomalyResult]) -> None:

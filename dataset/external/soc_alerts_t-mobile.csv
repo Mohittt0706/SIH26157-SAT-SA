@@ -1,0 +1,7 @@
+alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
+TMOB0001,T-Mobile,Medium,Unauthorized Access,Network Device,2026-02-01 07:00:00,2026-02-01 10:00:00,180,No,Closed,"SIM swap request flagged, customer identity verified via secondary channel."
+TMOB0002,T-Mobile,High,Phishing,Endpoint,2026-02-01 13:00:00,2026-02-01 16:30:00,210,Yes,Closed,"SMS phishing campaign identified, domain blocked across mobile gateway."
+TMOB0003,T-Mobile,Low,Misconfiguration,Server,2026-02-02 08:30:00,2026-02-02 11:00:00,150,No,Closed,Patched internal API gateway endpoint configuration.
+TMOB0004,T-Mobile,Critical,Data Exfiltration Attempt,Database,2026-02-02 14:00:00,2026-02-02 18:00:00,240,Yes,Closed,"Subscriber database query anomaly, session terminated, IP blocked."
+TMOB0005,T-Mobile,Medium,Malware,Cloud Workload,2026-02-03 09:00:00,2026-02-03 12:00:00,180,No,Closed,Container image vulnerability remediated.
+TMOB0006,T-Mobile,High,DDoS,Network Device,2026-02-04 02:00:00,2026-02-04 05:30:00,210,Yes,Closed,Cellular core network traffic throttled during volumetric anomaly.

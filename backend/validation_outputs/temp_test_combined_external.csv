@@ -1,0 +1,41 @@
+alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
+EQX00001,Equifax,High,Unauthorized Access,Database,2026-02-01 09:00:00,2026-02-01 12:30:00,210,Yes,Closed,"Investigated database query logs, revoked temporary key, notified security team."
+EQX00002,Equifax,Critical,Data Exfiltration Attempt,Server,2026-02-01 14:15:00,2026-02-01 18:45:00,270,Yes,Closed,"Identified outbound egress spike, blocked destination IP on edge firewall."
+EQX00003,Equifax,Medium,Phishing,Endpoint,2026-02-02 08:00:00,2026-02-02 09:30:00,90,No,Closed,Reviewed email headers and removed malicious attachment.
+EQX00004,Equifax,Low,Misconfiguration,Cloud Workload,2026-02-02 11:00:00,2026-02-02 11:45:00,45,No,Closed,Updated IAM policy to restrict public access.
+EQX00005,Equifax,Critical,Malware,Server,2026-02-03 01:20:00,2026-02-03 06:20:00,300,Yes,Closed,"Isolated host from network, initiated memory dump analysis."
+EQX00006,Equifax,Low,Insider Threat Indicator,Endpoint,2026-02-03 10:00:00,,,No,Open,
+EQX00007,Equifax,Medium,DDoS,Network Device,2026-02-04 15:30:00,2026-02-04 17:30:00,120,No,Closed,Mitigated rate-limiting threshold violation.
+EQX00008,Equifax,High,Unauthorized Access,Database,2026-02-05 03:10:00,2026-02-05 07:10:00,240,Yes,Closed,"Correlated logs, reset compromised admin credentials."
+JPM00001,JPMorgan Chase,Critical,Unauthorized Access,Server,2026-02-01 04:00:00,2026-02-01 04:03:00,3,No,Closed,Reviewed and closed.
+JPM00002,JPMorgan Chase,High,Data Exfiltration Attempt,Database,2026-02-01 06:10:00,2026-02-01 06:14:00,4,No,Closed,No action needed.
+JPM00003,JPMorgan Chase,Critical,Malware,Server,2026-02-02 09:00:00,2026-02-02 09:02:00,2,No,Closed,Closed as per procedure.
+JPM00004,JPMorgan Chase,Medium,Phishing,Endpoint,2026-02-02 11:30:00,2026-02-02 11:35:00,5,No,Closed,False positive.
+JPM00005,JPMorgan Chase,Low,Misconfiguration,Cloud Workload,2026-02-03 14:00:00,2026-02-03 14:04:00,4,No,Closed,No action needed.
+JPM00006,JPMorgan Chase,High,DDoS,Network Device,2026-02-04 01:10:00,2026-02-04 01:13:00,3,No,Closed,Reviewed and closed.
+JPM00007,JPMorgan Chase,Critical,Insider Threat Indicator,Database,2026-02-05 08:00:00,2026-02-05 08:05:00,5,No,Closed,False positive.
+JPM00008,JPMorgan Chase,Low,Unauthorized Access,IoT Device,2026-02-05 10:00:00,2026-02-05 10:02:00,2,No,Closed,Closed as per procedure.
+JPM00009,JPMorgan Chase,Medium,Malware,Endpoint,2026-02-06 12:00:00,2026-02-06 12:05:00,5,No,Closed,Reviewed and closed.
+JPM00010,JPMorgan Chase,High,Data Exfiltration Attempt,Cloud Workload,2026-02-06 15:00:00,2026-02-06 15:04:00,4,No,Closed,No action needed.
+MGM00001,MGM Resorts,Low,Phishing,Endpoint,2026-02-01 10:00:00,2026-02-01 13:00:00,180,No,Closed,"User clicked phishing link, workstation isolated, credentials reset."
+MGM00002,MGM Resorts,Low,Misconfiguration,Server,2026-02-02 11:00:00,2026-02-02 14:00:00,180,No,Closed,Fixed open port configuration on external web server.
+MGM00003,MGM Resorts,Low,Unauthorized Access,Endpoint,2026-02-03 09:30:00,2026-02-03 12:30:00,180,No,Closed,"Failed login attempt threshold exceeded, account locked temporarily."
+MGM00004,MGM Resorts,Low,DDoS,Network Device,2026-02-04 14:00:00,2026-02-04 17:00:00,180,Yes,Closed,"Volumetric spike detected, diverted traffic to scrubbing provider."
+MSFT0001,Microsoft,Critical,Unauthorized Access,Cloud Workload,2026-02-01 02:00:00,2026-02-01 05:30:00,210,Yes,Closed,"Analyzed Azure AD sign-in logs, enforced MFA, contained access token."
+MSFT0002,Microsoft,High,Data Exfiltration Attempt,Database,2026-02-01 08:00:00,2026-02-01 12:00:00,240,Yes,Closed,"Anomalous bulk query detected, blocked API token, alerted tenant owner."
+MSFT0003,Microsoft,Medium,Malware,Server,2026-02-02 10:15:00,2026-02-02 13:45:00,210,Yes,Closed,"Defender Endpoint alert triggered, malware file quarantined automatically."
+MSFT0004,Microsoft,Critical,Insider Threat Indicator,Cloud Workload,2026-02-02 16:00:00,2026-02-02 20:00:00,240,Yes,Closed,"Privileged identity assignment flagged, revoked role delegation."
+MSFT0005,Microsoft,Low,Phishing,Endpoint,2026-02-03 09:00:00,2026-02-03 11:30:00,150,No,Closed,Simulated phishing campaign click recorded for training.
+MSFT0006,Microsoft,High,Misconfiguration,Server,2026-02-03 14:00:00,2026-02-03 17:30:00,210,No,Closed,Remediated storage account public read permission.
+MSFT0007,Microsoft,Critical,DDoS,Network Device,2026-02-04 01:00:00,2026-02-04 04:30:00,210,Yes,Closed,Syn-flood mitigation rule enabled on edge router.
+MSFT0008,Microsoft,Medium,Unauthorized Access,IoT Device,2026-02-04 08:00:00,,,No,Open,
+MSFT0009,Microsoft,High,Malware,Endpoint,2026-02-05 11:00:00,2026-02-05 14:30:00,210,Yes,Closed,"Suspicious PowerShell execution blocked, host isolated."
+MSFT0010,Microsoft,Critical,Data Exfiltration Attempt,Database,2026-02-05 18:00:00,2026-02-05 22:00:00,240,Yes,Closed,"Cross-region data transfer blocked, security incident escalated."
+MSFT0011,Microsoft,Low,Insider Threat Indicator,Cloud Workload,2026-02-06 07:00:00,2026-02-06 10:00:00,180,No,Closed,Routine key rotation verified.
+MSFT0012,Microsoft,Medium,Misconfiguration,Network Device,2026-02-06 12:00:00,2026-02-06 15:30:00,210,No,Closed,Updated SSL/TLS cipher suite preference.
+TMOB0001,T-Mobile,Medium,Unauthorized Access,Network Device,2026-02-01 07:00:00,2026-02-01 10:00:00,180,No,Closed,"SIM swap request flagged, customer identity verified via secondary channel."
+TMOB0002,T-Mobile,High,Phishing,Endpoint,2026-02-01 13:00:00,2026-02-01 16:30:00,210,Yes,Closed,"SMS phishing campaign identified, domain blocked across mobile gateway."
+TMOB0003,T-Mobile,Low,Misconfiguration,Server,2026-02-02 08:30:00,2026-02-02 11:00:00,150,No,Closed,Patched internal API gateway endpoint configuration.
+TMOB0004,T-Mobile,Critical,Data Exfiltration Attempt,Database,2026-02-02 14:00:00,2026-02-02 18:00:00,240,Yes,Closed,"Subscriber database query anomaly, session terminated, IP blocked."
+TMOB0005,T-Mobile,Medium,Malware,Cloud Workload,2026-02-03 09:00:00,2026-02-03 12:00:00,180,No,Closed,Container image vulnerability remediated.
+TMOB0006,T-Mobile,High,DDoS,Network Device,2026-02-04 02:00:00,2026-02-04 05:30:00,210,Yes,Closed,Cellular core network traffic throttled during volumetric anomaly.

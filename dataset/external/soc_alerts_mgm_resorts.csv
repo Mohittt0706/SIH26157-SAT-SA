@@ -1,0 +1,5 @@
+alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
+MGM00001,MGM Resorts,Low,Phishing,Endpoint,2026-02-01 10:00:00,2026-02-01 13:00:00,180,No,Closed,"User clicked phishing link, workstation isolated, credentials reset."
+MGM00002,MGM Resorts,Low,Misconfiguration,Server,2026-02-02 11:00:00,2026-02-02 14:00:00,180,No,Closed,Fixed open port configuration on external web server.
+MGM00003,MGM Resorts,Low,Unauthorized Access,Endpoint,2026-02-03 09:30:00,2026-02-03 12:30:00,180,No,Closed,"Failed login attempt threshold exceeded, account locked temporarily."
+MGM00004,MGM Resorts,Low,DDoS,Network Device,2026-02-04 14:00:00,2026-02-04 17:00:00,180,Yes,Closed,"Volumetric spike detected, diverted traffic to scrubbing provider."

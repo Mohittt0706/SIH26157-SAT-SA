@@ -115,6 +115,45 @@ def compute_risk_scores(db: Session) -> list[dict]:
     return rows
 
 
+def compute_risk_scores_from_csv(csv_path, model_artifact_path) -> list[dict]:
+    """Combine execution_gap, negative_space, and anomaly from a CSV file into risk score rows."""
+    from pathlib import Path
+    from app.analytics.anomaly import extract_features_from_csv, predict_anomaly
+    from app.analytics.execution_gap import compute_execution_gap_from_csv
+    from app.analytics.negative_space import compute_negative_space_from_csv
+
+    eg_dict = compute_execution_gap_from_csv(csv_path)
+    ns_dict = compute_negative_space_from_csv(csv_path)
+    feat_map = extract_features_from_csv(csv_path)
+
+    # Predict anomaly using the joblib model artifact
+    anomaly_obj = predict_anomaly(feat_map, model_artifact_path)
+    an_dict = {
+        name: {
+            "score": res.score,
+            "metrics": res.metrics,
+            "evidence": res.evidence,
+        }
+        for name, res in anomaly_obj.items()
+    }
+
+    entity_names = set(eg_dict) | set(ns_dict) | set(an_dict)
+
+    rows = [
+        _combine_entity(
+            entity_name,
+            eg_dict.get(entity_name, _EMPTY_DETECTOR_RESULT),
+            ns_dict.get(entity_name, _EMPTY_DETECTOR_RESULT),
+            an_dict.get(entity_name, _EMPTY_DETECTOR_RESULT),
+        )
+        for entity_name in entity_names
+    ]
+
+    rows.sort(key=lambda row: row["risk_score"], reverse=True)
+    return rows
+
+
+
 def _combine_entity(
     entity_name: str,
     execution_gap: dict,
