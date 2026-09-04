@@ -95,7 +95,10 @@ async def upload_alerts(
     invalid_count = int(invalid_mask.sum())
     df_valid = df.loc[~invalid_mask].copy()
 
-    duplicate_mask = df_valid.duplicated(subset="alert_id", keep="first")
+    # alert_id alone is not globally unique: each company's CSV restarts its
+    # own alert_id series, so "ALT001" from one entity and "ALT001" from
+    # another are different alerts, not duplicates. Dedupe on the pair.
+    duplicate_mask = df_valid.duplicated(subset=["entity_name", "alert_id"], keep="first")
     duplicate_count = int(duplicate_mask.sum())
     df_clean = df_valid.loc[~duplicate_mask].copy()
 

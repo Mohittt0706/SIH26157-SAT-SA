@@ -17,6 +17,7 @@ Fully offline — no network calls, no external models.
 
 from __future__ import annotations
 
+import joblib
 import statistics
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -38,7 +39,7 @@ from app.models import Alert
 IFOREST_RANDOM_STATE: int = 42
 """Deterministic seed so the demo produces identical output every run."""
 
-IFOREST_CONTAMINATION: float = 0.2
+IFOREST_CONTAMINATION: float = 0.2 
 """Expected fraction of anomalous entities in the training set."""
 
 IFOREST_N_ESTIMATORS: int = 200
@@ -301,6 +302,14 @@ def _compute_anomaly_matrix(
         n_estimators=IFOREST_N_ESTIMATORS,
     )
     raw_scores = clf.fit(X_scaled).decision_function(X_scaled)
+    joblib.dump(
+       {
+           "model": clf,
+           "scaler": scaler,
+           "feature_names": FEATURE_NAMES,
+       },
+       "anomaly_model.joblib",
+   )
 
     # Convert to 0.0–1.0 (higher = more anomalous).
     converted = _convert_scores(raw_scores)
