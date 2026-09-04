@@ -19,8 +19,13 @@ class Alert(Base):
 
     __tablename__ = "alerts"
 
+    # alert_id is only unique *within* one company's export — each company's
+    # CSV restarts its own alert_id series, so two different entities can
+    # legitimately share the same alert_id. The real natural key is the pair
+    # (entity_name, alert_id); a composite primary key enforces that at the
+    # DB level instead of silently colliding across entities.
     alert_id: Mapped[str] = mapped_column(String, primary_key=True)
-    entity_name: Mapped[str] = mapped_column(String, index=True)
+    entity_name: Mapped[str] = mapped_column(String, primary_key=True, index=True)
     severity: Mapped[str] = mapped_column(String)
     created_time: Mapped[datetime] = mapped_column(DateTime)
     closed_time: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
