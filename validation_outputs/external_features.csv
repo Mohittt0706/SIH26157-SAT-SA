@@ -1,0 +1,6 @@
+entity_name,alert_count,avg_closure_seconds,escalation_rate,critical_ratio,avg_note_length,unique_asset_types,total_alerts,closed_alerts,escalated_alerts,critical_alerts,valid_notes
+Equifax,100,13120.25,0.25,0.14,49.41,6,100,79,25,14,87
+JPMorgan Chase,100,12050.23,0.38,0.13,46.96,6,100,86,38,13,83
+MGM Resorts,100,13026.74,0.28,0.11,45.07,6,100,89,28,11,82
+Microsoft,100,11510.53,0.3,0.08,50.6,6,100,76,30,8,86
+T-Mobile,100,11756.92,0.32,0.1,48.26,6,100,78,32,10,90

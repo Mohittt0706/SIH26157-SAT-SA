@@ -1,11 +1,101 @@
 alert_id,entity_name,severity,category,asset_type,created_time,closed_time,closure_duration_minutes,escalated,status,investigation_notes
-JPM00001,JPMorgan Chase,Critical,Unauthorized Access,Server,2026-02-01 04:00:00,2026-02-01 04:03:00,3,No,Closed,Reviewed and closed.
-JPM00002,JPMorgan Chase,High,Data Exfiltration Attempt,Database,2026-02-01 06:10:00,2026-02-01 06:14:00,4,No,Closed,No action needed.
-JPM00003,JPMorgan Chase,Critical,Malware,Server,2026-02-02 09:00:00,2026-02-02 09:02:00,2,No,Closed,Closed as per procedure.
-JPM00004,JPMorgan Chase,Medium,Phishing,Endpoint,2026-02-02 11:30:00,2026-02-02 11:35:00,5,No,Closed,False positive.
-JPM00005,JPMorgan Chase,Low,Misconfiguration,Cloud Workload,2026-02-03 14:00:00,2026-02-03 14:04:00,4,No,Closed,No action needed.
-JPM00006,JPMorgan Chase,High,DDoS,Network Device,2026-02-04 01:10:00,2026-02-04 01:13:00,3,No,Closed,Reviewed and closed.
-JPM00007,JPMorgan Chase,Critical,Insider Threat Indicator,Database,2026-02-05 08:00:00,2026-02-05 08:05:00,5,No,Closed,False positive.
-JPM00008,JPMorgan Chase,Low,Unauthorized Access,IoT Device,2026-02-05 10:00:00,2026-02-05 10:02:00,2,No,Closed,Closed as per procedure.
-JPM00009,JPMorgan Chase,Medium,Malware,Endpoint,2026-02-06 12:00:00,2026-02-06 12:05:00,5,No,Closed,Reviewed and closed.
-JPM00010,JPMorgan Chase,High,Data Exfiltration Attempt,Cloud Workload,2026-02-06 15:00:00,2026-02-06 15:04:00,4,No,Closed,No action needed.
+ALT00041,JPMorgan Chase,Low,Privilege Escalation,Database,2026-01-04 05:16:00,2026-01-04 11:24:00,368,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00029,JPMorgan Chase,Low,Ransomware Indicator,Web Application,2026-01-09 07:19:00,2026-01-09 10:40:00,201,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00083,JPMorgan Chase,High,Malware Detection,Cloud Storage,2026-01-17 17:06:00,2026-01-17 19:35:00,149,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00054,JPMorgan Chase,Low,Credential Stuffing,Network Device,2026-01-18 13:42:00,,,No,In Progress,"Blocked at firewall, source IP added to watchlist."
+ALT00094,JPMorgan Chase,Low,Insider Threat Indicator,Database,2026-01-19 03:14:00,2026-01-19 07:22:00,248,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00027,JPMorgan Chase,Medium,Privilege Escalation,Cloud Storage,2026-01-24 08:25:00,2026-01-24 14:52:00,387,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00072,JPMorgan Chase,Medium,Misconfiguration Alert,Endpoint,2026-01-29 22:54:00,2026-01-30 02:00:00,186,No,Closed,"Confirmed benign, closed after log review."
+ALT00075,JPMorgan Chase,Medium,Data Exfiltration Attempt,Web Application,2026-02-02 20:35:00,2026-02-02 21:33:00,58,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00096,JPMorgan Chase,Low,Ransomware Indicator,Database,2026-02-04 18:34:00,2026-02-05 01:14:00,400,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00008,JPMorgan Chase,High,Privilege Escalation,Endpoint,2026-02-12 15:54:00,,,No,Open,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00053,JPMorgan Chase,Medium,Phishing Campaign,Network Device,2026-02-14 00:31:00,2026-02-14 04:31:00,240,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00050,JPMorgan Chase,High,Data Exfiltration Attempt,Network Device,2026-02-14 19:08:00,2026-02-14 23:26:00,258,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00064,JPMorgan Chase,Critical,Privilege Escalation,Network Device,2026-02-18 23:24:00,2026-02-19 03:23:00,239,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00003,JPMorgan Chase,Medium,Misconfiguration Alert,Network Device,2026-02-19 15:50:00,2026-02-19 18:38:00,168,Yes,Closed,User account temporarily suspended pending review.
+ALT00063,JPMorgan Chase,Medium,Insider Threat Indicator,Endpoint,2026-02-20 04:01:00,2026-02-20 05:58:00,117,No,Closed,"No further action required, false positive."
+ALT00067,JPMorgan Chase,Medium,Data Exfiltration Attempt,Cloud Storage,2026-02-22 04:12:00,2026-02-22 08:21:00,249,Yes,Closed,User account temporarily suspended pending review.
+ALT00047,JPMorgan Chase,Critical,DDoS Attempt,Network Device,2026-02-27 18:19:00,2026-02-27 20:51:00,152,No,Closed,User account temporarily suspended pending review.
+ALT00024,JPMorgan Chase,Medium,Misconfiguration Alert,Database,2026-03-01 23:12:00,2026-03-02 04:47:00,335,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00071,JPMorgan Chase,Low,Phishing Campaign,Network Device,2026-03-02 15:05:00,2026-03-02 16:09:00,64,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00081,JPMorgan Chase,Low,Ransomware Indicator,Network Device,2026-03-02 16:02:00,2026-03-02 16:14:00,12,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00015,JPMorgan Chase,Medium,Data Exfiltration Attempt,Network Device,2026-03-03 08:30:00,2026-03-03 14:10:00,340,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00095,JPMorgan Chase,Low,Phishing Campaign,Database,2026-03-04 20:17:00,2026-03-05 00:32:00,255,Yes,Closed,
+ALT00084,JPMorgan Chase,Low,Credential Stuffing,Database,2026-03-05 00:23:00,2026-03-05 02:40:00,137,No,Closed,
+ALT00042,JPMorgan Chase,Medium,Privilege Escalation,Web Application,2026-03-05 17:36:00,2026-03-05 23:52:00,376,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00079,JPMorgan Chase,Critical,Ransomware Indicator,Network Device,2026-03-06 13:15:00,2026-03-06 16:48:00,213,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00019,JPMorgan Chase,Low,Malware Detection,Web Application,2026-03-07 07:56:00,,,Yes,In Progress,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00091,JPMorgan Chase,Medium,Phishing Campaign,Endpoint,2026-03-07 08:20:00,2026-03-07 12:13:00,233,No,Closed,
+ALT00007,JPMorgan Chase,Critical,DDoS Attempt,Server,2026-03-13 02:48:00,,,No,In Progress,"Blocked at firewall, source IP added to watchlist."
+ALT00058,JPMorgan Chase,Medium,Ransomware Indicator,Cloud Storage,2026-03-14 11:36:00,2026-03-14 14:30:00,174,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00061,JPMorgan Chase,High,Misconfiguration Alert,Database,2026-03-15 20:37:00,2026-03-16 00:03:00,206,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00028,JPMorgan Chase,Medium,Data Exfiltration Attempt,Database,2026-03-18 09:15:00,2026-03-18 10:41:00,86,No,Closed,User account temporarily suspended pending review.
+ALT00004,JPMorgan Chase,Low,DDoS Attempt,Endpoint,2026-03-19 06:07:00,2026-03-19 11:42:00,335,No,Closed,"Confirmed benign, closed after log review."
+ALT00059,JPMorgan Chase,Medium,Data Exfiltration Attempt,Database,2026-03-20 11:52:00,2026-03-20 13:34:00,102,Yes,Closed,"No further action required, false positive."
+ALT00098,JPMorgan Chase,Low,Unauthorized Access,Cloud Storage,2026-03-20 16:35:00,2026-03-20 18:18:00,103,No,Closed,User account temporarily suspended pending review.
+ALT00060,JPMorgan Chase,Low,Malware Detection,Database,2026-03-20 17:17:00,2026-03-20 18:36:00,79,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00031,JPMorgan Chase,Low,Data Exfiltration Attempt,Server,2026-03-21 16:16:00,2026-03-21 16:35:00,19,No,Closed,"Confirmed benign, closed after log review."
+ALT00080,JPMorgan Chase,Critical,Misconfiguration Alert,Server,2026-03-23 07:06:00,2026-03-23 10:36:00,210,No,Closed,
+ALT00045,JPMorgan Chase,Low,Data Exfiltration Attempt,Database,2026-03-24 01:09:00,,,Yes,Open,"No further action required, false positive."
+ALT00068,JPMorgan Chase,Low,Misconfiguration Alert,Cloud Storage,2026-03-26 16:55:00,2026-03-26 17:37:00,42,No,Closed,User account temporarily suspended pending review.
+ALT00086,JPMorgan Chase,Medium,Privilege Escalation,Web Application,2026-03-29 22:11:00,2026-03-30 01:43:00,212,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00055,JPMorgan Chase,Medium,Insider Threat Indicator,Network Device,2026-03-30 18:20:00,2026-03-30 18:57:00,37,Yes,Closed,
+ALT00016,JPMorgan Chase,Low,Unauthorized Access,Network Device,2026-03-30 21:23:00,2026-03-31 00:51:00,208,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00012,JPMorgan Chase,Low,Misconfiguration Alert,Web Application,2026-03-31 14:03:00,,,Yes,Open,"Reviewed and closed, no malicious activity confirmed."
+ALT00093,JPMorgan Chase,Low,Misconfiguration Alert,Web Application,2026-04-11 15:20:00,2026-04-11 19:29:00,249,No,Closed,User account temporarily suspended pending review.
+ALT00099,JPMorgan Chase,Medium,Unauthorized Access,Database,2026-04-16 07:39:00,2026-04-16 11:55:00,256,No,Closed,
+ALT00005,JPMorgan Chase,Low,DDoS Attempt,Server,2026-04-19 02:25:00,2026-04-19 08:48:00,383,No,Closed,
+ALT00078,JPMorgan Chase,Low,Data Exfiltration Attempt,Server,2026-04-25 15:20:00,2026-04-25 20:06:00,286,No,Closed,
+ALT00037,JPMorgan Chase,High,Credential Stuffing,Network Device,2026-04-27 20:23:00,2026-04-28 01:44:00,321,Yes,Closed,
+ALT00013,JPMorgan Chase,Low,Unauthorized Access,Network Device,2026-04-30 06:27:00,,,No,Open,"Blocked at firewall, source IP added to watchlist."
+ALT00023,JPMorgan Chase,Low,Insider Threat Indicator,Server,2026-05-01 22:26:00,2026-05-01 23:23:00,57,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00033,JPMorgan Chase,Low,Data Exfiltration Attempt,Network Device,2026-05-04 01:54:00,2026-05-04 05:12:00,198,Yes,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00030,JPMorgan Chase,Medium,Privilege Escalation,Server,2026-05-07 14:31:00,2026-05-07 16:12:00,101,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00087,JPMorgan Chase,High,Ransomware Indicator,Endpoint,2026-05-11 14:51:00,2026-05-11 15:41:00,50,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00092,JPMorgan Chase,High,Misconfiguration Alert,Network Device,2026-05-17 18:24:00,2026-05-18 00:15:00,351,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00089,JPMorgan Chase,Low,Privilege Escalation,Cloud Storage,2026-05-24 20:55:00,2026-05-25 01:38:00,283,No,Closed,
+ALT00009,JPMorgan Chase,Critical,Insider Threat Indicator,Database,2026-05-28 11:34:00,,,No,Open,"Reviewed and closed, no malicious activity confirmed."
+ALT00026,JPMorgan Chase,Low,Misconfiguration Alert,Server,2026-05-28 21:30:00,,,Yes,In Progress,
+ALT00035,JPMorgan Chase,Low,Phishing Campaign,Web Application,2026-06-02 09:54:00,2026-06-02 13:19:00,205,Yes,Closed,
+ALT00088,JPMorgan Chase,Critical,Ransomware Indicator,Web Application,2026-06-04 18:31:00,2026-06-05 00:40:00,369,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00043,JPMorgan Chase,Medium,Credential Stuffing,Database,2026-06-05 04:30:00,2026-06-05 08:47:00,257,No,Closed,"No further action required, false positive."
+ALT00066,JPMorgan Chase,Low,Unauthorized Access,Network Device,2026-06-05 23:41:00,2026-06-06 00:11:00,30,No,Closed,User account temporarily suspended pending review.
+ALT00077,JPMorgan Chase,Low,Unauthorized Access,Server,2026-06-10 14:27:00,2026-06-10 20:48:00,381,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00046,JPMorgan Chase,Critical,DDoS Attempt,Server,2026-06-13 06:20:00,2026-06-13 07:37:00,77,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00018,JPMorgan Chase,Medium,Ransomware Indicator,Cloud Storage,2026-06-19 20:35:00,2026-06-19 22:23:00,108,Yes,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00017,JPMorgan Chase,Medium,Phishing Campaign,Server,2026-06-20 03:09:00,2026-06-20 06:06:00,177,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00070,JPMorgan Chase,High,Unauthorized Access,Database,2026-06-21 14:11:00,2026-06-21 15:55:00,104,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00069,JPMorgan Chase,Low,Credential Stuffing,Web Application,2026-06-21 21:54:00,2026-06-21 23:16:00,82,No,Closed,
+ALT00097,JPMorgan Chase,High,Credential Stuffing,Endpoint,2026-06-26 04:39:00,2026-06-26 09:12:00,273,Yes,Closed,"No further action required, false positive."
+ALT00022,JPMorgan Chase,Medium,Data Exfiltration Attempt,Database,2026-06-27 08:38:00,2026-06-27 14:06:00,328,Yes,Closed,
+ALT00062,JPMorgan Chase,Medium,DDoS Attempt,Endpoint,2026-07-03 10:46:00,2026-07-03 14:20:00,214,Yes,Closed,"Confirmed benign, closed after log review."
+ALT00076,JPMorgan Chase,High,Ransomware Indicator,Server,2026-07-03 10:52:00,2026-07-03 14:39:00,227,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00052,JPMorgan Chase,Critical,DDoS Attempt,Network Device,2026-07-03 16:12:00,2026-07-03 21:42:00,330,No,Closed,
+ALT00020,JPMorgan Chase,Low,Privilege Escalation,Network Device,2026-07-09 14:28:00,2026-07-09 20:11:00,343,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00038,JPMorgan Chase,Low,Unauthorized Access,Endpoint,2026-07-10 02:24:00,2026-07-10 03:17:00,53,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00065,JPMorgan Chase,Low,Unauthorized Access,Database,2026-07-12 06:43:00,2026-07-12 12:13:00,330,No,Closed,"Confirmed benign, closed after log review."
+ALT00040,JPMorgan Chase,High,Misconfiguration Alert,Cloud Storage,2026-07-16 13:47:00,,,No,In Progress,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00032,JPMorgan Chase,Medium,Privilege Escalation,Network Device,2026-07-18 14:39:00,2026-07-18 16:56:00,137,No,Closed,"Confirmed benign, closed after log review."
+ALT00002,JPMorgan Chase,Critical,Credential Stuffing,Web Application,2026-07-20 06:21:00,2026-07-20 10:07:00,226,Yes,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00051,JPMorgan Chase,Medium,Unauthorized Access,Server,2026-07-21 17:55:00,2026-07-21 23:41:00,346,No,Closed,"No further action required, false positive."
+ALT00044,JPMorgan Chase,Low,DDoS Attempt,Endpoint,2026-07-22 01:10:00,2026-07-22 04:15:00,185,No,Closed,"Confirmed benign, closed after log review."
+ALT00006,JPMorgan Chase,Low,Insider Threat Indicator,Network Device,2026-07-23 00:23:00,2026-07-23 06:25:00,362,No,Closed,"No further action required, false positive."
+ALT00056,JPMorgan Chase,Low,Phishing Campaign,Network Device,2026-07-24 06:11:00,,,Yes,In Progress,"Confirmed benign, closed after log review."
+ALT00010,JPMorgan Chase,Medium,Privilege Escalation,Cloud Storage,2026-07-27 14:50:00,2026-07-27 20:18:00,328,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00039,JPMorgan Chase,High,Credential Stuffing,Network Device,2026-07-28 11:53:00,2026-07-28 15:10:00,197,Yes,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00034,JPMorgan Chase,Low,Credential Stuffing,Endpoint,2026-08-02 03:58:00,2026-08-02 10:15:00,377,Yes,Closed,
+ALT00090,JPMorgan Chase,Critical,Malware Detection,Cloud Storage,2026-08-05 03:34:00,2026-08-05 03:58:00,24,No,Closed,"Blocked at firewall, source IP added to watchlist."
+ALT00073,JPMorgan Chase,Low,Privilege Escalation,Endpoint,2026-08-09 05:59:00,2026-08-09 08:21:00,142,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00074,JPMorgan Chase,Low,Insider Threat Indicator,Database,2026-08-13 04:40:00,2026-08-13 10:48:00,368,No,Closed,"Confirmed benign, closed after log review."
+ALT00100,JPMorgan Chase,Medium,Ransomware Indicator,Network Device,2026-08-13 09:35:00,,,No,In Progress,"Confirmed benign, closed after log review."
+ALT00036,JPMorgan Chase,Low,Phishing Campaign,Endpoint,2026-08-13 16:02:00,2026-08-13 16:31:00,29,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00057,JPMorgan Chase,Low,Privilege Escalation,Database,2026-08-15 22:09:00,2026-08-16 01:13:00,184,No,Closed,"No further action required, false positive."
+ALT00011,JPMorgan Chase,High,Misconfiguration Alert,Endpoint,2026-08-16 04:05:00,2026-08-16 05:23:00,78,No,Closed,"Reviewed and closed, no malicious activity confirmed."
+ALT00014,JPMorgan Chase,Low,Malware Detection,Web Application,2026-08-16 05:00:00,,,No,Open,
+ALT00025,JPMorgan Chase,Medium,Data Exfiltration Attempt,Server,2026-08-18 16:45:00,2026-08-18 22:36:00,351,No,Closed,"Correlated with SIEM logs across multiple hosts, identified lateral movement attempt, escalated."
+ALT00048,JPMorgan Chase,Critical,Unauthorized Access,Web Application,2026-08-23 04:45:00,2026-08-23 04:52:00,7,No,Closed,"No further action required, false positive."
+ALT00021,JPMorgan Chase,Critical,Credential Stuffing,Cloud Storage,2026-08-25 01:00:00,2026-08-25 04:32:00,212,No,Closed,"No further action required, false positive."
+ALT00082,JPMorgan Chase,Medium,Insider Threat Indicator,Network Device,2026-08-25 05:29:00,2026-08-25 05:35:00,6,No,Closed,User account temporarily suspended pending review.
+ALT00001,JPMorgan Chase,Medium,Phishing Campaign,Cloud Storage,2026-08-25 11:29:00,2026-08-25 11:55:00,26,No,Closed,Escalated to threat hunting team for deeper investigation.
+ALT00049,JPMorgan Chase,Low,Credential Stuffing,Endpoint,2026-08-25 18:13:00,2026-08-25 19:19:00,66,Yes,Closed,User account temporarily suspended pending review.
+ALT00085,JPMorgan Chase,Low,Credential Stuffing,Endpoint,2026-08-27 20:26:00,,,Yes,Open,User account temporarily suspended pending review.

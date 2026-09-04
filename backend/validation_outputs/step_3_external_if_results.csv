@@ -1,0 +1,26 @@
+company,config,contamination,n_estimators,anomaly_score,rank
+Equifax,A,0.1,100,1.0000,1
+Microsoft,A,0.1,100,0.9262,2
+MGM Resorts,A,0.1,100,0.8534,3
+JPMorgan Chase,A,0.1,100,0.6554,4
+T-Mobile,A,0.1,100,0.0000,5
+Equifax,B,0.2,100,1.0000,1
+Microsoft,B,0.2,100,0.9262,2
+MGM Resorts,B,0.2,100,0.8534,3
+JPMorgan Chase,B,0.2,100,0.6554,4
+T-Mobile,B,0.2,100,0.0000,5
+Equifax,C,auto,100,1.0000,1
+Microsoft,C,auto,100,0.9262,2
+MGM Resorts,C,auto,100,0.8534,3
+JPMorgan Chase,C,auto,100,0.6554,4
+T-Mobile,C,auto,100,0.0000,5
+Equifax,D,0.2,50,1.0000,1
+JPMorgan Chase,D,0.2,50,0.8380,2
+Microsoft,D,0.2,50,0.8380,3
+MGM Resorts,D,0.2,50,0.7591,4
+T-Mobile,D,0.2,50,0.0000,5
+Equifax,E,0.2,200,1.0000,1
+MGM Resorts,E,0.2,200,0.9314,2
+Microsoft,E,0.2,200,0.8563,3
+JPMorgan Chase,E,0.2,200,0.8118,4
+T-Mobile,E,0.2,200,0.0000,5

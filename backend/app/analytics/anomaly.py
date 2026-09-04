@@ -304,12 +304,12 @@ def _compute_anomaly_matrix(
     raw_scores = clf.fit(X_scaled).decision_function(X_scaled)
     joblib.dump(
        {
-           "model": clf,
+           "clf": clf,
            "scaler": scaler,
            "feature_names": FEATURE_NAMES,
        },
        "anomaly_model.joblib",
-   )
+    )
 
     # Convert to 0.0–1.0 (higher = more anomalous).
     converted = _convert_scores(raw_scores)
@@ -578,25 +578,27 @@ def _run_cli() -> None:
 
 
 def _run_from_csv(csv_path: Path) -> None:
-    """Run the detector by reading alerts directly from a CSV file."""
+    """Run the detector by reading alerts directly from a CSV file.
+
+    Uses the persisted model artifact for inference — does NOT retrain.
+    """
     import csv as csv_mod
+    from pathlib import Path
 
-    alerts_data: list[dict[str, str]] = []
-    with open(csv_path, newline="", encoding="utf-8") as fh:
-        reader = csv_mod.DictReader(fh)
-        for row in reader:
-            alerts_data.append(row)
-
-    if not alerts_data:
-        print("No alerts found in CSV.", file=sys.stderr)
+    # Locate artifact relative to this file
+    artifact_path = Path(__file__).resolve().parent.parent.parent / "anomaly_model.joblib"
+    if not artifact_path.exists():
+        print(f"Error: Model artifact not found at {artifact_path}", file=sys.stderr)
         sys.exit(1)
 
-    # Group by entity — build lightweight Alert-like objects.
-    by_entity: dict[str, list[_CsvAlert]] = defaultdict(list)
-    for row in alerts_data:
-        by_entity[row["entity_name"]].append(_CsvAlert(row))
+    # Extract features from CSV
+    features_by_entity = extract_features_from_csv(csv_path)
+    if not features_by_entity:
+        print("No entities found in CSV.", file=sys.stderr)
+        sys.exit(1)
 
-    results = _compute_anomaly_matrix(by_entity)  # type: ignore[arg-type]
+    # Run inference using persisted model — NO retraining
+    results = predict_anomaly(features_by_entity, artifact_path)
     _print_results(results)
 
 
