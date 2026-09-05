@@ -8,6 +8,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import SecurityPage from "./pages/SecurityPage";
 import AccessibilityPage from "./pages/AccessibilityPage";
+import AuditPage from "./pages/AuditPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/upload" element={<UploadPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/entities/:entityName" element={<DrillDownPage />} />
+        <Route path="/audit" element={<AuditPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/terms" element={<TermsPage />} />
         <Route path="/security" element={<SecurityPage />} />

@@ -30,11 +30,12 @@ export default function UploadPage() {
 
     if (!selectedFile) return;
 
-    const isCsv = selectedFile.name.toLowerCase().endsWith(".csv");
+    const lowerName = selectedFile.name.toLowerCase();
+    const isSupported = lowerName.endsWith(".csv") || lowerName.endsWith(".json");
 
-    if (!isCsv) {
+    if (!isSupported) {
       setFile(null);
-      setError("Please select a CSV file.");
+      setError("Please select a CSV or JSON file.");
       return;
     }
 
@@ -72,7 +73,7 @@ export default function UploadPage() {
 
   const uploadFile = async () => {
     if (!file) {
-      setError("Please select a CSV file first.");
+      setError("Please select a CSV or JSON file first.");
       return;
     }
 
@@ -111,6 +112,26 @@ export default function UploadPage() {
 
     try {
       const text = await file.text();
+
+      if (file.name.toLowerCase().endsWith(".json")) {
+        const parsed = JSON.parse(text);
+        const records = Array.isArray(parsed) ? parsed : parsed.alerts;
+        if (Array.isArray(records) && records.length > 0) {
+          const headers = Array.from(
+            records.slice(0, 100).reduce((keys, record) => {
+              Object.keys(record || {}).forEach((key) => keys.add(key));
+              return keys;
+            }, new Set())
+          );
+          const rows = records
+            .slice(0, 100)
+            .map((record) => headers.map((h) => String(record?.[h] ?? "")));
+          setPreviewData({ headers, rows });
+          setShowPreview(true);
+        }
+        return;
+      }
+
       const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
       if (lines.length > 0) {
         const headers = lines[0]
@@ -180,7 +201,7 @@ export default function UploadPage() {
               <h2>Upload operational records</h2>
             </div>
 
-            <div className="workspace-format">CSV ONLY</div>
+            <div className="workspace-format">CSV / JSON</div>
           </div>
 
           {!file && (
@@ -198,7 +219,7 @@ export default function UploadPage() {
                 <Upload size={22} strokeWidth={1.5} />
               </div>
 
-              <h3>Drop your CSV file here</h3>
+              <h3>Drop your CSV or JSON file here</h3>
 
               <p>
                 or{" "}
@@ -208,13 +229,13 @@ export default function UploadPage() {
               </p>
 
               <span className="drop-hint">
-                Supported format: .csv
+                Supported formats: .csv, .json
               </span>
 
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".csv,text/csv"
+                accept=".csv,.json,text/csv,application/json"
                 onChange={handleInputChange}
                 hidden
               />

@@ -7,6 +7,8 @@ alerts table directly.
 """
 
 import statistics
+import json
+from sqlalchemy import select
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
@@ -16,7 +18,15 @@ from app.analytics.execution_gap import compute_execution_gap
 from app.analytics.negative_space import compute_negative_space
 from app.analytics.risk_score import compute_risk_scores
 from app.database import get_db
-from app.schemas import EntityDrillDown, RiskScoreSummary
+from app.models import AssessmentRun
+from app.schemas import (
+    AuditRunDetail,
+    AuditRunListItem,
+    DetectorConfiguration,
+    EntityDrillDown,
+    EntityResultSnapshot,
+    RiskScoreSummary,
+)
 
 router = APIRouter()
 
@@ -241,3 +251,53 @@ def _peer_metrics(entity_name: str, anomaly_results: dict[str, dict]) -> dict[st
             "peer_median": peer_median,
         }
     return result
+
+
+@router.get("/audit/runs", response_model=list[AuditRunListItem])
+def list_audit_runs(db: Session = Depends(get_db)) -> list[AuditRunListItem]:
+    """Return all assessment runs, newest first."""
+    runs = db.execute(
+        select(AssessmentRun).order_by(AssessmentRun.id.desc())
+    ).scalars().all()
+    return [
+        AuditRunListItem(
+            id=run.id,
+            timestamp=run.run_timestamp,
+            filename=run.source_filename,
+            format=run.source_format,
+            rows_received=run.rows_received,
+            rows_inserted=run.rows_inserted,
+            rows_skipped=run.rows_skipped,
+            entity_count=run.entity_count,
+        )
+        for run in runs
+    ]
+
+
+@router.get("/audit/runs/{run_id}", response_model=AuditRunDetail)
+def get_audit_run(run_id: int, db: Session = Depends(get_db)) -> AuditRunDetail:
+    """Return the complete audit record for a given run ID."""
+    run = db.get(AssessmentRun, run_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail=f"Audit run {run_id} not found")
+
+    detector_config = DetectorConfiguration.model_validate_json(run.detector_config)
+    results_snapshot = [
+        EntityResultSnapshot.model_validate(item)
+        for item in json.loads(run.results_snapshot)
+    ]
+
+    return AuditRunDetail(
+        id=run.id,
+        timestamp=run.run_timestamp,
+        filename=run.source_filename,
+        format=run.source_format,
+        rows_received=run.rows_received,
+        rows_inserted=run.rows_inserted,
+        rows_skipped=run.rows_skipped,
+        entity_count=run.entity_count,
+        data_range_start=run.data_range_start,
+        data_range_end=run.data_range_end,
+        detector_config=detector_config,
+        results_snapshot=results_snapshot,
+    )

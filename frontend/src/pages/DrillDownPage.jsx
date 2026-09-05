@@ -71,7 +71,7 @@ export default function DrillDownPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
-            <span className="active">DRILLDOWN</span>
+            <Link to="/audit">AUDIT</Link>
           </div>
           <div className="dashboard-status">
             <span />
@@ -118,7 +118,7 @@ export default function DrillDownPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
-            <span className="active">DRILLDOWN</span>
+            <Link to="/audit">AUDIT</Link>
           </div>
         </nav>
         <div className="error-state">
@@ -203,9 +203,9 @@ export default function DrillDownPage() {
           </div>
         </Link>
         <div className="dashboard-nav-links">
-          <Link to="/upload">ANALYZE</Link>
-          <Link to="/dashboard">OVERVIEW</Link>
-          <span className="active">DRILLDOWN</span>
+            <Link to="/upload">ANALYZE</Link>
+            <Link to="/dashboard">OVERVIEW</Link>
+            <Link to="/audit">AUDIT</Link>
         </div>
         <div className="dashboard-status">
           <span />

@@ -2094,3 +2094,325 @@ button.loading::after {
     gap: 30px;
   }
 }
+
+/* =========================
+   AUDIT
+========================= */
+
+.audit-shell {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.audit-page {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 72px 54px 100px;
+}
+
+.audit-content {
+  display: flex;
+  flex-direction: column;
+  gap: 44px;
+}
+
+.audit-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 320px;
+  color: var(--muted);
+}
+
+.audit-loader svg {
+  color: var(--accent);
+  animation: spin 1s linear infinite;
+}
+
+.audit-loader p {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+.section-header {
+  margin-bottom: 26px;
+}
+
+.section-header h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+
+.section-header p {
+  margin: 0;
+  max-width: 640px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+  font-style: italic;
+}
+
+.runs-table {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.runs-table table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.runs-table thead th {
+  text-align: left;
+  padding: 15px 20px;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--line);
+}
+
+.runs-table tbody td {
+  padding: 16px 20px;
+  color: var(--text);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  white-space: nowrap;
+}
+
+.runs-table tbody tr {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.runs-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.runs-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.runs-table tbody tr.selected {
+  background: rgba(86, 199, 255, 0.06);
+}
+
+.runs-table tbody tr.selected td:first-child {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.view-button {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 7px 14px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.view-button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(86, 199, 255, 0.06);
+}
+
+.view-button:active {
+  background: rgba(86, 199, 255, 0.12);
+}
+
+.empty-state-message {
+  margin-top: 18px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.audit-detail-section {
+  padding-top: 36px;
+  border-top: 1px solid var(--line);
+}
+
+.section-nav a {
+  display: inline-flex;
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.section-nav a:hover {
+  text-decoration: underline;
+}
+
+.detail-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.detail-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.detail-card .card-header {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.detail-card .card-header h3 {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+
+.detail-card .card-body {
+  padding: 6px 22px 4px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  font-size: 12px;
+}
+
+.detail-row:last-child {
+  border-bottom: 0;
+}
+
+.detail-label {
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.config-group {
+  border: 1px solid var(--line);
+}
+
+.config-group-header {
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.config-group-header span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.config-group-body {
+  padding: 4px 14px 2px;
+}
+
+.config-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+}
+
+.config-item:last-child {
+  border-bottom: 0;
+}
+
+.config-item span:first-child {
+  color: var(--muted);
+}
+
+.config-item span:last-child {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.results-table table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.results-table thead th {
+  text-align: left;
+  padding: 12px 14px;
+  color: var(--muted);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--line);
+}
+
+.results-table tbody td {
+  padding: 13px 14px;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.risk-band-critical,
+.risk-band-high,
+.risk-band-medium,
+.risk-band-low {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.risk-band-critical,
+.risk-band-high {
+  color: var(--red);
+}
+
+.risk-band-medium {
+  color: var(--amber);
+}
+
+.risk-band-low {
+  color: var(--green);
+}
+
+.empty-state-small {
+  padding: 26px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .audit-page {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  .config-grid {
+    grid-template-columns: 1fr;
+  }
+}

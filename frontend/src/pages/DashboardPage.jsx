@@ -57,6 +57,7 @@ export default function DashboardPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <span className="active">OVERVIEW</span>
+            <Link to="/audit">AUDIT</Link>
           </div>
           <div className="dashboard-status">
             <span />
@@ -101,6 +102,7 @@ export default function DashboardPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <span className="active">OVERVIEW</span>
+            <Link to="/audit">AUDIT</Link>
           </div>
           <div className="dashboard-status">
             <span />
@@ -159,8 +161,9 @@ export default function DashboardPage() {
           </div>
         </Link>
         <div className="dashboard-nav-links">
-          <Link to="/upload">ANALYZE</Link>
-          <span className="active">OVERVIEW</span>
+            <Link to="/upload">ANALYZE</Link>
+            <span className="active">OVERVIEW</span>
+            <Link to="/audit">AUDIT</Link>
         </div>
         <div className="dashboard-status">
           <span />

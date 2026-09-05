@@ -1,10 +1,12 @@
-"""POST /api/upload — parse a SOC alert CSV and load it into SQLite.
+"""POST /api/upload — parse a SOC alert CSV or JSON file and load it into SQLite.
 
 Each upload represents a fresh assessment run, so the alerts table is wiped
-before the new file's rows are inserted.
+before the new file's rows are inserted.  AssessmentRun records persist
+historically and are not affected by alerts-table resets.
 """
 
 import io
+import json
 import re
 from typing import Optional
 
@@ -13,7 +15,11 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import Alert
+from app.models import Alert, AssessmentRun
+from app.analytics.execution_gap import compute_execution_gap
+from app.analytics.negative_space import compute_negative_space
+from app.analytics.anomaly import compute_anomaly
+from app.analytics.risk_score import compute_risk_scores
 
 router = APIRouter()
 
@@ -84,18 +90,63 @@ def _canonicalize_column(values: "pd.Series", empty_value: Optional[str] = None)
     return pd.Series(result, index=values.index)
 
 
-@router.post("/upload")
-async def upload_alerts(
-    file: UploadFile = File(...),
-    db: Session = Depends(get_db),
-) -> dict[str, object]:
-    """Parse an uploaded alert CSV and replace the alerts table with its contents."""
-    raw = await file.read()
+def _detect_format(filename: Optional[str]) -> str:
+    """Pick the parser from the file extension, not the browser-supplied content-type."""
+    name = (filename or "").strip().lower()
+    if name.endswith(".json"):
+        return "json"
+    if name.endswith(".csv"):
+        return "csv"
+    raise HTTPException(
+        status_code=400,
+        detail="Unsupported file type: expected a .csv or .json file.",
+    )
+
+
+def _parse_csv(raw: bytes) -> "pd.DataFrame":
     try:
-        df = pd.read_csv(io.BytesIO(raw))
+        return pd.read_csv(io.BytesIO(raw))
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"Could not parse CSV: {exc}") from exc
 
+
+def _parse_json(raw: bytes) -> "pd.DataFrame":
+    """Accept either a top-level array of alert objects or {"alerts": [...]}."""
+    try:
+        payload = json.loads(raw)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Could not parse JSON: {exc}") from exc
+
+    if isinstance(payload, list):
+        records = payload
+    elif isinstance(payload, dict) and isinstance(payload.get("alerts"), list):
+        records = payload["alerts"]
+    else:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "JSON must be either a top-level array of alert objects, or an "
+                'object with a top-level "alerts" key containing that array.'
+            ),
+        )
+
+    if not all(isinstance(record, dict) for record in records):
+        raise HTTPException(
+            status_code=400, detail="Each alert in the JSON array must be an object."
+        )
+
+    try:
+        return pd.DataFrame.from_records(records)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Could not parse JSON: {exc}") from exc
+
+
+def _process_dataframe(df: "pd.DataFrame", db: Session, filename: str = "unknown", file_format: str = "csv") -> dict[str, object]:
+    """Run the shared normalization/validation/dedup/canonicalization pipeline and load it into SQLite.
+
+    Both the CSV and JSON upload paths funnel through here so a company's data
+    is treated identically regardless of which format it arrived in.
+    """
     missing_columns = [col for col in REQUIRED_COLUMNS if col not in df.columns]
     if missing_columns:
         raise HTTPException(status_code=400, detail={"missing_columns": missing_columns})
@@ -164,6 +215,29 @@ async def upload_alerts(
     else:
         date_range = {"start": None, "end": None}
 
+    # --- Create AssessmentRun audit record ---
+    from datetime import datetime
+    data_range_start = datetime.fromisoformat(date_range["start"]) if date_range.get("start") else None
+    data_range_end = datetime.fromisoformat(date_range["end"]) if date_range.get("end") else None
+
+    detector_config = _build_detector_config()
+    results_snapshot = _build_results_snapshot(db, detector_config)
+
+    db_assessment_run = AssessmentRun(
+        source_filename=filename or "unknown",
+        source_format=file_format,
+        rows_received=rows_received,
+        rows_inserted=rows_inserted,
+        rows_skipped=rows_skipped,
+        entity_count=len(entities) if rows_inserted else 0,
+        data_range_start=data_range_start,
+        data_range_end=data_range_end,
+        detector_config=detector_config,
+        results_snapshot=results_snapshot,
+    )
+    db.add(db_assessment_run)
+    db.commit()
+
     return {
         "rows_received": rows_received,
         "rows_inserted": rows_inserted,
@@ -171,3 +245,109 @@ async def upload_alerts(
         "entities_found": {"count": len(entities), "list": entities},
         "date_range": date_range,
     }
+
+
+def _build_detector_config() -> str:
+    """Build a complete detector configuration snapshot for audit purposes.
+
+    Captures actual constant values, not just names, so a supervisor can
+    verify that a run performed three months ago used the exact same
+    thresholds and weights that are in the code today.
+    The keys match the DetectorConfiguration model field names for
+    proper Pydantic validation on retrieval.
+    """
+    from app.analytics.execution_gap import (
+        FAST_CLOSURE_THRESHOLD_SECONDS,
+        MIN_NOTE_LENGTH,
+        MIN_DUPLICATE_MULTIPLICITY,
+        TEMPLATE_DUPLICATE_Z_THRESHOLD,
+        FAST_CLOSURE_WEIGHT,
+        NO_ESCALATION_WEIGHT,
+        TEMPLATE_NOTES_WEIGHT,
+    )
+    from app.analytics.negative_space import (
+        LOW_VOLUME_Z_THRESHOLD,
+        MIN_PEERS_WITH_SEVERITY,
+        LOW_VOLUME_WEIGHT,
+        MISSING_SEVERITY_WEIGHT,
+    )
+    from app.analytics.anomaly import (
+        IFOREST_RANDOM_STATE,
+        IFOREST_CONTAMINATION,
+        IFOREST_N_ESTIMATORS,
+    )
+    from app.analytics.risk_score import (
+        WEIGHT_EXECUTION_GAP,
+        WEIGHT_NEGATIVE_SPACE,
+        WEIGHT_ANOMALY,
+        FLOOR_ATTENUATION,
+        RISK_BAND_CRITICAL_THRESHOLD,
+        RISK_BAND_HIGH_THRESHOLD,
+        RISK_BAND_MEDIUM_THRESHOLD,
+    )
+    from app.routers.analytics import FINDING_SUMMARY_THRESHOLD
+
+    config = {
+        "fast_closure_threshold_seconds": FAST_CLOSURE_THRESHOLD_SECONDS,
+        "min_note_length": MIN_NOTE_LENGTH,
+        "min_duplicate_multiplicity": MIN_DUPLICATE_MULTIPLICITY,
+        "template_duplicate_z_threshold": TEMPLATE_DUPLICATE_Z_THRESHOLD,
+        "fast_closure_weight": FAST_CLOSURE_WEIGHT,
+        "no_escalation_weight": NO_ESCALATION_WEIGHT,
+        "template_notes_weight": TEMPLATE_NOTES_WEIGHT,
+        "low_volume_z_threshold": LOW_VOLUME_Z_THRESHOLD,
+        "min_peers_with_severity": MIN_PEERS_WITH_SEVERITY,
+        "low_volume_weight": LOW_VOLUME_WEIGHT,
+        "missing_severity_weight": MISSING_SEVERITY_WEIGHT,
+        "iforest_random_state": IFOREST_RANDOM_STATE,
+        "iforest_contamination": IFOREST_CONTAMINATION,
+        "iforest_n_estimators": IFOREST_N_ESTIMATORS,
+        "weight_execution_gap": WEIGHT_EXECUTION_GAP,
+        "weight_negative_space": WEIGHT_NEGATIVE_SPACE,
+        "weight_anomaly": WEIGHT_ANOMALY,
+        "floor_attenuation": FLOOR_ATTENUATION,
+        "risk_band_critical_threshold": RISK_BAND_CRITICAL_THRESHOLD,
+        "risk_band_high_threshold": RISK_BAND_HIGH_THRESHOLD,
+        "risk_band_medium_threshold": RISK_BAND_MEDIUM_THRESHOLD,
+        "finding_summary_threshold": FINDING_SUMMARY_THRESHOLD,
+    }
+    return json.dumps(config, sort_keys=True)
+
+
+def _build_results_snapshot(db: Session, detector_config: str) -> str:
+    """Build the JSON results snapshot for this AssessmentRun.
+
+    Runs the existing risk-score pipeline and serializes every entity's
+    result so that the audit record contains the exact scores that were
+    produced at upload time.
+    """
+    from app.analytics.risk_score import compute_risk_scores
+
+    risk_rows = compute_risk_scores(db)
+
+    entity_results: list[dict] = []
+    for row in risk_rows:
+        entity_results.append(
+            {
+                "entity_name": row["entity_name"],
+                "risk_score": row["risk_score"],
+                "risk_band": row["risk_band"],
+                "execution_gap_component_score": row.get("execution_gap_score"),
+                "negative_space_component_score": row.get("negative_space_score"),
+                "anomaly_component_score": row.get("anomaly_score"),
+            }
+        )
+
+    return json.dumps(entity_results, sort_keys=True)
+
+
+@router.post("/upload")
+async def upload_alerts(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+) -> dict[str, object]:
+    """Parse an uploaded alert CSV or JSON file and replace the alerts table with its contents."""
+    raw = await file.read()
+    file_format = _detect_format(file.filename)
+    df = _parse_csv(raw) if file_format == "csv" else _parse_json(raw)
+    return _process_dataframe(df, db, filename=file.filename or "unknown", file_format=file_format)

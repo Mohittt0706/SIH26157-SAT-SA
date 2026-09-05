@@ -37,46 +37,50 @@ class FakeAlert:
 # ---------------------------------------------------------------------------
 
 class TestBuildPeerBaseline:
-    """Tests for the peer baseline helper."""
+    """Tests for the peer baseline helper (median/MAD, not mean/stdev)."""
 
     def test_excludes_current_entity(self) -> None:
         counts = {"A": 60, "B": 18, "C": 160, "D": 55, "E": 45}
-        mean, std = build_peer_baseline(counts, "B")
-        assert mean == pytest.approx(80.0)
-        # Peer values: 60, 160, 55, 45 → stdev(ddof=1)
-        assert std > 0.0
+        median, mad = build_peer_baseline(counts, "B")
+        # Peer values: 60, 160, 55, 45 → sorted [45, 55, 60, 160]
+        assert median == pytest.approx(57.5)
+        # abs devs from 57.5: 12.5, 2.5, 2.5, 102.5 → sorted [2.5, 2.5, 12.5, 102.5]
+        assert mad == pytest.approx(7.5)
 
     def test_all_other_entities_excluded(self) -> None:
         counts = {"X": 10, "Y": 10, "Z": 10}
-        mean, std = build_peer_baseline(counts, "X")
-        assert mean == 10.0
-        assert std == 0.0  # only 2 peers, both same → stdev = 0
+        median, mad = build_peer_baseline(counts, "X")
+        assert median == 10.0
+        assert mad == 0.0  # only 2 peers, both same → MAD = 0
 
     def test_single_peer(self) -> None:
         counts = {"A": 50, "B": 100}
-        mean, std = build_peer_baseline(counts, "A")
-        assert mean == 100.0
-        assert std == 0.0  # <2 peers → std forced to 0
+        median, mad = build_peer_baseline(counts, "A")
+        assert median == 100.0
+        assert mad == 0.0  # <2 peers → MAD forced to 0
 
     def test_no_peers(self) -> None:
         counts = {"A": 42}
-        mean, std = build_peer_baseline(counts, "A")
-        assert mean == 0.0
-        assert std == 0.0
+        median, mad = build_peer_baseline(counts, "A")
+        assert median == 0.0
+        assert mad == 0.0
 
-    def test_zero_std_uniform_peers(self) -> None:
+    def test_zero_mad_uniform_peers(self) -> None:
         counts = {"A": 30, "B": 30, "C": 30}
-        mean, std = build_peer_baseline(counts, "A")
-        assert mean == 30.0
-        assert std == 0.0  # all peers identical
+        median, mad = build_peer_baseline(counts, "A")
+        assert median == 30.0
+        assert mad == 0.0  # all peers identical
 
-    def test_sample_stddev_used(self) -> None:
-        """Verify sample standard deviation (ddof=1) is used."""
-        counts = {"A": 0, "B": 10, "C": 20}
-        mean, std = build_peer_baseline(counts, "A")
-        assert mean == 15.0
-        # sample stdev of [10, 20] = 7.071...
-        assert std == pytest.approx(7.071, abs=0.01)
+    def test_mad_resists_a_single_outlier(self) -> None:
+        """A single high-volume outlier peer should not inflate the spread
+        the way it would under mean/stdev — this is the whole point of the
+        median/MAD switch (see Delta Rail vs. Fortis in production data)."""
+        counts = {"A": 0, "B": 10, "C": 20, "D": 1000}
+        median, mad = build_peer_baseline(counts, "A")
+        # Peers: 10, 20, 1000 → median = 20
+        assert median == pytest.approx(20.0)
+        # abs devs from 20: 10, 0, 980 → median of those = 10
+        assert mad == pytest.approx(10.0)
 
 
 # ---------------------------------------------------------------------------
@@ -146,49 +150,83 @@ class TestDetectMissingSeverities:
 # ---------------------------------------------------------------------------
 
 class TestRuleLowAlertVolume:
+    """Tests for the graded (ramp, not binary) modified-z-score low-volume rule.
 
-    def test_triggered_when_z_below_threshold(self) -> None:
-        triggered, z, finding = _rule_low_alert_volume(
-            entity_alert_count=18, peer_mean=80.0, peer_std=50.0
+    Signal is 0.0 at LOW_VOLUME_Z_THRESHOLD (-1.0), rises linearly to 1.0 at
+    LOW_VOLUME_Z_SATURATION (-5.0), and is clamped at both ends.
+    """
+
+    def test_signal_partway_up_the_ramp(self) -> None:
+        # z = 0.6745 * (18 - 80) / 30 = -1.394
+        # fraction = (-1.0 - (-1.394)) / (-1.0 - (-5.0)) = 0.394 / 4.0 = 0.0985
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=18, peer_median=80.0, peer_mad=30.0
         )
-        assert triggered is True
-        assert z == pytest.approx(-1.24, abs=0.01)
+        assert z == pytest.approx(-1.394, abs=0.01)
+        assert signal == pytest.approx(0.0985, abs=0.001)
         assert finding is not None
         assert finding.type == RULE_LOW_ALERT_VOLUME
 
-    def test_not_triggered_when_z_above_threshold(self) -> None:
-        triggered, z, finding = _rule_low_alert_volume(
-            entity_alert_count=80, peer_mean=80.0, peer_std=50.0
+    def test_signal_zero_above_threshold(self) -> None:
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=80, peer_median=80.0, peer_mad=30.0
         )
-        assert triggered is False
+        assert z == 0.0
+        assert signal == 0.0
         assert finding is None
 
-    def test_zero_std_below_mean(self) -> None:
-        triggered, z, finding = _rule_low_alert_volume(
-            entity_alert_count=10, peer_mean=50.0, peer_std=0.0
+    def test_signal_zero_exactly_at_threshold(self) -> None:
+        """No cliff: right at the threshold itself the ramp reads 0.0, same as
+        just short of it — continuous with the "not flagged" side."""
+        diff = -1.0 / 0.6745
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=diff, peer_median=0.0, peer_mad=1.0
         )
-        assert triggered is True  # z forced to -1.0
-
-    def test_zero_std_equal_mean(self) -> None:
-        triggered, z, finding = _rule_low_alert_volume(
-            entity_alert_count=50, peer_mean=50.0, peer_std=0.0
-        )
-        assert triggered is False
-
-    def test_zero_std_above_mean(self) -> None:
-        triggered, z, finding = _rule_low_alert_volume(
-            entity_alert_count=100, peer_mean=50.0, peer_std=0.0
-        )
-        assert triggered is False
-
-    def test_boundary_z_equals_threshold(self) -> None:
-        """At exactly z = -1.0 the rule should trigger (<=)."""
-        # z = (10 - 50) / 40 = -1.0
-        triggered, z, finding = _rule_low_alert_volume(
-            entity_alert_count=10, peer_mean=50.0, peer_std=40.0
-        )
-        assert triggered is True
         assert z == pytest.approx(-1.0)
+        assert signal == pytest.approx(0.0)
+        assert finding is None
+
+    def test_signal_saturates_at_saturation_point(self) -> None:
+        # Constructed so z lands exactly on LOW_VOLUME_Z_SATURATION (-5.0):
+        # diff = -5.0 / MAD_ZSCORE_SCALE.
+        diff = -5.0 / 0.6745
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=diff, peer_median=0.0, peer_mad=1.0
+        )
+        assert z == pytest.approx(-5.0)
+        assert signal == pytest.approx(1.0)
+        assert finding is not None
+
+    def test_signal_clamped_beyond_saturation(self) -> None:
+        """Far past saturation (e.g. Delta Rail's z=-5.49) still clamps at 1.0,
+        it does not overshoot."""
+        diff = -10.0 / 0.6745
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=diff, peer_median=0.0, peer_mad=1.0
+        )
+        assert z == pytest.approx(-10.0)
+        assert signal == pytest.approx(1.0)
+
+    def test_zero_mad_below_median(self) -> None:
+        """Zero-MAD fallback forces z to exactly -1.0 (the threshold itself),
+        so the graded signal is 0.0 there, not the old flat 1.0."""
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=10, peer_median=50.0, peer_mad=0.0
+        )
+        assert z == -1.0
+        assert signal == 0.0
+
+    def test_zero_mad_equal_median(self) -> None:
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=50, peer_median=50.0, peer_mad=0.0
+        )
+        assert signal == 0.0
+
+    def test_zero_mad_above_median(self) -> None:
+        signal, z, finding = _rule_low_alert_volume(
+            entity_alert_count=100, peer_median=50.0, peer_mad=0.0
+        )
+        assert signal == 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -239,14 +277,14 @@ class TestComputeForEntity:
             "D": {"low", "medium", "high"},
             "E": {"low", "medium"},
         }
-        # Entity B has 18 alerts, peer mean = (60+160+55+45)/4 = 80.0
+        # Entity B has 18 alerts; peers [60, 160, 55, 45] → median = 57.5
         fake_alerts = [FakeAlert("low")] * 18
         result = _compute_for_entity("B", fake_alerts, entity_alert_counts, entity_severity_sets)
 
         assert result.entity_name == "B"
         assert result.negative_space_score > 0.0
         assert result.metrics["total_alerts"] == 18
-        assert result.metrics["peer_mean_alerts"] == 80.0
+        assert result.metrics["peer_median_alerts"] == 57.5
         rule_types = [f.type for f in result.evidence]
         assert RULE_LOW_ALERT_VOLUME in rule_types
         assert RULE_MISSING_EXPECTED_SEVERITY in rule_types
@@ -263,7 +301,8 @@ class TestComputeForEntity:
         fake_alerts = [FakeAlert("low")] * 60
         result = _compute_for_entity("A", fake_alerts, entity_alert_counts, entity_severity_sets)
 
-        # A has 60 alerts vs peer mean 69.75 → z is not significantly low
+        # A has 60 alerts; peers [18, 160, 55, 45] → median 50.0, MAD 18.5
+        # → z ≈ 0.36, not significantly low
         # A has all severities peers have → no missing
         assert result.negative_space_score == 0.0
         assert result.evidence == []
@@ -275,13 +314,13 @@ class TestComputeForEntity:
         result = _compute_for_entity("B", fake_alerts, entity_alert_counts, entity_severity_sets)
         assert 0.0 <= result.negative_space_score <= 1.0
 
-    def test_peer_mean_excludes_self(self) -> None:
+    def test_peer_median_excludes_self(self) -> None:
         entity_alert_counts = {"A": 100, "B": 100, "C": 100}
         entity_severity_sets = {"A": {"low"}, "B": {"low"}, "C": {"low"}}
         fake_alerts = [FakeAlert("low")] * 100
         result = _compute_for_entity("A", fake_alerts, entity_alert_counts, entity_severity_sets)
-        assert result.metrics["peer_mean_alerts"] == 100.0
-        assert result.metrics["peer_std_alerts"] == 0.0
+        assert result.metrics["peer_median_alerts"] == 100.0
+        assert result.metrics["peer_mad_alerts"] == 0.0
         assert result.negative_space_score == 0.0
 
 

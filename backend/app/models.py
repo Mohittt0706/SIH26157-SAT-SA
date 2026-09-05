@@ -1,9 +1,9 @@
 """ORM models for SAT-SA — the SOC alert table."""
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
-from sqlalchemy import Boolean, DateTime, String, Text
+from sqlalchemy import Boolean, DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.database import Base
@@ -39,3 +39,33 @@ class Alert(Base):
         if self.closed_time is None:
             return None
         return (self.closed_time - self.created_time).total_seconds()
+
+
+class AssessmentRun(Base):
+    """Persistent audit record for a SAT-SA assessment run.
+
+    Stores a historical snapshot of each upload so that a supervisor can
+    verify the configuration and data that produced the risk scores for
+    that run, independently of the current alerts table.
+    """
+
+    __tablename__ = "assessment_runs"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    run_timestamp: Mapped[datetime] = mapped_column(
+        DateTime, default=lambda: datetime.now(timezone.utc), nullable=False
+    )
+    source_filename: Mapped[str] = mapped_column(String, nullable=False)
+    source_format: Mapped[str] = mapped_column(String, nullable=False)
+    rows_received: Mapped[int] = mapped_column(Integer, nullable=False)
+    rows_inserted: Mapped[int] = mapped_column(Integer, nullable=False)
+    rows_skipped: Mapped[int] = mapped_column(Integer, nullable=False)
+    entity_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    data_range_start: Mapped[Optional[datetime]] = mapped_column(
+        DateTime, nullable=True
+    )
+    data_range_end: Mapped[Optional[datetime]] = mapped_column(
+        DateTime, nullable=True
+    )
+    detector_config: Mapped[str] = mapped_column(Text, nullable=False)
+    results_snapshot: Mapped[str] = mapped_column(Text, nullable=False)

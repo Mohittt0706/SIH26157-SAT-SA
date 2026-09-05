@@ -29,7 +29,20 @@ from app.models import Alert
 # ---------------------------------------------------------------------------
 
 LOW_VOLUME_Z_THRESHOLD: float = -1.0
-"""Z-score at or below which low-alert-volume is flagged."""
+"""Modified z-score at or below which low-alert-volume starts to be flagged
+(signal 0.0 at this point — see LOW_VOLUME_Z_SATURATION for the ramp)."""
+
+LOW_VOLUME_Z_SATURATION: float = -5.0
+"""Modified z-score at or below which the low-alert-volume signal saturates
+at 1.0. Between LOW_VOLUME_Z_THRESHOLD and this point the signal is a linear
+ramp, not a binary trigger — an entity far past the threshold (e.g. a
+near-total silence at z=-5.49) should read as more severe than one that just
+crossed it (z=-1.01); a flat 0/1 trigger discards that magnitude."""
+
+MAD_ZSCORE_SCALE: float = 0.6745
+"""Scale factor converting MAD to a std-equivalent z-score (75th percentile
+of the standard normal). Mirrors the constant of the same name in anomaly.py
+and execution_gap.py."""
 
 MIN_PEERS_WITH_SEVERITY: int = 2
 """Minimum number of peer entities that must exhibit a severity before it
@@ -78,10 +91,16 @@ def build_peer_baseline(
     entity_alert_counts: dict[str, int],
     current_entity: str,
 ) -> tuple[float, float]:
-    """Compute mean and sample standard deviation of alert counts for *peers*.
+    """Compute the median and MAD of alert counts for *peers*.
 
     The *current_entity* is excluded from the calculation so that an entity
-    is never compared against itself.
+    is never compared against itself. Same median/MAD-based peer-baseline
+    convention used for feature attribution in anomaly.py (see
+    MAD_ZSCORE_SCALE there) and mirrored by execution_gap.py's
+    ``_peer_median_mad`` — robust to a single outlier the way mean/stdev is
+    not. Concretely: Fortis Defense Systems' 166 alerts previously inflated
+    the peer standard deviation enough to weaken Delta Rail's low-volume
+    signal (z=-1.86 on mean/stdev); median/MAD is not pulled by that outlier.
 
     Parameters
     ----------
@@ -93,9 +112,8 @@ def build_peer_baseline(
     Returns
     -------
     tuple[float, float]
-        (peer_mean, peer_std) where *peer_std* uses the **sample** standard
-        deviation (ddof=1).  If fewer than 2 peers exist the std is returned
-        as 0.0 to avoid division-by-zero downstream.
+        (peer_median, peer_mad). MAD is returned as 0.0 when fewer than 2
+        peers exist, to signal the zero-MAD fallback path downstream.
     """
     peer_values = [
         count
@@ -106,14 +124,25 @@ def build_peer_baseline(
     if not peer_values:
         return 0.0, 0.0
 
-    peer_mean = statistics.mean(peer_values)
+    peer_median = statistics.median(peer_values)
 
     if len(peer_values) < 2:
-        peer_std = 0.0
-    else:
-        peer_std = statistics.stdev(peer_values)
+        return peer_median, 0.0
 
-    return peer_mean, peer_std
+    peer_mad = statistics.median(abs(v - peer_median) for v in peer_values)
+    return peer_median, peer_mad
+
+
+def _modified_z_score(value: float, peer_median: float, peer_mad: float) -> float:
+    """Modified z-score of *value* against a peer median/MAD, with a zero-MAD fallback.
+
+    Mirrors the helper of the same purpose in execution_gap.py.
+    """
+    if peer_mad == 0.0:
+        if value == peer_median:
+            return 0.0
+        return 1.0 if value > peer_median else -1.0
+    return MAD_ZSCORE_SCALE * (value - peer_median) / peer_mad
 
 
 # ---------------------------------------------------------------------------
@@ -181,35 +210,42 @@ def detect_missing_severities(
 # Rule implementations
 # ---------------------------------------------------------------------------
 
+def _low_volume_signal(z_score: float) -> float:
+    """Graded ramp from LOW_VOLUME_Z_THRESHOLD (0.0) to LOW_VOLUME_Z_SATURATION (1.0).
+
+    Replaces a binary trigger so magnitude carries information: an entity at
+    z=-5.49 reads as more severe than one at z=-1.01, instead of both reading
+    as the same flat 1.0. Above the threshold (less negative) the signal is 0.0.
+    """
+    if z_score > LOW_VOLUME_Z_THRESHOLD:
+        return 0.0
+    span = LOW_VOLUME_Z_THRESHOLD - LOW_VOLUME_Z_SATURATION
+    fraction = (LOW_VOLUME_Z_THRESHOLD - z_score) / span
+    return max(0.0, min(1.0, fraction))
+
+
 def _rule_low_alert_volume(
     entity_alert_count: int,
-    peer_mean: float,
-    peer_std: float,
-) -> tuple[bool, float, Finding | None]:
+    peer_median: float,
+    peer_mad: float,
+) -> tuple[float, float, Finding | None]:
     """Check whether the entity's alert count is significantly below its peers.
 
     Returns
     -------
-    tuple[bool, float, Finding | None]
-        (triggered, z_score, finding_or_None)
+    tuple[float, float, Finding | None]
+        (signal, z_score, finding_or_None) — *signal* is the graded
+        LOW_VOLUME ramp in [0.0, 1.0] from _low_volume_signal, not a boolean.
     """
-    if peer_std == 0.0:
-        # All peers have the same count — no meaningful z-score.
-        # Flag only if the entity is strictly below the peer mean.
-        z_score = 0.0 if entity_alert_count == peer_mean else (
-            -1.0 if entity_alert_count < peer_mean else 1.0
-        )
-    else:
-        z_score = (entity_alert_count - peer_mean) / peer_std
+    z_score = _modified_z_score(entity_alert_count, peer_median, peer_mad)
+    signal = _low_volume_signal(z_score)
 
-    triggered = z_score <= LOW_VOLUME_Z_THRESHOLD
-
-    if triggered:
+    if signal > 0.0:
         finding = Finding(
             type=RULE_LOW_ALERT_VOLUME,
             detail=(
-                f"Observed {entity_alert_count} alerts versus peer mean of "
-                f"{peer_mean:.1f} alerts."
+                f"Observed {entity_alert_count} alerts versus peer median of "
+                f"{peer_median:.1f} alerts."
             ),
             reason=(
                 f"Alert activity is significantly below the peer baseline "
@@ -219,7 +255,7 @@ def _rule_low_alert_volume(
     else:
         finding = None
 
-    return triggered, z_score, finding
+    return signal, z_score, finding
 
 
 def _rule_missing_expected_severity(
@@ -269,11 +305,10 @@ def _compute_for_entity(
     total_alerts = len(entity_alerts)
 
     # --- Peer baseline (alert volume) ---
-    peer_mean, peer_std = build_peer_baseline(entity_alert_counts, entity_name)
-    low_volume_triggered, z_score, low_volume_finding = _rule_low_alert_volume(
-        total_alerts, peer_mean, peer_std
+    peer_median, peer_mad = build_peer_baseline(entity_alert_counts, entity_name)
+    low_volume_signal, z_score, low_volume_finding = _rule_low_alert_volume(
+        total_alerts, peer_median, peer_mad
     )
-    low_volume_signal = 1.0 if low_volume_triggered else 0.0
 
     # --- Missing severities ---
     current_severities = entity_severity_sets.get(entity_name, set())
@@ -315,8 +350,8 @@ def _compute_for_entity(
 
     metrics = {
         "total_alerts": total_alerts,
-        "peer_mean_alerts": round(peer_mean, 1),
-        "peer_std_alerts": round(peer_std, 1),
+        "peer_median_alerts": round(peer_median, 1),
+        "peer_mad_alerts": round(peer_mad, 1),
         "alert_volume_z_score": round(z_score, 2),
         "missing_asset_count": missing_asset_count,
         "missing_severity_count": len(missing),
@@ -535,11 +570,10 @@ def _compute_for_entity_csv(
     """Compute negative space for one entity from CSV row dicts (CLI mode)."""
     total_alerts = len(entity_rows)
 
-    peer_mean, peer_std = build_peer_baseline(entity_alert_counts, entity_name)
-    low_volume_triggered, z_score, low_volume_finding = _rule_low_alert_volume(
-        total_alerts, peer_mean, peer_std
+    peer_median, peer_mad = build_peer_baseline(entity_alert_counts, entity_name)
+    low_volume_signal, z_score, low_volume_finding = _rule_low_alert_volume(
+        total_alerts, peer_median, peer_mad
     )
-    low_volume_signal = 1.0 if low_volume_triggered else 0.0
 
     missing = detect_missing_severities(entity_severity_sets, entity_name)
 
@@ -575,8 +609,8 @@ def _compute_for_entity_csv(
 
     metrics = {
         "total_alerts": total_alerts,
-        "peer_mean_alerts": round(peer_mean, 1),
-        "peer_std_alerts": round(peer_std, 1),
+        "peer_median_alerts": round(peer_median, 1),
+        "peer_mad_alerts": round(peer_mad, 1),
         "alert_volume_z_score": round(z_score, 2),
         "missing_asset_count": missing_asset_count,
         "missing_severity_count": len(missing),

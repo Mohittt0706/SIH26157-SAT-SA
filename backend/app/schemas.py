@@ -99,6 +99,82 @@ class ComponentScores(BaseModel):
     anomaly: float
 
 
+class DetectorConfiguration(BaseModel):
+    """Snapshot of all named constants that affected scoring for a given run."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    fast_closure_threshold_seconds: int
+    min_note_length: int
+    min_duplicate_multiplicity: int
+    template_duplicate_z_threshold: float
+    fast_closure_weight: float
+    no_escalation_weight: float
+    template_notes_weight: float
+    low_volume_z_threshold: float
+    min_peers_with_severity: int
+    low_volume_weight: float
+    missing_severity_weight: float
+    iforest_random_state: int
+    iforest_contamination: float
+    iforest_n_estimators: int
+    weight_execution_gap: float
+    weight_negative_space: float
+    weight_anomaly: float
+    floor_attenuation: float
+    risk_band_critical_threshold: float
+    risk_band_high_threshold: float
+    risk_band_medium_threshold: float
+    finding_summary_threshold: float
+
+
+class EntityResultSnapshot(BaseModel):
+    """One entity's scored result stored in an AssessmentRun's results_snapshot."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    entity_name: str
+    risk_score: float
+    risk_band: str
+    execution_gap_component_score: float
+    negative_space_component_score: float
+    anomaly_component_score: float
+
+
+class AuditRunListItem(BaseModel):
+    """Response model for GET /api/audit/runs list endpoint."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    timestamp: datetime
+    filename: str
+    format: str
+    rows_received: int
+    rows_inserted: int
+    rows_skipped: int
+    entity_count: int
+
+
+class AuditRunDetail(BaseModel):
+    """Response model for GET /api/audit/runs/{run_id} endpoint."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    timestamp: datetime
+    filename: str
+    format: str
+    rows_received: int
+    rows_inserted: int
+    rows_skipped: int
+    entity_count: int
+    data_range_start: Optional[datetime] = None
+    data_range_end: Optional[datetime] = None
+    detector_config: DetectorConfiguration
+    results_snapshot: list[EntityResultSnapshot]
+
+
 class EntityDrillDown(BaseModel):
     """Full drill-down detail for one entity, returned by GET /api/entities/{entity_name}."""
 

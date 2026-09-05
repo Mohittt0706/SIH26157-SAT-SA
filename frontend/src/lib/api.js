@@ -24,3 +24,13 @@ export async function uploadCSV(file) {
   });
   return response.data;
 }
+
+export async function getAuditRuns() {
+  const response = await client.get("/audit/runs");
+  return response.data;
+}
+
+export async function getAuditRunDetail(runId) {
+  const response = await client.get(`/audit/runs/${runId}`);
+  return response.data;
+}
