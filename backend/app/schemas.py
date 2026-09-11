@@ -175,6 +175,19 @@ class AuditRunDetail(BaseModel):
     results_snapshot: list[EntityResultSnapshot]
 
 
+class ExpectedVsObservedItem(BaseModel):
+    """Comparison of a single metric's observed value vs peer baseline."""
+
+    metric: str
+    metric_key: str
+    observed: float
+    expected: float
+    unit: str
+    deviation_z: float
+    direction: str
+    interpretation: str
+
+
 class EntityDrillDown(BaseModel):
     """Full drill-down detail for one entity, returned by GET /api/entities/{entity_name}."""
 
@@ -185,3 +198,34 @@ class EntityDrillDown(BaseModel):
     component_scores: ComponentScores
     findings: list[Finding]
     peer_metrics: PeerMetrics
+    expected_vs_observed: list[ExpectedVsObservedItem]
+
+
+class TrendPoint(BaseModel):
+    """One historical data point for entity risk trend."""
+
+    run_id: int
+    timestamp: datetime
+    risk_score: float
+    risk_band: str
+    execution_gap: float
+    negative_space: float
+    anomaly: float
+
+
+class EntityTrendDetail(BaseModel):
+    """Trend details for a single entity across historical assessment runs."""
+
+    entity_name: str
+    points: list[TrendPoint]
+    direction: str  # "improving" | "stable" | "deteriorating" | "insufficient_data"
+    change: Optional[float] = None
+
+
+class EntityTrendSummary(BaseModel):
+    """Summary trend direction for an entity (dashboard view)."""
+
+    entity_name: str
+    direction: str
+
+

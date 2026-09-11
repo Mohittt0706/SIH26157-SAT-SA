@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 
 from app.analytics.anomaly import compute_anomaly
 from app.analytics.execution_gap import compute_execution_gap
+from app.analytics.expected_observed import compute_expected_vs_observed
 from app.analytics.negative_space import compute_negative_space
 from app.analytics.risk_score import compute_risk_scores
 from app.database import get_db
@@ -25,7 +26,10 @@ from app.schemas import (
     DetectorConfiguration,
     EntityDrillDown,
     EntityResultSnapshot,
+    EntityTrendDetail,
+    EntityTrendSummary,
     RiskScoreSummary,
+    TrendPoint,
 )
 
 router = APIRouter()
@@ -124,6 +128,7 @@ def get_entity_detail(entity_name: str, db: Session = Depends(get_db)) -> dict:
     execution_gap_results = compute_execution_gap(db)
     negative_space_results = compute_negative_space(db)
     anomaly_results = compute_anomaly(db)
+    expected_vs_observed_results = compute_expected_vs_observed(db)
 
     canonical_name = _resolve_entity_name(entity_name, execution_gap_results)
     if canonical_name is None:
@@ -148,6 +153,7 @@ def get_entity_detail(entity_name: str, db: Session = Depends(get_db)) -> dict:
         },
         "findings": _build_findings(eg, ns, an),
         "peer_metrics": _peer_metrics(canonical_name, anomaly_results),
+        "expected_vs_observed": expected_vs_observed_results.get(canonical_name, []),
     }
 
 
@@ -301,3 +307,99 @@ def get_audit_run(run_id: int, db: Session = Depends(get_db)) -> AuditRunDetail:
         detector_config=detector_config,
         results_snapshot=results_snapshot,
     )
+
+
+TREND_STABLE_THRESHOLD: float = 5.0
+"""Max absolute score change between earliest and latest runs for a trend to be 'stable'."""
+
+
+def _compute_entity_trend(
+    requested_name: str, runs: list[AssessmentRun]
+) -> tuple[bool, str, list[dict], str, float | None]:
+    """Compute trend details for requested_name across AssessmentRun snapshots.
+
+    Returns:
+        (found, canonical_name, points, direction, change)
+    """
+    normalized = requested_name.strip().lower()
+    matched_points: list[dict] = []
+    canonical_name = requested_name
+
+    for run in runs:
+        snapshot_list = json.loads(run.results_snapshot)
+        for item in snapshot_list:
+            if item["entity_name"].strip().lower() == normalized:
+                canonical_name = item["entity_name"]
+                matched_points.append(
+                    {
+                        "run_id": run.id,
+                        "timestamp": run.run_timestamp,
+                        "risk_score": float(item["risk_score"]),
+                        "risk_band": item["risk_band"],
+                        "execution_gap": float(item.get("execution_gap_component_score") or 0.0),
+                        "negative_space": float(item.get("negative_space_component_score") or 0.0),
+                        "anomaly": float(item.get("anomaly_component_score") or 0.0),
+                    }
+                )
+                break
+
+    if not matched_points:
+        return False, requested_name, [], "insufficient_data", None
+
+    if len(matched_points) < 2:
+        return True, canonical_name, [], "insufficient_data", None
+
+    earliest_score = matched_points[0]["risk_score"]
+    latest_score = matched_points[-1]["risk_score"]
+    change = round(latest_score - earliest_score, 2)
+
+    if change > TREND_STABLE_THRESHOLD:
+        direction = "deteriorating"
+    elif change < -TREND_STABLE_THRESHOLD:
+        direction = "improving"
+    else:
+        direction = "stable"
+
+    return True, canonical_name, matched_points, direction, change
+
+
+@router.get("/trends", response_model=list[EntityTrendSummary])
+def get_trends_summary(db: Session = Depends(get_db)) -> list[EntityTrendSummary]:
+    """Summary of current trend directions for all entities across historical runs."""
+    runs = db.execute(
+        select(AssessmentRun).order_by(AssessmentRun.run_timestamp.asc(), AssessmentRun.id.asc())
+    ).scalars().all()
+
+    entity_names: set[str] = set()
+    for run in runs:
+        snapshot_list = json.loads(run.results_snapshot)
+        for item in snapshot_list:
+            entity_names.add(item["entity_name"])
+
+    results: list[EntityTrendSummary] = []
+    for name in sorted(entity_names):
+        found, canonical_name, points, direction, change = _compute_entity_trend(name, runs)
+        results.append(EntityTrendSummary(entity_name=canonical_name, direction=direction))
+
+    return results
+
+
+@router.get("/trends/{entity_name}", response_model=EntityTrendDetail)
+def get_entity_trend(entity_name: str, db: Session = Depends(get_db)) -> EntityTrendDetail:
+    """Historical risk score trend points and direction for one entity."""
+    runs = db.execute(
+        select(AssessmentRun).order_by(AssessmentRun.run_timestamp.asc(), AssessmentRun.id.asc())
+    ).scalars().all()
+
+    found, canonical_name, points, direction, change = _compute_entity_trend(entity_name, runs)
+    if not found:
+        raise HTTPException(status_code=404, detail=f"Entity '{entity_name}' not found")
+
+    trend_points = [TrendPoint(**p) for p in points]
+    return EntityTrendDetail(
+        entity_name=canonical_name,
+        points=trend_points,
+        direction=direction,
+        change=change,
+    )
+
