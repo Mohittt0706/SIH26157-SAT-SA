@@ -1,14 +1,9 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
   Shield,
-  Clock,
-  Folder,
-  FileText,
-  Table,
   Loader2,
   AlertCircle,
-  Menu,
 } from "lucide-react";
 import { getAuditRuns, getAuditRunDetail } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
@@ -49,26 +44,25 @@ export default function AuditPage() {
 
   // Fetch audit run detail
   useEffect(() => {
-    // If a run ID is in the URL, load its detail
-    const param = searchParams.get("runId");
-    if (param) {
-      const id = parseInt(param, 10);
-      if (!isNaN(id)) {
-        setLoadingDetail(true);
-        getAuditRunDetail(id).then(
-          (d) => {
+    const fetchDetail = async () => {
+      const param = searchParams.get("runId");
+      if (param) {
+        const id = parseInt(param, 10);
+        if (!isNaN(id)) {
+          try {
+            setLoadingDetail(true);
+            const d = await getAuditRunDetail(id);
             setDetail(d);
-            setLoadingDetail(false);
-          }
-        ).catch(
-          (err) => {
+          } catch (err) {
             console.error(err);
             setError("Unable to load audit details.");
+          } finally {
             setLoadingDetail(false);
           }
-        );
+        }
       }
-    }
+    };
+    fetchDetail();
   }, [searchParams]);
 
   // If no run ID in URL but a run is selected, update detail

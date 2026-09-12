@@ -138,7 +138,7 @@ export default function UploadPage() {
           .split(",")
           .map((h) => h.replace(/^["']|["']$/g, "").trim());
         const rows = lines.slice(1, 101).map((line) => {
-          const cells = line.split(/,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/);
+          const cells = line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
           return cells.map((cell) => cell.replace(/^["']|["']$/g, "").trim());
         });
         setPreviewData({ headers, rows });

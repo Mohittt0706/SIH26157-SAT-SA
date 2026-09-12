@@ -7,8 +7,10 @@ import {
   BarChart3,
   AlertTriangle,
 } from "lucide-react";
-import { getRiskScores } from "../lib/api";
+import { getRiskScores, getAuditRuns } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
+import SupervisoryReviewPriority from "../components/SupervisoryReviewPriority";
+import DatasetScale from "../components/DatasetScale";
 
 export default function DashboardPage() {
   usePageMetadata({
@@ -17,6 +19,7 @@ export default function DashboardPage() {
     path: "/dashboard",
   });
   const [entities, setEntities] = useState([]);
+  const [auditRuns, setAuditRuns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -25,8 +28,12 @@ export default function DashboardPage() {
       try {
         setLoading(true);
         setError(null);
-        const data = await getRiskScores();
-        setEntities(data || []);
+        const [scoresData, runsData] = await Promise.all([
+          getRiskScores(),
+          getAuditRuns().catch(() => []),
+        ]);
+        setEntities(scoresData || []);
+        setAuditRuns(runsData || []);
       } catch (err) {
         console.error(err);
         let safeError = "Failed to load risk scores. Please ensure the backend server is running.";
@@ -126,12 +133,14 @@ export default function DashboardPage() {
 
   const driverCounts = {};
   entities.forEach((e) => {
-    if (e.primary_driver && e.primary_driver !== "Normal") {
+    if (e.primary_driver && e.primary_driver !== "Normal" && e.primary_driver !== "None") {
       driverCounts[e.primary_driver] = (driverCounts[e.primary_driver] || 0) + 1;
     }
   });
   const driverEntries = Object.entries(driverCounts).sort((a, b) => b[1] - a[1]);
-  const totalDrivers = driverEntries.reduce((sum, [_, count]) => sum + count, 0);
+  const totalDrivers = driverEntries.reduce((sum, [, count]) => sum + count, 0);
+
+  const latestRun = auditRuns && auditRuns.length > 0 ? auditRuns[0] : null;
 
   const getSignalText = (entity) => {
     if (entity.findings_summary && entity.findings_summary.length > 0) {
@@ -161,9 +170,9 @@ export default function DashboardPage() {
           </div>
         </Link>
         <div className="dashboard-nav-links">
-            <Link to="/upload">ANALYZE</Link>
-            <span className="active">OVERVIEW</span>
-            <Link to="/audit">AUDIT</Link>
+          <Link to="/upload">ANALYZE</Link>
+          <span className="active">OVERVIEW</span>
+          <Link to="/audit">AUDIT</Link>
         </div>
         <div className="dashboard-status">
           <span />
@@ -184,18 +193,17 @@ export default function DashboardPage() {
               <span>OVERVIEW.</span>
             </h1>
             <p>
-              Assessment results generated from structured SOC operational
-              data.
+              Evidence-backed supervisory assessment generated from structured SOC operational telemetry.
             </p>
           </div>
           <div className="dataset-info">
             <span>ACTIVE DATASET</span>
             <strong>ACTIVE SOC DATASET</strong>
-            <small>{totalAlerts} records · {entities.length} entities</small>
+            <small>{totalAlerts.toLocaleString()} records · {entities.length} entities</small>
           </div>
         </div>
 
-        {/* METRICS */}
+        {/* 1. OVERALL SOC POSTURE / METRICS */}
         <div className="dashboard-metrics">
           <div className="dashboard-metric">
             <div className="metric-icon">
@@ -212,7 +220,7 @@ export default function DashboardPage() {
             </div>
             <div>
               <span>TOTAL ALERTS</span>
-              <strong>{totalAlerts}</strong>
+              <strong>{totalAlerts.toLocaleString()}</strong>
             </div>
           </div>
           <div className="dashboard-metric">
@@ -226,9 +234,12 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* MAIN ANALYSIS */}
-        <div className="dashboard-main-grid">
-          {/* RANKING */}
+        {/* 2. SUPERVISORY REVIEW PRIORITIZATION (Answers: WHO should I review first?) */}
+        <SupervisoryReviewPriority entities={entities} />
+
+        {/* 3. RISK & SIGNAL DISTRIBUTION (Answers: WHAT is the posture & findings?) */}
+        <div className="dashboard-main-grid" style={{ marginTop: "30px" }}>
+          {/* RANKING PANEL */}
           <section className="ranking-panel">
             <div className="panel-header">
               <div>
@@ -283,7 +294,7 @@ export default function DashboardPage() {
             </div>
           </section>
 
-          {/* SIDE PANEL */}
+          {/* SIGNALS SIDE PANEL */}
           <section className="signals-panel">
             <div className="panel-header">
               <div>
@@ -294,7 +305,7 @@ export default function DashboardPage() {
             <div className="signal-list">
               {driverEntries.length === 0 ? (
                 <div className="empty-state" style={{ minHeight: "150px", padding: "20px" }}>
-                  <p>No review signals identified.</p>
+                  <p>No elevated review signals identified.</p>
                 </div>
               ) : (
                 driverEntries.map(([driver, count], idx) => {
@@ -313,45 +324,32 @@ export default function DashboardPage() {
               )}
             </div>
             <div className="review-note">
-              <span>SUPERVISORY NOTE</span>
+              <span>SUPERVISORY PRINCIPLE</span>
               <p>
-                Signals indicate patterns requiring review. They do not by
-                themselves establish a security failure.
+                Signals identify operational anomalies requiring human supervisory review. They do not constitute an automatic verdict.
               </p>
             </div>
           </section>
         </div>
 
-        {/* BENCHMARK */}
-        <section className="benchmark-section">
-          <div className="panel-header">
-            <div>
-              <div className="panel-label">PEER BENCHMARKING</div>
-              <h2>Operational deviation</h2>
-            </div>
-            <span className="panel-meta">
-              ENTITY VS PEER MEDIAN
-            </span>
-          </div>
-          <div className="benchmark-grid">
-            <div className="empty-state" style={{ gridColumn: "1 / -1", minHeight: "150px" }}>
-              <BarChart3 size={24} />
-              <h3>Benchmarking Data</h3>
-              <p>Select a specific entity from the risk ranking to view detailed peer benchmarking data and deviations.</p>
-            </div>
-          </div>
-        </section>
+        {/* 4. DATASET / ANALYSIS SCALE (Answers: HOW large is the analyzed dataset?) */}
+        <DatasetScale
+          totalAlerts={totalAlerts}
+          entitiesCount={entities.length}
+          auditRunsCount={auditRuns.length}
+          latestRun={latestRun}
+          inputFormat="CSV / JSON"
+        />
 
-        {/* FOOTNOTE */}
-        <div className="dashboard-footnote">
-          <span>ANALYSIS STATUS</span>
-          <strong>REVIEW SIGNALS IDENTIFIED</strong>
+        {/* BENCHMARK / FOOTNOTE */}
+        <div className="dashboard-footnote" style={{ marginTop: "30px" }}>
+          <span>SUPERVISORY WORKFLOW</span>
+          <strong>PRIORITIZED EVIDENCE INSPECTION</strong>
           <p>
-            Select an entity above to inspect evidence and findings.
+            Select an entity from the priority queue above to inspect its component scores, evidence breakdown, and peer baseline deviations.
           </p>
         </div>
       </section>
     </main>
   );
 }
-

@@ -12,6 +12,9 @@ import {
   CartesianGrid,
 } from "recharts";
 import { getEntityDetails } from "../lib/api";
+import WhyFlaggedPanel from "../components/WhyFlaggedPanel";
+import ExpectedObserved from "../components/ExpectedObserved";
+import TrendPanel from "../components/TrendPanel";
 
 export default function DrillDownPage() {
   const { entityName: paramEntityName } = useParams();
@@ -81,13 +84,13 @@ export default function DrillDownPage() {
         <section className="drilldown-page" style={{ paddingTop: "20px" }}>
           <div className="drilldown-header-container" style={{ marginBottom: "20px" }}>
             <div className="drilldown-title">
-               <div className="skeleton skeleton-text" style={{ width: "120px" }} />
-               <div className="skeleton skeleton-title" style={{ width: "300px", height: "40px", marginTop: "10px" }} />
-               <div className="skeleton skeleton-text" style={{ width: "350px", marginTop: "10px" }} />
+              <div className="skeleton skeleton-text" style={{ width: "120px" }} />
+              <div className="skeleton skeleton-title" style={{ width: "300px", height: "40px", marginTop: "10px" }} />
+              <div className="skeleton skeleton-text" style={{ width: "350px", marginTop: "10px" }} />
             </div>
             <div className="drilldown-scores-container" style={{ display: "flex", gap: "20px" }}>
-               <div className="skeleton skeleton-card" style={{ width: "180px", height: "90px" }} />
-               <div className="skeleton skeleton-card" style={{ width: "250px", height: "90px" }} />
+              <div className="skeleton skeleton-card" style={{ width: "180px", height: "90px" }} />
+              <div className="skeleton skeleton-card" style={{ width: "250px", height: "90px" }} />
             </div>
           </div>
           
@@ -203,9 +206,9 @@ export default function DrillDownPage() {
           </div>
         </Link>
         <div className="dashboard-nav-links">
-            <Link to="/upload">ANALYZE</Link>
-            <Link to="/dashboard">OVERVIEW</Link>
-            <Link to="/audit">AUDIT</Link>
+          <Link to="/upload">ANALYZE</Link>
+          <Link to="/dashboard">OVERVIEW</Link>
+          <Link to="/audit">AUDIT</Link>
         </div>
         <div className="dashboard-status">
           <span />
@@ -222,17 +225,17 @@ export default function DrillDownPage() {
           </Link>
         </div>
 
-        {/* HEADER */}
+        {/* 1. ENTITY HEADER & RISK SCORE */}
         <div className="drilldown-header-container">
           <div className="drilldown-title">
             <div className="drilldown-eyebrow">03 / ENTITY DOSSIER</div>
             <h1>{data.entity_name}</h1>
-            <p>Supervisory assessment and evidence documentation.</p>
+            <p>Supervisory assessment and operational evidence documentation.</p>
           </div>
 
           <div
             className="drilldown-scores-container"
-            style={{ display: "flex", gap: "20px" }}
+            style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}
           >
             <div className={`drilldown-score-panel ${scoreClassStr}`}>
               <span>RISK SCORE</span>
@@ -250,6 +253,7 @@ export default function DrillDownPage() {
                   padding: "15px 20px",
                   borderRadius: "4px",
                   border: "1px solid rgba(255,255,255,0.05)",
+                  flexWrap: "wrap",
                 }}
               >
                 <div style={{ display: "flex", flexDirection: "column" }}>
@@ -326,14 +330,120 @@ export default function DrillDownPage() {
           </div>
         )}
 
-        <div className="drilldown-main-grid">
-          {/* FINDINGS */}
-          <section className="findings-panel">
+        {/* 2. WHY FLAGGED? (PRIMARY EXPLAINABILITY SECTION) */}
+        <WhyFlaggedPanel data={data} />
+
+        {/* 3. EXPECTED VS OBSERVED (NEGATIVE SPACE & BASELINE COMPARISON) */}
+        <ExpectedObserved data={data} />
+
+        {/* 4. PEER BENCHMARK COMPARISON */}
+        <section className="benchmark-section" style={{ marginTop: "30px" }}>
+          <div className="panel-header">
+            <div>
+              <div className="panel-label">PEER BENCHMARKING</div>
+              <h2>Peer Deviation Breakdown</h2>
+              <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+                Comparison of this entity&apos;s operational indicators against median peer baseline values across the cohort.
+              </p>
+            </div>
+            <span className="panel-meta">ENTITY VS PEER MEDIAN</span>
+          </div>
+
+          {benchmarkArray.length === 0 ? (
+            <div
+              className="empty-state"
+              style={{ minHeight: "150px", marginTop: "16px" }}
+            >
+              <h3>No Benchmark Data</h3>
+              <p>Peer benchmark data is currently unavailable for this entity. Check back after next data ingestion.</p>
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px", marginTop: "16px" }}>
+              <div className="peer-chart-container" role="img" aria-label={`Bar chart comparing ${entityName} metrics to peer medians`}>
+                <ResponsiveContainer width="100%" height={240}>
+                  <BarChart
+                    data={benchmarkArray}
+                    margin={{ top: 15, right: 15, left: -10, bottom: 5 }}
+                  >
+                    <CartesianGrid
+                      stroke="rgba(255,255,255,0.07)"
+                      vertical={false}
+                    />
+                    <XAxis
+                      dataKey="metric"
+                      tick={{ fill: "#8e96a0", fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      tick={{ fill: "#8e96a0", fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        background: "#11151a",
+                        border: "1px solid #2a3038",
+                        color: "#f2f4f7",
+                        fontSize: "11px",
+                      }}
+                    />
+                    <Bar
+                      dataKey="entity"
+                      fill="#56c7ff"
+                      name="Entity"
+                      barSize={18}
+                    />
+                    <Bar
+                      dataKey="peer"
+                      fill="#3b424b"
+                      name="Peer Median"
+                      barSize={18}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+                <div className="chart-legend">
+                  <span>
+                    <i className="legend-entity" />
+                    THIS ENTITY
+                  </span>
+                  <span>
+                    <i className="legend-peer" />
+                    PEER MEDIAN
+                  </span>
+                </div>
+              </div>
+
+              <div className="peer-metrics-list" style={{ marginTop: 0 }}>
+                {benchmarkArray.map((item, idx) => (
+                  <div className="peer-metric-item" key={idx}>
+                    <span>{item.metric.toUpperCase()}</span>
+                    <div className="peer-metric-values">
+                      <strong>{item.entity}</strong>
+                      <small>Peer: {item.peer}</small>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* 5. TEMPORAL / TREND ANALYSIS */}
+        <TrendPanel entityName={data.entity_name} />
+
+        {/* 6. DETAILED EVIDENCE & FINDINGS (UNDERLYING OPERATIONAL RECORDS) */}
+        <div className="drilldown-main-grid" style={{ marginTop: "30px" }}>
+          <section className="findings-panel" style={{ gridColumn: "1 / -1" }}>
             <div className="panel-header">
               <div>
-                <div className="panel-label">EVIDENCE GATHERED</div>
-                <h2>Review Signals</h2>
+                <div className="panel-label">DETAILED EVIDENCE AUDIT</div>
+                <h2>Rule Findings & Sampled Alerts</h2>
+                <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+                  Exhaustive audit breakdown of all triggered detector rules with concrete alert identifiers and rationale.
+                </p>
               </div>
+              <span className="panel-meta">{data.findings?.length || 0} TRIGGERED RULES</span>
             </div>
 
             <div className="findings-grid">
@@ -385,6 +495,8 @@ export default function DrillDownPage() {
                                 style={{
                                   color: "#f2f4f7",
                                   whiteSpace: "nowrap",
+                                  fontFamily: "monospace",
+                                  fontSize: "11px",
                                 }}
                               >
                                 {alertId}
@@ -401,98 +513,8 @@ export default function DrillDownPage() {
               )}
             </div>
           </section>
-
-          {/* BENCHMARK (SIDE) */}
-          <section className="peer-panel">
-            <div className="panel-header">
-              <div>
-                <div className="panel-label">PEER BENCHMARKING</div>
-                <h2>Deviation Details</h2>
-              </div>
-            </div>
-
-            {benchmarkArray.length === 0 ? (
-              <div
-                className="empty-state"
-                style={{ minHeight: "150px", marginTop: "20px" }}
-              >
-                <h3>No Benchmark Data</h3>
-                <p>Peer benchmark data is currently unavailable for this entity. Check back after next data ingestion.</p>
-              </div>
-            ) : (
-              <>
-                <div className="peer-chart-container" role="img" aria-label={`Bar chart comparing ${entityName} metrics to peer medians`}>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <BarChart
-                      data={benchmarkArray}
-                      margin={{ top: 15, right: 15, left: -10, bottom: 5 }}
-                    >
-                      <CartesianGrid
-                        stroke="rgba(255,255,255,0.07)"
-                        vertical={false}
-                      />
-                      <XAxis
-                        dataKey="metric"
-                        tick={{ fill: "#8e96a0", fontSize: 10 }}
-                        axisLine={false}
-                        tickLine={false}
-                      />
-                      <YAxis
-                        tick={{ fill: "#8e96a0", fontSize: 10 }}
-                        axisLine={false}
-                        tickLine={false}
-                      />
-                      <Tooltip
-                        contentStyle={{
-                          background: "#11151a",
-                          border: "1px solid #2a3038",
-                          color: "#f2f4f7",
-                          fontSize: "11px",
-                        }}
-                      />
-                      <Bar
-                        dataKey="entity"
-                        fill="#56c7ff"
-                        name="Entity"
-                        barSize={18}
-                      />
-                      <Bar
-                        dataKey="peer"
-                        fill="#3b424b"
-                        name="Peer Median"
-                        barSize={18}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                  <div className="chart-legend">
-                    <span>
-                      <i className="legend-entity" />
-                      THIS ENTITY
-                    </span>
-                    <span>
-                      <i className="legend-peer" />
-                      PEER MEDIAN
-                    </span>
-                  </div>
-                </div>
-
-                <div className="peer-metrics-list">
-                  {benchmarkArray.map((item, idx) => (
-                    <div className="peer-metric-item" key={idx}>
-                      <span>{item.metric.toUpperCase()}</span>
-                      <div className="peer-metric-values">
-                        <strong>{item.entity}</strong>
-                        <small>Peer: {item.peer}</small>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </section>
         </div>
       </section>
     </main>
   );
 }
-
