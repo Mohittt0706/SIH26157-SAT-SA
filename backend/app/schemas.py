@@ -195,6 +195,7 @@ class EntityDrillDown(BaseModel):
     risk_score: float
     risk_band: str
     alert_count: int
+    primary_driver: str
     component_scores: ComponentScores
     findings: list[Finding]
     peer_metrics: PeerMetrics
@@ -218,8 +219,14 @@ class EntityTrendDetail(BaseModel):
 
     entity_name: str
     points: list[TrendPoint]
-    direction: str  # "improving" | "stable" | "deteriorating" | "insufficient_data"
+    direction: str  # "improving" | "stable" | "deteriorating" | "volatile" | "insufficient_data"
     change: Optional[float] = None
+    """First-to-last risk_score difference — kept for reference only; it no
+    longer decides `direction` (see _compute_entity_trend), since it's blind
+    to a series that dips and recovers back to its starting value."""
+    volatility: Optional[float] = None
+    """Population standard deviation of risk_score across the series, in
+    points. None when there are fewer than two points to compute it from."""
 
 
 class EntityTrendSummary(BaseModel):
@@ -227,5 +234,22 @@ class EntityTrendSummary(BaseModel):
 
     entity_name: str
     direction: str
+
+
+class PrioritySample(BaseModel):
+    """One alert ranked for manual supervisory review by GET /api/priority-samples.
+
+    Mirrors the dict shape returned by
+    app.analytics.sample_priority.compute_sample_priority.
+    """
+
+    alert_id: str
+    entity_name: str
+    entity_risk_score: float
+    severity: str
+    created_time: datetime
+    priority_score: float
+    triggered_rules: list[str]
+    reason: str
 
 

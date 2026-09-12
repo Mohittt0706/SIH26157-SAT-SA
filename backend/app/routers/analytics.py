@@ -8,9 +8,10 @@ alerts table directly.
 
 import statistics
 import json
+import numpy as np
 from sqlalchemy import select
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.analytics.anomaly import compute_anomaly
@@ -18,6 +19,7 @@ from app.analytics.execution_gap import compute_execution_gap
 from app.analytics.expected_observed import compute_expected_vs_observed
 from app.analytics.negative_space import compute_negative_space
 from app.analytics.risk_score import compute_risk_scores
+from app.analytics.sample_priority import compute_sample_priority
 from app.database import get_db
 from app.models import AssessmentRun
 from app.schemas import (
@@ -28,9 +30,13 @@ from app.schemas import (
     EntityResultSnapshot,
     EntityTrendDetail,
     EntityTrendSummary,
+    PrioritySample,
     RiskScoreSummary,
     TrendPoint,
 )
+
+DEFAULT_PRIORITY_SAMPLES_LIMIT: int = 25
+MAX_PRIORITY_SAMPLES_LIMIT: int = 100
 
 router = APIRouter()
 
@@ -146,6 +152,7 @@ def get_entity_detail(entity_name: str, db: Session = Depends(get_db)) -> dict:
         "risk_score": risk_row["risk_score"],
         "risk_band": risk_row["risk_band"],
         "alert_count": int(an["metrics"]["alert_count"]),
+        "primary_driver": risk_row["primary_driver"],
         "component_scores": {
             "execution_gap": eg["score"],
             "negative_space": ns["score"],
@@ -259,6 +266,22 @@ def _peer_metrics(entity_name: str, anomaly_results: dict[str, dict]) -> dict[st
     return result
 
 
+@router.get("/priority-samples", response_model=list[PrioritySample])
+def get_priority_samples(
+    limit: int = Query(default=DEFAULT_PRIORITY_SAMPLES_LIMIT, ge=1, le=MAX_PRIORITY_SAMPLES_LIMIT),
+    db: Session = Depends(get_db),
+) -> list[dict]:
+    """Cross-entity ranked list of individual alerts to review first.
+
+    Thin wrapper around app.analytics.sample_priority.compute_sample_priority
+    — see that module for the eligibility rule (only alerts execution_gap.py
+    actually cited as evidence) and the scoring weights. Returns an empty
+    list when the alerts table is empty, the same as every other detector
+    endpoint.
+    """
+    return compute_sample_priority(db, limit=limit)
+
+
 @router.get("/audit/runs", response_model=list[AuditRunListItem])
 def list_audit_runs(db: Session = Depends(get_db)) -> list[AuditRunListItem]:
     """Return all assessment runs, newest first."""
@@ -310,16 +333,43 @@ def get_audit_run(run_id: int, db: Session = Depends(get_db)) -> AuditRunDetail:
 
 
 TREND_STABLE_THRESHOLD: float = 5.0
-"""Max absolute score change between earliest and latest runs for a trend to be 'stable'."""
+"""Max absolute least-squares slope, in risk_score points per run (not per
+unit time — each run counts as one step along the x-axis regardless of the
+elapsed time between runs), for a trend to be considered flat rather than
+improving/deteriorating. See _compute_entity_trend: this now gates the
+regression slope, not the raw first-to-last change — a first-vs-last
+comparison reads a deep V-shaped series (e.g. 85 -> 30.9 -> ... -> 85) as
+perfectly flat, which is exactly the failure mode this constant used to
+produce."""
+
+TREND_VOLATILITY_THRESHOLD: float = 15.0
+"""Population standard deviation of risk_score (points) across the series,
+above which a slope that reads as flat is reported as 'volatile' rather than
+'stable' — a supervisory concern distinct from either direction, since an
+entity swinging repeatedly between low and critical is not the same as one
+that has simply held steady."""
 
 
 def _compute_entity_trend(
     requested_name: str, runs: list[AssessmentRun]
-) -> tuple[bool, str, list[dict], str, float | None]:
+) -> tuple[bool, str, list[dict], str, float | None, float | None]:
     """Compute trend details for requested_name across AssessmentRun snapshots.
 
+    Direction is decided by a least-squares linear regression of risk_score
+    against run index (0, 1, 2, ... in chronological order — "points per
+    run", not calendar time), not by comparing only the first and last point.
+    A first-vs-last comparison is blind to a series that dips and recovers
+    (or spikes and recovers) back to roughly its starting value, reporting
+    "stable" for what a chart clearly shows as volatile. Regression over
+    every point catches that shape via `volatility` (the series' own
+    population standard deviation) even when the net slope is flat.
+
     Returns:
-        (found, canonical_name, points, direction, change)
+        (found, canonical_name, points, direction, change, volatility)
+
+    `direction` is one of "improving" | "deteriorating" | "stable" |
+    "volatile" | "insufficient_data". `change` remains first-to-last, kept
+    only as a simple at-a-glance reference — it no longer decides direction.
     """
     normalized = requested_name.strip().lower()
     matched_points: list[dict] = []
@@ -344,23 +394,31 @@ def _compute_entity_trend(
                 break
 
     if not matched_points:
-        return False, requested_name, [], "insufficient_data", None
+        return False, requested_name, [], "insufficient_data", None, None
 
     if len(matched_points) < 2:
-        return True, canonical_name, [], "insufficient_data", None
+        return True, canonical_name, [], "insufficient_data", None, None
+
+    scores = np.array([p["risk_score"] for p in matched_points], dtype=float)
+    run_indices = np.arange(len(scores), dtype=float)
 
     earliest_score = matched_points[0]["risk_score"]
     latest_score = matched_points[-1]["risk_score"]
     change = round(latest_score - earliest_score, 2)
 
-    if change > TREND_STABLE_THRESHOLD:
+    slope = float(np.polyfit(run_indices, scores, 1)[0])
+    volatility = round(float(np.std(scores)), 2)
+
+    if slope > TREND_STABLE_THRESHOLD:
         direction = "deteriorating"
-    elif change < -TREND_STABLE_THRESHOLD:
+    elif slope < -TREND_STABLE_THRESHOLD:
         direction = "improving"
+    elif volatility > TREND_VOLATILITY_THRESHOLD:
+        direction = "volatile"
     else:
         direction = "stable"
 
-    return True, canonical_name, matched_points, direction, change
+    return True, canonical_name, matched_points, direction, change, volatility
 
 
 @router.get("/trends", response_model=list[EntityTrendSummary])
@@ -378,7 +436,7 @@ def get_trends_summary(db: Session = Depends(get_db)) -> list[EntityTrendSummary
 
     results: list[EntityTrendSummary] = []
     for name in sorted(entity_names):
-        found, canonical_name, points, direction, change = _compute_entity_trend(name, runs)
+        found, canonical_name, points, direction, change, volatility = _compute_entity_trend(name, runs)
         results.append(EntityTrendSummary(entity_name=canonical_name, direction=direction))
 
     return results
@@ -391,7 +449,7 @@ def get_entity_trend(entity_name: str, db: Session = Depends(get_db)) -> EntityT
         select(AssessmentRun).order_by(AssessmentRun.run_timestamp.asc(), AssessmentRun.id.asc())
     ).scalars().all()
 
-    found, canonical_name, points, direction, change = _compute_entity_trend(entity_name, runs)
+    found, canonical_name, points, direction, change, volatility = _compute_entity_trend(entity_name, runs)
     if not found:
         raise HTTPException(status_code=404, detail=f"Entity '{entity_name}' not found")
 
@@ -401,5 +459,6 @@ def get_entity_trend(entity_name: str, db: Session = Depends(get_db)) -> EntityT
         points=trend_points,
         direction=direction,
         change=change,
+        volatility=volatility,
     )
 

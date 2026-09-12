@@ -1,0 +1,784 @@
+alert_id,entity_name,severity,created_time,closed_time,escalated,investigation_notes,asset_type
+ALT00001,Jupiter Aviation Control,Medium,2025-10-23 16:29:00,2025-10-23 19:26:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00002,Jupiter Aviation Control,Low,2025-12-04 17:15:00,2025-12-04 19:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00003,Jupiter Aviation Control,Critical,2025-11-10 08:53:00,2025-11-10 11:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00004,Jupiter Aviation Control,Medium,2025-11-10 02:09:00,2025-11-10 04:42:00,No,Reviewed and closed.,Server
+ALT00005,Jupiter Aviation Control,Low,2025-10-04 14:57:00,2025-10-04 18:26:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00006,Jupiter Aviation Control,Medium,2025-11-26 13:46:00,2025-11-26 17:05:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00007,Jupiter Aviation Control,Low,2025-10-07 16:56:00,2025-10-07 19:31:00,No,No further action required.,Database
+ALT00008,Jupiter Aviation Control,Medium,2025-11-10 19:27:00,2025-11-10 22:52:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00009,Jupiter Aviation Control,Critical,2025-11-11 18:31:00,2025-11-11 21:07:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00010,Jupiter Aviation Control,Low,2025-12-14 20:44:00,2025-12-14 23:38:00,No,Reviewed and closed.,Cloud Workload
+ALT00011,Jupiter Aviation Control,Medium,2025-12-16 09:30:00,2025-12-16 12:25:00,No,No further action required.,IoT Device
+ALT00012,Jupiter Aviation Control,High,2025-11-01 17:19:00,2025-11-01 20:33:00,Yes,Reviewed and closed.,Cloud Workload
+ALT00013,Jupiter Aviation Control,Low,2025-11-27 07:11:00,2025-11-27 09:52:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00014,Jupiter Aviation Control,Low,2025-12-13 17:44:00,2025-12-13 21:11:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00015,Jupiter Aviation Control,Low,2025-11-01 23:17:00,2025-11-02 02:32:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00016,Jupiter Aviation Control,Low,2025-10-03 18:42:00,2025-10-03 21:32:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00017,Jupiter Aviation Control,Low,2025-12-03 23:07:00,2025-12-04 02:05:00,No,False positive.,IoT Device
+ALT00018,Jupiter Aviation Control,Medium,2025-11-23 15:31:00,2025-11-23 18:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00019,Jupiter Aviation Control,Medium,2025-12-19 03:24:00,2025-12-19 06:17:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00020,Jupiter Aviation Control,Medium,2025-12-13 07:09:00,2025-12-13 09:49:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00021,Jupiter Aviation Control,Low,2025-10-18 10:38:00,2025-10-18 13:10:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00022,Jupiter Aviation Control,Medium,2025-11-04 06:52:00,2025-11-04 09:52:00,Yes,Reviewed and closed.,Server
+ALT00023,Jupiter Aviation Control,Low,2025-10-24 11:55:00,2025-10-24 14:37:00,No,False positive.,Endpoint
+ALT00024,Jupiter Aviation Control,Low,2025-10-27 01:01:00,2025-10-27 03:58:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00025,Jupiter Aviation Control,Medium,2025-10-30 19:12:00,2025-10-30 22:32:00,No,Reviewed and closed.,Database
+ALT00026,Jupiter Aviation Control,High,2025-12-25 09:39:00,2025-12-25 12:35:00,No,No further action required.,Server
+ALT00027,Jupiter Aviation Control,Low,2025-10-11 21:16:00,2025-10-11 23:57:00,No,No further action required.,Endpoint
+ALT00028,Jupiter Aviation Control,Low,2025-10-03 09:57:00,2025-10-03 12:41:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00029,Jupiter Aviation Control,Low,2025-12-03 09:39:00,2025-12-03 12:52:00,No,False positive.,Cloud Workload
+ALT00030,Jupiter Aviation Control,High,2025-10-24 17:37:00,2025-10-24 20:41:00,Yes,No further action required.,IoT Device
+ALT00031,Jupiter Aviation Control,High,2025-12-15 12:59:00,2025-12-15 16:00:00,No,Closed as per standard procedure.,Database
+ALT00032,Jupiter Aviation Control,Critical,2025-11-19 04:30:00,2025-11-19 07:24:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00033,Jupiter Aviation Control,Medium,2025-10-30 06:38:00,2025-10-30 09:34:00,Yes,False positive.,IoT Device
+ALT00034,Jupiter Aviation Control,Critical,2025-11-04 20:46:00,2025-11-04 23:42:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00035,Jupiter Aviation Control,Low,2025-10-21 21:22:00,2025-10-21 23:54:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00036,Jupiter Aviation Control,Medium,2025-12-09 01:13:00,2025-12-09 03:48:00,No,Closed as per standard procedure.,IoT Device
+ALT00037,Jupiter Aviation Control,High,2025-11-02 01:44:00,2025-11-02 04:39:00,Yes,False positive.,Endpoint
+ALT00038,Jupiter Aviation Control,High,2025-10-30 14:11:00,2025-10-30 17:20:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00039,Jupiter Aviation Control,Low,2025-12-07 07:45:00,2025-12-07 10:21:00,Yes,Closed as per standard procedure.,IoT Device
+ALT00040,Jupiter Aviation Control,Medium,2025-10-17 12:29:00,2025-10-17 15:05:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00041,Jupiter Aviation Control,Low,2025-11-05 06:18:00,2025-11-05 09:09:00,No,False positive.,IoT Device
+ALT00042,Jupiter Aviation Control,Low,2025-12-16 10:35:00,2025-12-16 13:33:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00043,Jupiter Aviation Control,Critical,2025-11-12 23:44:00,2025-11-13 02:57:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00044,Jupiter Aviation Control,Medium,2025-12-16 12:07:00,2025-12-16 15:37:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00045,Jupiter Aviation Control,Critical,2025-12-19 12:22:00,2025-12-19 15:43:00,Yes,False positive.,Endpoint
+ALT00046,Jupiter Aviation Control,High,2025-10-04 12:51:00,2025-10-04 15:22:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00047,Jupiter Aviation Control,Medium,2025-12-23 20:00:00,2025-12-23 22:40:00,No,Closed as per standard procedure.,Database
+ALT00048,Jupiter Aviation Control,Medium,2025-10-19 16:04:00,2025-10-19 18:39:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00049,Jupiter Aviation Control,Medium,2025-10-24 15:39:00,2025-10-24 18:13:00,Yes,Reviewed and closed.,IoT Device
+ALT00050,Jupiter Aviation Control,Low,2025-12-08 14:44:00,2025-12-08 17:59:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00051,Jupiter Aviation Control,Medium,2025-11-06 12:28:00,2025-11-06 15:17:00,Yes,Closed as per standard procedure.,Database
+ALT00052,Jupiter Aviation Control,Low,2025-11-18 05:39:00,2025-11-18 09:07:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00053,Jupiter Aviation Control,Medium,2025-12-22 15:18:00,2025-12-22 18:04:00,No,No further action required.,Endpoint
+ALT00054,Jupiter Aviation Control,Low,2025-10-04 14:27:00,2025-10-04 17:47:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00055,Jupiter Aviation Control,High,2025-12-10 15:32:00,2025-12-10 18:55:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00056,Jupiter Aviation Control,Critical,2025-10-12 04:51:00,2025-10-12 08:06:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00057,Jupiter Aviation Control,Medium,2025-11-24 04:08:00,2025-11-24 06:58:00,No,No further action required.,Cloud Workload
+ALT00058,Jupiter Aviation Control,Medium,2025-11-30 10:02:00,2025-11-30 12:32:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00059,Jupiter Aviation Control,Medium,2025-11-05 04:46:00,2025-11-05 07:23:00,Yes,No further action required.,Network Device
+ALT00060,Jupiter Aviation Control,Medium,2025-10-25 13:33:00,2025-10-25 16:21:00,No,Closed as per standard procedure.,IoT Device
+ALT00061,Jupiter Aviation Control,High,2025-12-21 09:17:00,2025-12-21 11:49:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00062,Jupiter Aviation Control,High,2025-10-18 21:29:00,2025-10-19 00:14:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00063,Jupiter Aviation Control,High,2025-10-25 03:06:00,2025-10-25 06:30:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00064,Jupiter Aviation Control,Critical,2025-12-08 13:21:00,2025-12-08 15:52:00,Yes,Reviewed and closed.,Database
+ALT00065,Jupiter Aviation Control,Low,2025-10-31 00:17:00,2025-10-31 03:37:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00066,Jupiter Aviation Control,Medium,2025-11-22 00:22:00,2025-11-22 03:27:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00067,Jupiter Aviation Control,Low,2025-11-03 16:30:00,2025-11-03 19:31:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00068,Jupiter Aviation Control,Medium,2025-12-28 01:00:00,2025-12-28 03:46:00,No,Reviewed and closed.,Database
+ALT00069,Jupiter Aviation Control,Critical,2025-12-12 04:19:00,2025-12-12 06:57:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00070,Jupiter Aviation Control,Critical,2025-10-09 01:18:00,2025-10-09 03:55:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00071,Jupiter Aviation Control,Medium,2025-12-11 10:06:00,2025-12-11 12:41:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00072,Jupiter Aviation Control,High,2025-11-14 03:46:00,2025-11-14 06:33:00,Yes,Reviewed and closed.,Cloud Workload
+ALT00073,Jupiter Aviation Control,Critical,2025-11-16 03:08:00,2025-11-16 06:35:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00074,Jupiter Aviation Control,High,2025-10-05 16:49:00,2025-10-05 20:15:00,Yes,Closed as per standard procedure.,Database
+ALT00075,Jupiter Aviation Control,Low,2025-12-15 12:59:00,2025-12-15 16:20:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00076,Jupiter Aviation Control,High,2025-11-05 08:14:00,2025-11-05 11:25:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00077,Jupiter Aviation Control,Critical,2025-10-08 17:56:00,2025-10-08 21:10:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00078,Jupiter Aviation Control,Low,2025-10-27 00:11:00,2025-10-27 03:15:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00079,Jupiter Aviation Control,High,2025-10-29 19:38:00,2025-10-29 22:53:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00080,Jupiter Aviation Control,High,2025-11-21 09:06:00,2025-11-21 12:21:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00081,Jupiter Aviation Control,Low,2025-10-10 07:37:00,2025-10-10 10:47:00,Yes,Reviewed and closed.,Server
+ALT00082,Jupiter Aviation Control,Low,2025-10-27 06:44:00,2025-10-27 10:06:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00083,Jupiter Aviation Control,Low,2025-12-09 14:38:00,2025-12-09 17:52:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00084,Jupiter Aviation Control,Critical,2025-10-24 08:07:00,2025-10-24 11:06:00,Yes,No further action required.,Network Device
+ALT00085,Jupiter Aviation Control,High,2025-11-05 07:28:00,2025-11-05 10:50:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00086,Jupiter Aviation Control,Low,2025-12-29 05:08:00,2025-12-29 08:22:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00087,Jupiter Aviation Control,Low,2025-11-25 01:48:00,2025-11-25 05:04:00,No,Reviewed and closed.,Network Device
+ALT00001,Eastern Water Utility,Medium,2025-10-15 02:15:00,2025-10-15 05:43:00,No,False positive.,IoT Device
+ALT00002,Eastern Water Utility,Medium,2025-11-15 21:12:00,2025-11-16 00:41:00,No,Reviewed and closed.,Cloud Workload
+ALT00003,Eastern Water Utility,Low,2025-11-29 09:15:00,2025-11-29 12:33:00,No,No further action required.,Database
+ALT00004,Eastern Water Utility,Medium,2025-12-11 00:13:00,2025-12-11 02:55:00,No,False positive.,Cloud Workload
+ALT00005,Eastern Water Utility,High,2025-11-07 11:56:00,2025-11-07 14:52:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00006,Eastern Water Utility,Low,2025-11-05 00:07:00,2025-11-05 03:12:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00007,Eastern Water Utility,Critical,2025-12-12 07:44:00,2025-12-12 11:03:00,No,No further action required.,Server
+ALT00008,Eastern Water Utility,High,2025-11-19 05:51:00,2025-11-19 09:20:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00009,Eastern Water Utility,High,2025-12-24 18:02:00,2025-12-24 21:27:00,No,False positive.,Cloud Workload
+ALT00010,Eastern Water Utility,Low,2025-10-22 07:16:00,2025-10-22 10:14:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00011,Eastern Water Utility,Medium,2025-11-16 01:54:00,2025-11-16 05:10:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00012,Eastern Water Utility,Critical,2025-12-25 13:06:00,2025-12-25 16:30:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00013,Eastern Water Utility,High,2025-12-05 00:25:00,2025-12-05 03:40:00,Yes,No further action required.,Server
+ALT00014,Eastern Water Utility,Low,2025-10-22 22:23:00,2025-10-23 01:26:00,No,False positive.,IoT Device
+ALT00015,Eastern Water Utility,High,2025-10-12 09:27:00,2025-10-12 12:09:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00016,Eastern Water Utility,Critical,2025-11-27 10:02:00,2025-11-27 12:52:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00017,Eastern Water Utility,Low,2025-11-11 08:30:00,2025-11-11 11:54:00,No,No further action required.,Database
+ALT00018,Eastern Water Utility,High,2025-12-04 09:02:00,2025-12-04 12:12:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00019,Eastern Water Utility,Low,2025-12-19 07:25:00,2025-12-19 10:40:00,No,No further action required.,Endpoint
+ALT00020,Eastern Water Utility,Medium,2025-12-23 19:45:00,2025-12-23 22:25:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00021,Eastern Water Utility,Critical,2025-11-05 10:58:00,2025-11-05 14:01:00,Yes,No further action required.,IoT Device
+ALT00022,Eastern Water Utility,High,2025-12-31 22:54:00,2025-12-31 23:59:59,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00023,Eastern Water Utility,Low,2025-11-06 20:35:00,2025-11-07 00:03:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00024,Eastern Water Utility,Low,2025-10-23 02:11:00,2025-10-23 04:58:00,No,No further action required.,Endpoint
+ALT00025,Eastern Water Utility,Medium,2025-12-25 11:43:00,2025-12-25 14:38:00,No,False positive.,Network Device
+ALT00026,Eastern Water Utility,High,2025-11-27 21:05:00,2025-11-28 00:33:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00027,Eastern Water Utility,Low,2025-12-02 14:05:00,2025-12-02 17:19:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00028,Eastern Water Utility,Low,2025-10-31 13:42:00,2025-10-31 16:16:00,No,Closed as per standard procedure.,IoT Device
+ALT00029,Eastern Water Utility,Critical,2025-12-25 01:27:00,2025-12-25 03:57:00,Yes,Closed as per standard procedure.,Endpoint
+ALT00030,Eastern Water Utility,Low,2025-10-23 04:19:00,2025-10-23 07:23:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00031,Eastern Water Utility,Medium,2025-10-26 02:20:00,2025-10-26 05:49:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00032,Eastern Water Utility,High,2025-10-29 02:03:00,2025-10-29 04:48:00,Yes,Reviewed and closed.,Server
+ALT00033,Eastern Water Utility,High,2025-11-08 19:09:00,2025-11-08 22:28:00,Yes,False positive.,Endpoint
+ALT00034,Eastern Water Utility,High,2025-12-08 23:27:00,2025-12-09 02:28:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00035,Eastern Water Utility,Critical,2025-10-18 17:12:00,2025-10-18 20:41:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00036,Eastern Water Utility,High,2025-11-18 06:51:00,2025-11-18 10:00:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00037,Eastern Water Utility,Low,2025-11-16 04:31:00,2025-11-16 07:29:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00038,Eastern Water Utility,Medium,2025-10-13 15:02:00,2025-10-13 17:32:00,No,No further action required.,IoT Device
+ALT00039,Eastern Water Utility,Medium,2025-11-17 11:40:00,2025-11-17 14:12:00,No,False positive.,Cloud Workload
+ALT00040,Eastern Water Utility,Critical,2025-12-16 20:35:00,2025-12-16 23:40:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00041,Eastern Water Utility,Medium,2025-12-05 23:25:00,2025-12-06 02:19:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00042,Eastern Water Utility,Low,2025-11-30 03:34:00,2025-11-30 06:29:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00043,Eastern Water Utility,High,2025-12-14 23:54:00,2025-12-15 02:46:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00044,Eastern Water Utility,Low,2025-10-01 03:16:00,2025-10-01 06:37:00,Yes,False positive.,Cloud Workload
+ALT00045,Eastern Water Utility,Medium,2025-11-15 09:03:00,2025-11-15 12:09:00,No,Closed as per standard procedure.,IoT Device
+ALT00046,Eastern Water Utility,Medium,2025-10-02 22:05:00,2025-10-03 01:08:00,No,Reviewed and closed.,Network Device
+ALT00047,Eastern Water Utility,Low,2025-10-10 06:32:00,2025-10-10 09:46:00,No,False positive.,Cloud Workload
+ALT00048,Eastern Water Utility,Medium,2025-10-15 08:20:00,2025-10-15 10:50:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00049,Eastern Water Utility,Medium,2025-12-31 06:13:00,2025-12-31 08:47:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00050,Eastern Water Utility,Medium,2025-11-13 09:30:00,2025-11-13 12:55:00,No,Reviewed and closed.,Database
+ALT00051,Eastern Water Utility,Medium,2025-11-15 01:50:00,2025-11-15 05:11:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00052,Eastern Water Utility,Medium,2025-11-16 11:40:00,2025-11-16 14:49:00,No,No further action required.,Database
+ALT00053,Eastern Water Utility,Critical,2025-12-11 15:02:00,2025-12-11 18:21:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00054,Eastern Water Utility,High,2025-12-13 07:29:00,2025-12-13 10:06:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00055,Eastern Water Utility,Medium,2025-11-30 09:42:00,2025-11-30 12:14:00,Yes,Closed as per standard procedure.,Database
+ALT00056,Eastern Water Utility,Critical,2025-11-18 22:18:00,2025-11-19 00:49:00,Yes,False positive.,IoT Device
+ALT00057,Eastern Water Utility,Low,2025-10-25 09:13:00,2025-10-25 12:38:00,No,False positive.,Network Device
+ALT00058,Eastern Water Utility,High,2025-10-19 08:35:00,2025-10-19 11:11:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00059,Eastern Water Utility,Low,2025-10-17 11:20:00,2025-10-17 13:55:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00060,Eastern Water Utility,Critical,2025-12-31 14:41:00,2025-12-31 17:43:00,No,False positive.,Cloud Workload
+ALT00061,Eastern Water Utility,High,2025-12-11 07:20:00,2025-12-11 10:07:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00062,Eastern Water Utility,Low,2025-10-25 04:45:00,2025-10-25 07:53:00,No,False positive.,IoT Device
+ALT00063,Eastern Water Utility,Low,2025-11-21 12:32:00,2025-11-21 15:50:00,No,False positive.,Cloud Workload
+ALT00064,Eastern Water Utility,Low,2025-10-21 20:34:00,2025-10-21 23:04:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00065,Eastern Water Utility,Medium,2025-12-25 15:59:00,2025-12-25 18:29:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00066,Eastern Water Utility,High,2025-10-10 00:29:00,2025-10-10 03:43:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00067,Eastern Water Utility,Low,2025-10-19 12:31:00,2025-10-19 15:12:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00068,Eastern Water Utility,High,2025-12-14 04:17:00,2025-12-14 06:55:00,Yes,False positive.,Endpoint
+ALT00069,Eastern Water Utility,Low,2025-11-16 15:54:00,2025-11-16 18:26:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00070,Eastern Water Utility,Low,2025-12-28 19:47:00,2025-12-28 23:07:00,No,No further action required.,IoT Device
+ALT00071,Eastern Water Utility,Medium,2025-11-14 20:05:00,2025-11-14 23:14:00,Yes,Reviewed and closed.,Network Device
+ALT00072,Eastern Water Utility,Low,2025-10-08 04:56:00,2025-10-08 08:19:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00073,Eastern Water Utility,Critical,2025-11-23 16:48:00,2025-11-23 19:53:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00074,Eastern Water Utility,Critical,2025-10-25 13:56:00,2025-10-25 16:49:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00075,Eastern Water Utility,Low,2025-12-22 17:33:00,2025-12-22 20:21:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00076,Eastern Water Utility,Medium,2025-10-12 15:10:00,2025-10-12 17:59:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00077,Eastern Water Utility,Medium,2025-11-29 23:53:00,2025-11-30 03:02:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00078,Eastern Water Utility,Low,2025-12-19 02:21:00,2025-12-19 05:11:00,No,No further action required.,Endpoint
+ALT00079,Eastern Water Utility,Medium,2025-10-26 12:35:00,2025-10-26 15:26:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00080,Eastern Water Utility,Low,2025-10-11 16:31:00,2025-10-11 19:23:00,No,Reviewed and closed.,Server
+ALT00081,Eastern Water Utility,Medium,2025-10-14 08:32:00,2025-10-14 11:15:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00082,Eastern Water Utility,Medium,2025-10-27 03:15:00,2025-10-27 06:13:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00083,Eastern Water Utility,Low,2025-10-21 02:21:00,2025-10-21 05:35:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00084,Eastern Water Utility,Critical,2025-12-12 06:41:00,2025-12-12 09:23:00,Yes,Reviewed and closed.,IoT Device
+ALT00085,Eastern Water Utility,Medium,2025-11-10 22:10:00,2025-11-11 01:26:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00086,Eastern Water Utility,Low,2025-11-16 07:16:00,2025-11-16 10:38:00,No,No further action required.,Database
+ALT00087,Eastern Water Utility,Critical,2025-12-08 04:53:00,2025-12-08 07:52:00,Yes,Closed as per standard procedure.,IoT Device
+ALT00088,Eastern Water Utility,Low,2025-11-06 04:09:00,2025-11-06 07:14:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00089,Eastern Water Utility,Medium,2025-12-18 01:24:00,2025-12-18 04:49:00,No,No further action required.,IoT Device
+ALT00090,Eastern Water Utility,Critical,2025-12-25 21:08:00,2025-12-26 00:10:00,Yes,Closed as per standard procedure.,IoT Device
+ALT00091,Eastern Water Utility,Low,2025-12-21 18:45:00,2025-12-21 21:16:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00092,Eastern Water Utility,Medium,2025-11-30 17:37:00,2025-11-30 20:35:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00093,Eastern Water Utility,Medium,2025-11-03 05:48:00,2025-11-03 08:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00094,Eastern Water Utility,Low,2025-11-17 12:42:00,2025-11-17 16:06:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00095,Eastern Water Utility,Medium,2025-12-09 07:14:00,2025-12-09 10:02:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00096,Eastern Water Utility,Low,2025-10-01 14:33:00,2025-10-01 17:22:00,No,Closed as per standard procedure.,Network Device
+ALT00097,Eastern Water Utility,High,2025-10-27 10:48:00,2025-10-27 13:26:00,No,False positive.,Database
+ALT00098,Eastern Water Utility,Low,2025-11-01 10:43:00,2025-11-01 13:17:00,No,False positive.,Network Device
+ALT00099,Eastern Water Utility,Low,2025-12-27 08:44:00,2025-12-27 11:50:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00001,Indus Financial Services,High,2025-10-16 17:42:00,2025-10-16 20:33:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00002,Indus Financial Services,High,2025-10-28 01:48:00,2025-10-28 01:49:00,No,False positive.,Server
+ALT00003,Indus Financial Services,Low,2025-11-16 06:40:00,2025-11-16 09:13:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00004,Indus Financial Services,Critical,2025-11-28 12:23:00,2025-11-28 12:27:00,Yes,No further action required.,Endpoint
+ALT00005,Indus Financial Services,Low,2025-10-31 18:17:00,2025-10-31 21:06:00,No,Reviewed and closed.,Network Device
+ALT00006,Indus Financial Services,Low,2025-12-05 05:57:00,2025-12-05 09:03:00,No,False positive.,Network Device
+ALT00007,Indus Financial Services,Medium,2025-12-12 10:34:00,2025-12-12 13:44:00,No,No further action required.,Server
+ALT00008,Indus Financial Services,Low,2025-10-06 05:20:00,2025-10-06 08:35:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00009,Indus Financial Services,Low,2025-12-02 20:09:00,2025-12-02 23:35:00,Yes,No further action required.,Cloud Workload
+ALT00010,Indus Financial Services,Low,2025-12-23 19:39:00,2025-12-23 23:01:00,No,No further action required.,Endpoint
+ALT00011,Indus Financial Services,Low,2025-10-22 17:08:00,2025-10-22 20:25:00,No,No further action required.,Database
+ALT00012,Indus Financial Services,Low,2025-12-10 05:54:00,2025-12-10 08:54:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00013,Indus Financial Services,Medium,2025-12-26 10:06:00,2025-12-26 13:01:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00014,Indus Financial Services,High,2025-11-11 03:02:00,2025-11-11 05:54:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00015,Indus Financial Services,Low,2025-11-11 14:32:00,2025-11-11 17:16:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00016,Indus Financial Services,Medium,2025-10-28 03:19:00,2025-10-28 05:59:00,Yes,No further action required.,IoT Device
+ALT00017,Indus Financial Services,Medium,2025-10-20 06:40:00,2025-10-20 09:22:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00018,Indus Financial Services,Low,2025-12-22 02:39:00,2025-12-22 05:36:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00019,Indus Financial Services,High,2025-11-20 05:01:00,2025-11-20 05:02:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00020,Indus Financial Services,Low,2025-12-04 02:50:00,2025-12-04 05:38:00,No,Closed as per standard procedure.,Network Device
+ALT00021,Indus Financial Services,Low,2025-12-23 21:58:00,2025-12-24 00:46:00,No,False positive.,Endpoint
+ALT00022,Indus Financial Services,Low,2025-10-23 17:46:00,2025-10-23 20:38:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00023,Indus Financial Services,Low,2025-10-20 20:43:00,2025-10-20 23:14:00,No,Reviewed and closed.,Database
+ALT00024,Indus Financial Services,Low,2025-11-10 14:57:00,2025-11-10 18:06:00,Yes,Reviewed and closed.,Endpoint
+ALT00025,Indus Financial Services,Critical,2025-12-16 12:54:00,2025-12-16 15:35:00,Yes,No further action required.,Server
+ALT00026,Indus Financial Services,Low,2025-11-19 08:52:00,2025-11-19 11:53:00,Yes,No further action required.,Endpoint
+ALT00027,Indus Financial Services,Critical,2025-10-16 14:05:00,2025-10-16 14:07:00,Yes,False positive.,Cloud Workload
+ALT00028,Indus Financial Services,Low,2025-10-22 20:04:00,2025-10-22 22:49:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00029,Indus Financial Services,High,2025-11-27 03:45:00,2025-11-27 07:15:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00030,Indus Financial Services,Medium,2025-10-26 16:12:00,2025-10-26 19:40:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00031,Indus Financial Services,Low,2025-11-13 21:59:00,2025-11-14 01:08:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00032,Indus Financial Services,Medium,2025-11-14 04:37:00,2025-11-14 07:46:00,No,No further action required.,Endpoint
+ALT00033,Indus Financial Services,Low,2025-10-16 11:27:00,2025-10-16 14:50:00,Yes,False positive.,Endpoint
+ALT00034,Indus Financial Services,Medium,2025-11-27 22:00:00,2025-11-28 01:23:00,No,Reviewed and closed.,Endpoint
+ALT00035,Indus Financial Services,Critical,2025-11-19 09:49:00,2025-11-19 12:48:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00036,Indus Financial Services,Medium,2025-12-28 17:08:00,2025-12-28 20:37:00,No,Closed as per standard procedure.,Network Device
+ALT00037,Indus Financial Services,Medium,2025-12-29 09:02:00,2025-12-29 11:46:00,No,Closed as per standard procedure.,Database
+ALT00038,Indus Financial Services,Medium,2025-11-05 16:02:00,2025-11-05 19:04:00,No,Closed as per standard procedure.,Server
+ALT00039,Indus Financial Services,Medium,2025-12-24 10:10:00,2025-12-24 13:23:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00040,Indus Financial Services,High,2025-11-18 18:45:00,2025-11-18 18:48:00,No,Closed as per standard procedure.,Server
+ALT00041,Indus Financial Services,Critical,2025-10-27 07:09:00,2025-10-27 10:03:00,No,False positive.,Endpoint
+ALT00042,Indus Financial Services,High,2025-12-05 10:51:00,2025-12-05 13:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00043,Indus Financial Services,Medium,2025-12-17 03:08:00,2025-12-17 05:44:00,No,No further action required.,Cloud Workload
+ALT00044,Indus Financial Services,High,2025-11-09 20:57:00,2025-11-09 23:45:00,Yes,No further action required.,Server
+ALT00045,Indus Financial Services,Critical,2025-12-28 11:43:00,2025-12-28 11:47:00,Yes,False positive.,Server
+ALT00046,Indus Financial Services,Low,2025-10-06 07:38:00,2025-10-06 10:28:00,No,False positive.,Cloud Workload
+ALT00047,Indus Financial Services,High,2025-12-05 17:14:00,2025-12-05 17:15:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00048,Indus Financial Services,High,2025-10-19 12:11:00,2025-10-19 12:15:00,No,False positive.,Endpoint
+ALT00049,Indus Financial Services,Low,2025-11-29 22:47:00,2025-11-30 02:04:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00050,Indus Financial Services,Low,2025-10-28 17:42:00,2025-10-28 20:30:00,Yes,No further action required.,Network Device
+ALT00051,Indus Financial Services,Medium,2025-12-19 09:13:00,2025-12-19 11:53:00,No,Reviewed and closed.,Cloud Workload
+ALT00052,Indus Financial Services,Medium,2025-10-09 07:01:00,2025-10-09 10:04:00,No,No further action required.,Network Device
+ALT00053,Indus Financial Services,Medium,2025-12-26 10:00:00,2025-12-26 12:35:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00054,Indus Financial Services,Critical,2025-10-02 02:00:00,2025-10-02 04:41:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00055,Indus Financial Services,Low,2025-11-12 11:35:00,2025-11-12 14:48:00,No,False positive.,Endpoint
+ALT00056,Indus Financial Services,Low,2025-10-08 02:05:00,2025-10-08 05:02:00,No,False positive.,Network Device
+ALT00057,Indus Financial Services,Critical,2025-12-02 10:14:00,2025-12-02 10:17:00,Yes,Reviewed and closed.,Server
+ALT00058,Indus Financial Services,Medium,2025-11-03 22:03:00,2025-11-04 00:33:00,No,No further action required.,Endpoint
+ALT00059,Indus Financial Services,Low,2025-11-13 12:34:00,2025-11-13 15:13:00,No,Closed as per standard procedure.,Endpoint
+ALT00060,Indus Financial Services,Low,2025-12-23 01:17:00,2025-12-23 03:52:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00061,Indus Financial Services,Low,2025-10-26 21:18:00,2025-10-27 00:13:00,No,Closed as per standard procedure.,IoT Device
+ALT00062,Indus Financial Services,Medium,2025-12-19 21:05:00,2025-12-19 23:37:00,No,No further action required.,Cloud Workload
+ALT00001,Fortis Defense Systems,High,2025-10-05 12:41:00,2025-10-05 15:23:00,Yes,False positive.,Database
+ALT00002,Fortis Defense Systems,Low,2025-10-05 23:57:00,2025-10-06 03:21:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00003,Fortis Defense Systems,Low,2025-12-29 13:07:00,2025-12-29 16:05:00,Yes,No further action required.,Network Device
+ALT00004,Fortis Defense Systems,High,2025-10-02 03:55:00,2025-10-02 07:04:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00005,Fortis Defense Systems,Low,2025-11-05 09:53:00,2025-11-05 12:29:00,No,Closed as per standard procedure.,Endpoint
+ALT00006,Fortis Defense Systems,Low,2025-12-31 07:08:00,2025-12-31 10:37:00,Yes,No further action required.,Database
+ALT00007,Fortis Defense Systems,Low,2025-10-18 18:24:00,2025-10-18 21:39:00,Yes,False positive.,Cloud Workload
+ALT00008,Fortis Defense Systems,Low,2025-11-14 13:54:00,2025-11-14 16:58:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00009,Fortis Defense Systems,Medium,2025-12-03 10:03:00,2025-12-03 12:35:00,No,Reviewed and closed.,Cloud Workload
+ALT00010,Fortis Defense Systems,High,2025-11-27 12:19:00,2025-11-27 15:31:00,No,Closed as per standard procedure.,Network Device
+ALT00011,Fortis Defense Systems,Medium,2025-10-31 01:06:00,2025-10-31 03:50:00,No,No further action required.,IoT Device
+ALT00012,Fortis Defense Systems,High,2025-11-18 22:07:00,2025-11-19 00:39:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00013,Fortis Defense Systems,Low,2025-12-10 00:40:00,2025-12-10 03:13:00,No,False positive.,IoT Device
+ALT00014,Fortis Defense Systems,Medium,2025-12-03 18:35:00,2025-12-03 21:45:00,No,Closed as per standard procedure.,Network Device
+ALT00015,Fortis Defense Systems,Medium,2025-10-16 13:34:00,2025-10-16 17:01:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00016,Fortis Defense Systems,Medium,2025-11-29 02:24:00,2025-11-29 05:17:00,No,False positive.,Server
+ALT00017,Fortis Defense Systems,Medium,2025-10-26 20:33:00,2025-10-26 23:21:00,No,No further action required.,Server
+ALT00018,Fortis Defense Systems,Low,2025-10-03 05:46:00,2025-10-03 09:08:00,Yes,False positive.,Database
+ALT00019,Fortis Defense Systems,Low,2025-12-01 08:02:00,2025-12-01 11:30:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00020,Fortis Defense Systems,Low,2025-10-10 22:08:00,2025-10-11 00:41:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00021,Fortis Defense Systems,Low,2025-12-01 10:53:00,2025-12-01 14:14:00,No,No further action required.,IoT Device
+ALT00022,Fortis Defense Systems,Low,2025-11-07 21:44:00,2025-11-08 00:56:00,No,Reviewed and closed.,Cloud Workload
+ALT00023,Fortis Defense Systems,Critical,2025-11-22 22:03:00,2025-11-23 01:03:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00024,Fortis Defense Systems,Low,2025-10-12 08:20:00,2025-10-12 11:44:00,No,Closed as per standard procedure.,Database
+ALT00025,Fortis Defense Systems,Low,2025-11-22 20:28:00,2025-11-22 23:57:00,No,No further action required.,IoT Device
+ALT00026,Fortis Defense Systems,Critical,2025-11-01 06:38:00,2025-11-01 09:21:00,No,Reviewed and closed.,IoT Device
+ALT00027,Fortis Defense Systems,Critical,2025-10-23 20:58:00,2025-10-24 00:11:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00028,Fortis Defense Systems,Low,2025-10-27 11:30:00,2025-10-27 14:41:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00029,Fortis Defense Systems,Medium,2025-11-16 01:12:00,2025-11-16 04:05:00,No,Closed as per standard procedure.,Database
+ALT00030,Fortis Defense Systems,Low,2025-10-04 00:03:00,2025-10-04 03:25:00,No,No further action required.,Network Device
+ALT00031,Fortis Defense Systems,Medium,2025-12-10 05:50:00,2025-12-10 08:52:00,No,Reviewed and closed.,Database
+ALT00032,Fortis Defense Systems,Medium,2025-11-15 02:16:00,2025-11-15 05:15:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00033,Fortis Defense Systems,Critical,2025-12-26 02:25:00,2025-12-26 05:45:00,No,Closed as per standard procedure.,IoT Device
+ALT00034,Fortis Defense Systems,Low,2025-11-30 10:57:00,2025-11-30 14:23:00,No,False positive.,Endpoint
+ALT00035,Fortis Defense Systems,High,2025-12-19 23:52:00,2025-12-20 02:38:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00036,Fortis Defense Systems,Critical,2025-12-18 17:23:00,2025-12-18 20:06:00,No,False positive.,Network Device
+ALT00037,Fortis Defense Systems,Critical,2025-10-18 20:56:00,2025-10-18 23:34:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00038,Fortis Defense Systems,High,2025-11-09 16:33:00,2025-11-09 19:41:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00039,Fortis Defense Systems,Medium,2025-11-09 03:12:00,2025-11-09 06:24:00,No,No further action required.,Cloud Workload
+ALT00040,Fortis Defense Systems,Critical,2025-11-18 02:54:00,2025-11-18 05:51:00,No,Reviewed and closed.,Database
+ALT00041,Fortis Defense Systems,Medium,2025-12-18 10:41:00,2025-12-18 13:29:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00042,Fortis Defense Systems,Medium,2025-10-21 23:44:00,2025-10-22 02:42:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00043,Fortis Defense Systems,Low,2025-12-29 12:13:00,2025-12-29 15:21:00,Yes,Reviewed and closed.,Network Device
+ALT00044,Fortis Defense Systems,Medium,2025-11-01 15:15:00,2025-11-01 18:13:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00045,Fortis Defense Systems,Critical,2025-10-23 09:44:00,2025-10-23 13:07:00,No,False positive.,Cloud Workload
+ALT00046,Fortis Defense Systems,High,2025-11-23 08:21:00,2025-11-23 11:16:00,Yes,False positive.,Server
+ALT00047,Fortis Defense Systems,Low,2025-12-27 18:59:00,2025-12-27 21:41:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00048,Fortis Defense Systems,Low,2025-11-10 08:08:00,2025-11-10 10:51:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00049,Fortis Defense Systems,Low,2025-12-14 12:31:00,2025-12-14 15:01:00,No,False positive.,IoT Device
+ALT00050,Fortis Defense Systems,Medium,2025-12-28 07:51:00,2025-12-28 10:56:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00051,Fortis Defense Systems,Medium,2025-10-29 01:57:00,2025-10-29 04:47:00,No,Closed as per standard procedure.,IoT Device
+ALT00052,Fortis Defense Systems,Critical,2025-11-19 09:13:00,2025-11-19 12:26:00,No,Closed as per standard procedure.,Server
+ALT00053,Fortis Defense Systems,High,2025-12-04 12:02:00,2025-12-04 15:01:00,No,Reviewed and closed.,Database
+ALT00054,Fortis Defense Systems,Medium,2025-10-09 22:37:00,2025-10-10 01:10:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00055,Fortis Defense Systems,Critical,2025-10-31 18:04:00,2025-10-31 21:20:00,No,Reviewed and closed.,Cloud Workload
+ALT00056,Fortis Defense Systems,Low,2025-11-02 08:39:00,2025-11-02 11:20:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00057,Fortis Defense Systems,High,2025-10-03 07:44:00,2025-10-03 11:14:00,No,Closed as per standard procedure.,Endpoint
+ALT00058,Fortis Defense Systems,Low,2025-10-30 22:01:00,2025-10-31 00:48:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00059,Fortis Defense Systems,Critical,2025-11-29 13:25:00,2025-11-29 16:49:00,No,False positive.,Endpoint
+ALT00060,Fortis Defense Systems,High,2025-11-11 05:19:00,2025-11-11 08:01:00,No,No further action required.,Network Device
+ALT00061,Fortis Defense Systems,High,2025-11-18 15:05:00,2025-11-18 17:45:00,No,No further action required.,Database
+ALT00062,Fortis Defense Systems,Low,2025-10-10 10:29:00,2025-10-10 13:00:00,No,False positive.,Server
+ALT00063,Fortis Defense Systems,Low,2025-10-26 20:09:00,2025-10-26 22:50:00,No,No further action required.,Database
+ALT00064,Fortis Defense Systems,Critical,2025-10-21 13:59:00,2025-10-21 17:01:00,Yes,No further action required.,Network Device
+ALT00065,Fortis Defense Systems,Low,2025-11-30 14:20:00,2025-11-30 17:50:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00066,Fortis Defense Systems,High,2025-10-11 07:23:00,2025-10-11 10:20:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00067,Fortis Defense Systems,High,2025-11-20 22:22:00,2025-11-21 01:03:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00068,Fortis Defense Systems,Low,2025-12-26 07:33:00,2025-12-26 10:37:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00069,Fortis Defense Systems,Low,2025-11-01 11:58:00,2025-11-01 14:53:00,Yes,Closed as per standard procedure.,Network Device
+ALT00070,Fortis Defense Systems,High,2025-10-08 14:32:00,2025-10-08 18:01:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00071,Fortis Defense Systems,Low,2025-11-29 04:59:00,2025-11-29 07:50:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00072,Fortis Defense Systems,Low,2025-10-29 17:45:00,2025-10-29 21:07:00,No,No further action required.,Network Device
+ALT00073,Fortis Defense Systems,Low,2025-11-14 15:29:00,2025-11-14 18:53:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00074,Fortis Defense Systems,Medium,2025-11-28 18:10:00,2025-11-28 21:01:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00075,Fortis Defense Systems,Critical,2025-11-24 08:22:00,2025-11-24 11:51:00,No,False positive.,Endpoint
+ALT00076,Fortis Defense Systems,Low,2025-12-10 06:21:00,2025-12-10 09:36:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00077,Fortis Defense Systems,High,2025-10-12 23:59:00,2025-10-13 02:59:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00078,Fortis Defense Systems,Medium,2025-10-07 01:08:00,2025-10-07 03:47:00,No,No further action required.,IoT Device
+ALT00079,Fortis Defense Systems,Critical,2025-10-25 21:58:00,2025-10-26 00:38:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00080,Fortis Defense Systems,Low,2025-11-09 00:47:00,2025-11-09 04:05:00,No,No further action required.,IoT Device
+ALT00081,Fortis Defense Systems,Medium,2025-11-28 12:38:00,2025-11-28 15:31:00,Yes,Reviewed and closed.,Network Device
+ALT00082,Fortis Defense Systems,High,2025-11-20 04:46:00,2025-11-20 07:18:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00083,Fortis Defense Systems,Low,2025-11-15 14:15:00,2025-11-15 16:53:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00084,Fortis Defense Systems,High,2025-11-22 21:52:00,2025-11-23 01:14:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00085,Fortis Defense Systems,High,2025-11-06 16:07:00,2025-11-06 19:16:00,Yes,Reviewed and closed.,Server
+ALT00086,Fortis Defense Systems,Low,2025-11-18 03:49:00,2025-11-18 06:43:00,No,No further action required.,Network Device
+ALT00087,Fortis Defense Systems,High,2025-10-24 05:15:00,2025-10-24 08:28:00,No,Closed as per standard procedure.,Server
+ALT00088,Fortis Defense Systems,Low,2025-11-18 00:41:00,2025-11-18 03:52:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00089,Fortis Defense Systems,Low,2025-11-15 23:09:00,2025-11-16 02:20:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00090,Fortis Defense Systems,Low,2025-10-28 06:56:00,2025-10-28 09:36:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00091,Fortis Defense Systems,High,2025-12-12 02:53:00,2025-12-12 05:29:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00092,Fortis Defense Systems,Medium,2025-12-16 23:10:00,2025-12-17 02:08:00,No,Reviewed and closed.,Database
+ALT00093,Fortis Defense Systems,Medium,2025-11-11 20:19:00,2025-11-11 23:31:00,No,Reviewed and closed.,Server
+ALT00094,Fortis Defense Systems,High,2025-10-13 18:29:00,2025-10-13 21:17:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00095,Fortis Defense Systems,High,2025-12-10 00:53:00,2025-12-10 04:11:00,No,False positive.,Server
+ALT00001,Ganga Oil & Gas,Medium,2025-10-14 15:14:00,2025-10-14 18:32:00,No,Reviewed and closed.,Server
+ALT00002,Ganga Oil & Gas,High,2025-10-12 17:25:00,2025-10-12 19:59:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00003,Ganga Oil & Gas,Medium,2025-11-30 02:36:00,2025-11-30 05:33:00,No,Closed as per standard procedure.,Server
+ALT00004,Ganga Oil & Gas,High,2025-12-10 17:03:00,2025-12-10 19:46:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00005,Ganga Oil & Gas,Medium,2025-10-25 21:31:00,2025-10-26 00:07:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00006,Ganga Oil & Gas,High,2025-10-18 23:23:00,2025-10-19 02:03:00,Yes,Reviewed and closed.,Server
+ALT00007,Ganga Oil & Gas,Low,2025-10-09 17:40:00,2025-10-09 20:50:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00008,Ganga Oil & Gas,High,2025-12-27 23:21:00,2025-12-28 01:58:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00009,Ganga Oil & Gas,High,2025-12-21 07:23:00,2025-12-21 10:46:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00010,Ganga Oil & Gas,Low,2025-12-04 16:55:00,2025-12-04 19:51:00,Yes,No further action required.,Network Device
+ALT00011,Ganga Oil & Gas,Medium,2025-10-24 15:31:00,2025-10-24 18:30:00,Yes,Reviewed and closed.,IoT Device
+ALT00012,Ganga Oil & Gas,Low,2025-10-29 07:53:00,2025-10-29 10:47:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00013,Ganga Oil & Gas,Low,2025-12-05 21:19:00,2025-12-06 00:16:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00014,Ganga Oil & Gas,Critical,2025-12-06 11:54:00,2025-12-06 15:15:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00015,Ganga Oil & Gas,Critical,2025-11-05 16:07:00,2025-11-05 19:00:00,No,Reviewed and closed.,Server
+ALT00016,Ganga Oil & Gas,Critical,2025-10-01 19:53:00,2025-10-01 22:56:00,No,Closed as per standard procedure.,Network Device
+ALT00017,Ganga Oil & Gas,Medium,2025-12-28 08:30:00,2025-12-28 11:07:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00018,Ganga Oil & Gas,Low,2025-10-12 18:01:00,2025-10-12 20:36:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00019,Ganga Oil & Gas,Medium,2025-11-28 09:06:00,2025-11-28 11:43:00,No,Reviewed and closed.,Database
+ALT00020,Ganga Oil & Gas,Low,2025-11-21 04:04:00,2025-11-21 07:01:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00021,Ganga Oil & Gas,Critical,2025-11-28 09:01:00,2025-11-28 11:44:00,Yes,Reviewed and closed.,Endpoint
+ALT00022,Ganga Oil & Gas,Low,2025-12-11 17:06:00,2025-12-11 20:23:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00023,Ganga Oil & Gas,High,2025-10-01 01:30:00,2025-10-01 04:49:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00024,Ganga Oil & Gas,Medium,2025-11-08 11:13:00,2025-11-08 14:41:00,No,No further action required.,Endpoint
+ALT00025,Ganga Oil & Gas,Low,2025-11-05 03:27:00,2025-11-05 06:41:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00026,Ganga Oil & Gas,Low,2025-10-21 09:45:00,2025-10-21 12:49:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00027,Ganga Oil & Gas,Low,2025-11-23 05:04:00,2025-11-23 07:46:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00028,Ganga Oil & Gas,High,2025-12-10 19:57:00,2025-12-10 22:55:00,Yes,No further action required.,Database
+ALT00029,Ganga Oil & Gas,Low,2025-10-04 19:55:00,2025-10-04 23:06:00,No,False positive.,Cloud Workload
+ALT00030,Ganga Oil & Gas,Low,2025-12-31 21:22:00,2025-12-31 23:59:59,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00031,Ganga Oil & Gas,Medium,2025-12-18 07:48:00,2025-12-18 10:40:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00032,Ganga Oil & Gas,Low,2025-10-19 18:11:00,2025-10-19 21:18:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00033,Ganga Oil & Gas,Critical,2025-11-15 13:19:00,2025-11-15 16:10:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00034,Ganga Oil & Gas,Low,2025-11-08 21:18:00,2025-11-09 00:21:00,Yes,Closed as per standard procedure.,Server
+ALT00035,Ganga Oil & Gas,High,2025-12-05 05:14:00,2025-12-05 08:18:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00036,Ganga Oil & Gas,Low,2025-10-15 06:17:00,2025-10-15 09:37:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00037,Ganga Oil & Gas,Low,2025-11-23 04:39:00,2025-11-23 08:08:00,No,False positive.,Cloud Workload
+ALT00038,Ganga Oil & Gas,Low,2025-12-20 06:07:00,2025-12-20 09:05:00,No,Closed as per standard procedure.,Endpoint
+ALT00039,Ganga Oil & Gas,Low,2025-10-01 13:09:00,2025-10-01 16:13:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00040,Ganga Oil & Gas,Medium,2025-11-11 15:11:00,2025-11-11 18:32:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00041,Ganga Oil & Gas,Low,2025-11-21 22:51:00,2025-11-22 01:27:00,No,Closed as per standard procedure.,Server
+ALT00042,Ganga Oil & Gas,Low,2025-10-09 04:41:00,2025-10-09 08:10:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00043,Ganga Oil & Gas,Low,2025-11-28 22:59:00,2025-11-29 02:09:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00044,Ganga Oil & Gas,Medium,2025-12-26 08:56:00,2025-12-26 11:51:00,No,Reviewed and closed.,Endpoint
+ALT00045,Ganga Oil & Gas,Critical,2025-12-14 23:57:00,2025-12-15 03:23:00,No,Reviewed and closed.,Endpoint
+ALT00046,Ganga Oil & Gas,Low,2025-12-07 19:12:00,2025-12-07 22:21:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00047,Ganga Oil & Gas,High,2025-10-14 12:07:00,2025-10-14 14:44:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00048,Ganga Oil & Gas,Critical,2025-12-28 05:41:00,2025-12-28 08:27:00,Yes,Reviewed and closed.,Database
+ALT00049,Ganga Oil & Gas,High,2025-10-10 17:06:00,2025-10-10 20:16:00,Yes,False positive.,Endpoint
+ALT00050,Ganga Oil & Gas,Low,2025-11-30 19:37:00,2025-11-30 22:39:00,No,Closed as per standard procedure.,IoT Device
+ALT00051,Ganga Oil & Gas,Low,2025-10-01 14:30:00,2025-10-01 17:57:00,No,No further action required.,IoT Device
+ALT00052,Ganga Oil & Gas,Medium,2025-11-21 04:48:00,2025-11-21 07:41:00,No,Reviewed and closed.,Server
+ALT00053,Ganga Oil & Gas,Medium,2025-10-20 09:32:00,2025-10-20 12:42:00,No,No further action required.,Server
+ALT00054,Ganga Oil & Gas,Medium,2025-10-16 00:00:00,2025-10-16 02:35:00,No,False positive.,Server
+ALT00055,Ganga Oil & Gas,Medium,2025-10-14 13:51:00,2025-10-14 16:22:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00056,Ganga Oil & Gas,High,2025-11-20 02:39:00,2025-11-20 05:31:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00057,Ganga Oil & Gas,Low,2025-12-12 02:23:00,2025-12-12 05:32:00,Yes,No further action required.,Endpoint
+ALT00058,Ganga Oil & Gas,Critical,2025-11-28 17:09:00,2025-11-28 20:01:00,No,Reviewed and closed.,IoT Device
+ALT00059,Ganga Oil & Gas,Low,2025-12-27 21:51:00,2025-12-28 00:29:00,No,False positive.,Database
+ALT00060,Ganga Oil & Gas,Medium,2025-12-14 02:59:00,2025-12-14 06:18:00,No,False positive.,Network Device
+ALT00061,Ganga Oil & Gas,High,2025-12-07 15:07:00,2025-12-07 17:58:00,Yes,Closed as per standard procedure.,Endpoint
+ALT00062,Ganga Oil & Gas,High,2025-10-14 01:35:00,2025-10-14 04:06:00,Yes,Reviewed and closed.,Cloud Workload
+ALT00063,Ganga Oil & Gas,High,2025-11-24 23:46:00,2025-11-25 02:31:00,Yes,No further action required.,Server
+ALT00064,Ganga Oil & Gas,Low,2025-12-28 20:24:00,2025-12-28 23:44:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00065,Ganga Oil & Gas,Medium,2025-10-19 10:06:00,2025-10-19 13:00:00,Yes,False positive.,Endpoint
+ALT00066,Ganga Oil & Gas,Low,2025-10-29 17:05:00,2025-10-29 19:40:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00067,Ganga Oil & Gas,Medium,2025-11-20 12:15:00,2025-11-20 15:17:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00068,Ganga Oil & Gas,Low,2025-11-11 17:39:00,2025-11-11 20:47:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00069,Ganga Oil & Gas,High,2025-11-17 11:31:00,2025-11-17 14:43:00,Yes,No further action required.,Endpoint
+ALT00070,Ganga Oil & Gas,Critical,2025-10-29 17:39:00,2025-10-29 20:15:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00071,Ganga Oil & Gas,Medium,2025-11-30 16:17:00,2025-11-30 18:47:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00072,Ganga Oil & Gas,Medium,2025-10-27 15:51:00,2025-10-27 18:41:00,No,No further action required.,IoT Device
+ALT00073,Ganga Oil & Gas,Low,2025-11-05 10:56:00,2025-11-05 14:00:00,No,False positive.,Server
+ALT00074,Ganga Oil & Gas,High,2025-12-29 04:06:00,2025-12-29 07:34:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00075,Ganga Oil & Gas,High,2025-11-19 19:45:00,2025-11-19 22:19:00,Yes,Reviewed and closed.,IoT Device
+ALT00076,Ganga Oil & Gas,High,2025-12-05 14:19:00,2025-12-05 17:29:00,Yes,No further action required.,IoT Device
+ALT00077,Ganga Oil & Gas,Low,2025-12-23 04:00:00,2025-12-23 06:54:00,No,No further action required.,Endpoint
+ALT00078,Ganga Oil & Gas,Medium,2025-10-07 23:47:00,2025-10-08 02:34:00,No,Reviewed and closed.,Cloud Workload
+ALT00079,Ganga Oil & Gas,Low,2025-10-21 17:52:00,2025-10-21 21:05:00,No,Reviewed and closed.,Endpoint
+ALT00080,Ganga Oil & Gas,Medium,2025-12-24 11:58:00,2025-12-24 15:26:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00081,Ganga Oil & Gas,High,2025-11-11 11:15:00,2025-11-11 14:34:00,Yes,False positive.,Database
+ALT00082,Ganga Oil & Gas,Low,2025-10-21 15:58:00,2025-10-21 19:02:00,No,False positive.,Endpoint
+ALT00083,Ganga Oil & Gas,Low,2025-12-16 20:06:00,2025-12-16 23:04:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00084,Ganga Oil & Gas,Medium,2025-10-01 05:04:00,2025-10-01 08:17:00,No,False positive.,Endpoint
+ALT00085,Ganga Oil & Gas,Medium,2025-10-06 04:13:00,2025-10-06 06:58:00,No,No further action required.,Database
+ALT00086,Ganga Oil & Gas,Low,2025-11-20 03:35:00,2025-11-20 06:22:00,No,False positive.,IoT Device
+ALT00087,Ganga Oil & Gas,Low,2025-12-15 16:05:00,2025-12-15 18:48:00,No,Reviewed and closed.,IoT Device
+ALT00001,Bharat Telecom Networks,Medium,2025-11-16 19:27:00,2025-11-16 22:48:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00002,Bharat Telecom Networks,Critical,2025-12-09 02:19:00,2025-12-09 05:16:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00003,Bharat Telecom Networks,High,2025-12-08 10:02:00,2025-12-08 13:29:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00004,Bharat Telecom Networks,Low,2025-11-21 08:33:00,2025-11-21 11:42:00,No,False positive.,IoT Device
+ALT00005,Bharat Telecom Networks,High,2025-10-17 23:18:00,2025-10-18 02:12:00,Yes,Reviewed and closed.,Cloud Workload
+ALT00006,Bharat Telecom Networks,Low,2025-11-22 16:58:00,2025-11-22 19:36:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00007,Bharat Telecom Networks,High,2025-11-28 15:29:00,2025-11-28 18:38:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00008,Bharat Telecom Networks,Low,2025-10-23 02:34:00,2025-10-23 05:32:00,Yes,No further action required.,Database
+ALT00009,Bharat Telecom Networks,Medium,2025-12-12 17:44:00,2025-12-12 20:38:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00010,Bharat Telecom Networks,Low,2025-12-15 11:56:00,2025-12-15 15:01:00,No,Reviewed and closed.,Endpoint
+ALT00011,Bharat Telecom Networks,High,2025-10-10 16:29:00,2025-10-10 19:28:00,Yes,Closed as per standard procedure.,Database
+ALT00012,Bharat Telecom Networks,Low,2025-12-12 02:54:00,2025-12-12 05:51:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00013,Bharat Telecom Networks,Medium,2025-11-12 17:02:00,2025-11-12 19:50:00,Yes,Reviewed and closed.,Network Device
+ALT00014,Bharat Telecom Networks,Low,2025-12-21 02:47:00,2025-12-21 05:30:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00015,Bharat Telecom Networks,High,2025-12-29 21:11:00,2025-12-30 00:41:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00016,Bharat Telecom Networks,Critical,2025-11-06 06:48:00,2025-11-06 09:53:00,No,No further action required.,Network Device
+ALT00017,Bharat Telecom Networks,Low,2025-11-02 22:22:00,2025-11-03 01:28:00,No,Reviewed and closed.,Endpoint
+ALT00018,Bharat Telecom Networks,High,2025-12-07 06:00:00,2025-12-07 09:05:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00019,Bharat Telecom Networks,Medium,2025-11-01 13:26:00,2025-11-01 16:41:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00020,Bharat Telecom Networks,Medium,2025-11-05 19:03:00,2025-11-05 22:25:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00021,Bharat Telecom Networks,Critical,2025-10-08 13:18:00,2025-10-08 16:23:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00022,Bharat Telecom Networks,Medium,2025-12-14 05:39:00,2025-12-14 08:16:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00023,Bharat Telecom Networks,Critical,2025-11-08 02:10:00,2025-11-08 05:00:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00024,Bharat Telecom Networks,Medium,2025-11-12 15:33:00,2025-11-12 18:27:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00025,Bharat Telecom Networks,Low,2025-12-15 02:49:00,2025-12-15 05:20:00,No,False positive.,Endpoint
+ALT00026,Bharat Telecom Networks,Medium,2025-11-09 00:53:00,2025-11-09 04:11:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00027,Bharat Telecom Networks,High,2025-12-16 11:50:00,2025-12-16 15:17:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00028,Bharat Telecom Networks,Low,2025-11-14 06:10:00,2025-11-14 09:02:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00029,Bharat Telecom Networks,Critical,2025-12-25 14:21:00,2025-12-25 17:20:00,Yes,False positive.,IoT Device
+ALT00030,Bharat Telecom Networks,High,2025-12-19 03:29:00,2025-12-19 06:54:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00031,Bharat Telecom Networks,Critical,2025-12-14 06:04:00,2025-12-14 08:44:00,Yes,No further action required.,Endpoint
+ALT00032,Bharat Telecom Networks,Low,2025-12-02 07:01:00,2025-12-02 09:43:00,No,False positive.,Cloud Workload
+ALT00033,Bharat Telecom Networks,Medium,2025-11-11 10:48:00,2025-11-11 13:30:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00034,Bharat Telecom Networks,Low,2025-10-17 07:25:00,2025-10-17 10:06:00,No,Closed as per standard procedure.,Database
+ALT00035,Bharat Telecom Networks,Low,2025-10-27 13:30:00,2025-10-27 16:10:00,No,Closed as per standard procedure.,Server
+ALT00036,Bharat Telecom Networks,High,2025-11-20 09:28:00,2025-11-20 12:24:00,No,Reviewed and closed.,Database
+ALT00037,Bharat Telecom Networks,Low,2025-10-18 14:37:00,2025-10-18 17:30:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00038,Bharat Telecom Networks,Medium,2025-11-29 20:43:00,2025-11-29 23:26:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00039,Bharat Telecom Networks,Low,2025-10-16 08:50:00,2025-10-16 12:07:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00040,Bharat Telecom Networks,Medium,2025-11-26 14:31:00,2025-11-26 17:39:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00041,Bharat Telecom Networks,Medium,2025-11-25 22:30:00,2025-11-26 01:36:00,No,Reviewed and closed.,IoT Device
+ALT00042,Bharat Telecom Networks,Medium,2025-11-26 15:59:00,2025-11-26 18:45:00,No,Reviewed and closed.,Server
+ALT00043,Bharat Telecom Networks,Low,2025-10-28 07:28:00,2025-10-28 10:04:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00044,Bharat Telecom Networks,Critical,2025-11-19 13:44:00,2025-11-19 17:09:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00045,Bharat Telecom Networks,High,2025-10-08 03:08:00,2025-10-08 06:29:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00046,Bharat Telecom Networks,Low,2025-11-11 20:00:00,2025-11-11 23:16:00,No,False positive.,Cloud Workload
+ALT00047,Bharat Telecom Networks,Low,2025-10-09 04:41:00,2025-10-09 08:04:00,No,No further action required.,Endpoint
+ALT00048,Bharat Telecom Networks,Low,2025-11-06 06:57:00,2025-11-06 10:07:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00049,Bharat Telecom Networks,Medium,2025-12-26 19:27:00,2025-12-26 22:01:00,Yes,No further action required.,Cloud Workload
+ALT00050,Bharat Telecom Networks,High,2025-10-10 22:10:00,2025-10-11 00:47:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00051,Bharat Telecom Networks,Low,2025-12-24 21:10:00,2025-12-25 00:38:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00052,Bharat Telecom Networks,High,2025-11-24 22:07:00,2025-11-25 00:47:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00053,Bharat Telecom Networks,Medium,2025-10-14 08:46:00,2025-10-14 11:56:00,No,False positive.,Endpoint
+ALT00054,Bharat Telecom Networks,Critical,2025-10-16 08:10:00,2025-10-16 11:14:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00055,Bharat Telecom Networks,Medium,2025-10-07 13:53:00,2025-10-07 16:44:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00056,Bharat Telecom Networks,Low,2025-10-06 17:52:00,2025-10-06 20:54:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00057,Bharat Telecom Networks,High,2025-10-20 20:42:00,2025-10-20 23:34:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00058,Bharat Telecom Networks,Medium,2025-11-17 19:19:00,2025-11-17 22:12:00,No,False positive.,Cloud Workload
+ALT00059,Bharat Telecom Networks,Low,2025-12-28 20:30:00,2025-12-28 23:02:00,No,Reviewed and closed.,IoT Device
+ALT00060,Bharat Telecom Networks,High,2025-12-07 13:32:00,2025-12-07 16:50:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00061,Bharat Telecom Networks,Low,2025-12-02 23:24:00,2025-12-03 02:50:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00062,Bharat Telecom Networks,Medium,2025-11-18 20:06:00,2025-11-18 23:14:00,Yes,False positive.,Cloud Workload
+ALT00063,Bharat Telecom Networks,High,2025-10-06 03:17:00,2025-10-06 06:06:00,Yes,Reviewed and closed.,Network Device
+ALT00064,Bharat Telecom Networks,Low,2025-10-02 16:27:00,2025-10-02 19:09:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00065,Bharat Telecom Networks,High,2025-11-17 07:30:00,2025-11-17 10:11:00,Yes,No further action required.,Endpoint
+ALT00066,Bharat Telecom Networks,Low,2025-11-08 01:37:00,2025-11-08 05:06:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00067,Bharat Telecom Networks,High,2025-11-28 20:19:00,2025-11-28 23:25:00,Yes,Reviewed and closed.,Server
+ALT00068,Bharat Telecom Networks,High,2025-12-10 23:27:00,2025-12-11 01:57:00,Yes,Reviewed and closed.,Endpoint
+ALT00069,Bharat Telecom Networks,Low,2025-12-09 21:13:00,2025-12-10 00:39:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00070,Bharat Telecom Networks,Low,2025-12-20 00:37:00,2025-12-20 04:04:00,Yes,Reviewed and closed.,Cloud Workload
+ALT00071,Bharat Telecom Networks,Low,2025-12-09 07:44:00,2025-12-09 11:14:00,No,Reviewed and closed.,Endpoint
+ALT00072,Bharat Telecom Networks,Critical,2025-12-12 13:34:00,2025-12-12 16:23:00,No,No further action required.,Database
+ALT00073,Bharat Telecom Networks,Medium,2025-11-09 16:26:00,2025-11-09 19:09:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00074,Bharat Telecom Networks,Critical,2025-11-22 11:33:00,2025-11-22 15:00:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00075,Bharat Telecom Networks,Low,2025-10-26 08:50:00,2025-10-26 11:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00076,Bharat Telecom Networks,Medium,2025-12-03 22:36:00,2025-12-04 02:04:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00077,Bharat Telecom Networks,Low,2025-10-22 05:05:00,2025-10-22 07:46:00,No,False positive.,Endpoint
+ALT00078,Bharat Telecom Networks,Low,2025-10-25 05:25:00,2025-10-25 08:46:00,No,Reviewed and closed.,Server
+ALT00079,Bharat Telecom Networks,Low,2025-10-04 14:20:00,2025-10-04 17:18:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00080,Bharat Telecom Networks,Medium,2025-11-17 00:11:00,2025-11-17 03:39:00,No,False positive.,Database
+ALT00081,Bharat Telecom Networks,High,2025-12-22 03:18:00,2025-12-22 06:43:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00082,Bharat Telecom Networks,High,2025-11-02 15:23:00,2025-11-02 17:55:00,No,Reviewed and closed.,Cloud Workload
+ALT00083,Bharat Telecom Networks,Low,2025-12-15 00:43:00,2025-12-15 04:08:00,No,No further action required.,IoT Device
+ALT00084,Bharat Telecom Networks,Medium,2025-10-09 21:41:00,2025-10-10 00:44:00,No,Closed as per standard procedure.,Server
+ALT00085,Bharat Telecom Networks,High,2025-10-21 16:34:00,2025-10-21 19:37:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00001,Himalayan Healthcare Network,Low,2025-10-09 09:37:00,2025-10-09 13:05:00,Yes,No further action required.,Network Device
+ALT00002,Himalayan Healthcare Network,High,2025-12-02 02:08:00,2025-12-02 04:42:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00003,Himalayan Healthcare Network,Medium,2025-12-20 06:14:00,2025-12-20 09:06:00,No,No further action required.,Endpoint
+ALT00004,Himalayan Healthcare Network,Low,2025-11-30 18:36:00,2025-11-30 21:57:00,Yes,Closed as per standard procedure.,Server
+ALT00005,Himalayan Healthcare Network,Critical,2025-11-13 19:14:00,2025-11-13 21:47:00,Yes,False positive.,Cloud Workload
+ALT00006,Himalayan Healthcare Network,Low,2025-11-13 07:19:00,2025-11-13 10:04:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00007,Himalayan Healthcare Network,Medium,2025-12-13 23:00:00,2025-12-14 01:45:00,No,No further action required.,Database
+ALT00008,Himalayan Healthcare Network,Medium,2025-11-22 06:58:00,2025-11-22 09:29:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00009,Himalayan Healthcare Network,Medium,2025-10-20 03:33:00,2025-10-20 06:58:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00010,Himalayan Healthcare Network,Low,2025-11-22 11:34:00,2025-11-22 14:16:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00011,Himalayan Healthcare Network,Low,2025-10-20 17:31:00,2025-10-20 20:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00012,Himalayan Healthcare Network,Low,2025-11-10 05:08:00,2025-11-10 08:36:00,No,Reviewed and closed.,Server
+ALT00013,Himalayan Healthcare Network,High,2025-11-25 23:24:00,2025-11-26 01:59:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00014,Himalayan Healthcare Network,Medium,2025-10-26 12:16:00,2025-10-26 14:49:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00015,Himalayan Healthcare Network,Low,2025-12-29 23:41:00,2025-12-30 02:20:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00016,Himalayan Healthcare Network,High,2025-10-21 23:30:00,2025-10-22 02:59:00,Yes,False positive.,Endpoint
+ALT00017,Himalayan Healthcare Network,Low,2025-10-28 15:11:00,2025-10-28 18:09:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00018,Himalayan Healthcare Network,Critical,2025-11-06 16:00:00,2025-11-06 19:08:00,No,False positive.,Server
+ALT00019,Himalayan Healthcare Network,High,2025-10-27 21:01:00,2025-10-28 00:25:00,Yes,Reviewed and closed.,Cloud Workload
+ALT00020,Himalayan Healthcare Network,Medium,2025-10-24 23:46:00,2025-10-25 02:36:00,No,False positive.,Network Device
+ALT00021,Himalayan Healthcare Network,Medium,2025-12-22 09:52:00,2025-12-22 12:25:00,No,No further action required.,Endpoint
+ALT00022,Himalayan Healthcare Network,Low,2025-12-10 15:32:00,2025-12-10 18:23:00,No,Closed as per standard procedure.,IoT Device
+ALT00023,Himalayan Healthcare Network,Medium,2025-12-10 19:08:00,2025-12-10 21:52:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00024,Himalayan Healthcare Network,Low,2025-12-30 07:40:00,2025-12-30 10:27:00,No,No further action required.,Network Device
+ALT00025,Himalayan Healthcare Network,Medium,2025-12-12 12:58:00,2025-12-12 16:09:00,No,Reviewed and closed.,Cloud Workload
+ALT00026,Himalayan Healthcare Network,Low,2025-11-29 04:47:00,2025-11-29 07:45:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00027,Himalayan Healthcare Network,Low,2025-12-28 17:28:00,2025-12-28 20:38:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00028,Himalayan Healthcare Network,Medium,2025-12-22 13:16:00,2025-12-22 15:55:00,No,Reviewed and closed.,Endpoint
+ALT00029,Himalayan Healthcare Network,Medium,2025-12-16 14:47:00,2025-12-16 17:46:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00030,Himalayan Healthcare Network,Medium,2025-12-13 15:02:00,2025-12-13 18:29:00,No,Reviewed and closed.,Server
+ALT00031,Himalayan Healthcare Network,Medium,2025-11-30 07:05:00,2025-11-30 10:23:00,No,False positive.,Database
+ALT00032,Himalayan Healthcare Network,Low,2025-11-27 18:55:00,2025-11-27 21:33:00,Yes,No further action required.,Database
+ALT00033,Himalayan Healthcare Network,Medium,2025-11-07 14:50:00,2025-11-07 17:46:00,Yes,No further action required.,Server
+ALT00034,Himalayan Healthcare Network,Low,2025-11-14 08:02:00,2025-11-14 11:23:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00035,Himalayan Healthcare Network,Low,2025-11-01 04:10:00,2025-11-01 07:17:00,No,False positive.,Endpoint
+ALT00036,Himalayan Healthcare Network,Low,2025-12-13 20:51:00,2025-12-13 23:57:00,No,No further action required.,Database
+ALT00037,Himalayan Healthcare Network,High,2025-12-26 05:19:00,2025-12-26 08:27:00,Yes,Reviewed and closed.,Network Device
+ALT00038,Himalayan Healthcare Network,Low,2025-12-26 16:23:00,2025-12-26 19:41:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00039,Himalayan Healthcare Network,Critical,2025-11-30 08:42:00,2025-11-30 12:11:00,No,False positive.,Database
+ALT00040,Himalayan Healthcare Network,Low,2025-12-09 16:59:00,2025-12-09 20:18:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00041,Himalayan Healthcare Network,Medium,2025-10-01 10:02:00,2025-10-01 12:52:00,Yes,False positive.,Endpoint
+ALT00042,Himalayan Healthcare Network,Low,2025-10-19 04:18:00,2025-10-19 07:31:00,No,False positive.,Server
+ALT00043,Himalayan Healthcare Network,Medium,2025-11-06 05:13:00,2025-11-06 08:30:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00044,Himalayan Healthcare Network,Low,2025-10-17 22:25:00,2025-10-18 01:22:00,No,Closed as per standard procedure.,Endpoint
+ALT00045,Himalayan Healthcare Network,Low,2025-11-27 13:09:00,2025-11-27 16:04:00,No,Closed as per standard procedure.,IoT Device
+ALT00046,Himalayan Healthcare Network,Low,2025-11-07 05:42:00,2025-11-07 08:25:00,No,No further action required.,Endpoint
+ALT00047,Himalayan Healthcare Network,Low,2025-12-13 15:34:00,2025-12-13 18:11:00,No,False positive.,Database
+ALT00048,Himalayan Healthcare Network,Critical,2025-12-12 21:02:00,2025-12-12 23:56:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00049,Himalayan Healthcare Network,High,2025-10-02 07:50:00,2025-10-02 10:21:00,Yes,Reviewed and closed.,IoT Device
+ALT00050,Himalayan Healthcare Network,High,2025-10-26 13:29:00,2025-10-26 16:43:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00051,Himalayan Healthcare Network,Low,2025-11-01 11:46:00,2025-11-01 14:17:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00052,Himalayan Healthcare Network,High,2025-12-25 17:18:00,2025-12-25 19:58:00,Yes,False positive.,Server
+ALT00053,Himalayan Healthcare Network,Medium,2025-10-31 17:34:00,2025-10-31 20:14:00,No,Closed as per standard procedure.,Server
+ALT00054,Himalayan Healthcare Network,Medium,2025-11-16 15:12:00,2025-11-16 18:35:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",IoT Device
+ALT00055,Himalayan Healthcare Network,High,2025-10-09 18:07:00,2025-10-09 21:16:00,Yes,Closed as per standard procedure.,Network Device
+ALT00056,Himalayan Healthcare Network,Critical,2025-12-03 17:56:00,2025-12-03 20:55:00,Yes,Reviewed and closed.,Server
+ALT00057,Himalayan Healthcare Network,Low,2025-11-28 06:55:00,2025-11-28 09:38:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00058,Himalayan Healthcare Network,Medium,2025-12-25 01:34:00,2025-12-25 04:07:00,No,False positive.,Cloud Workload
+ALT00059,Himalayan Healthcare Network,Critical,2025-11-29 00:58:00,2025-11-29 03:50:00,Yes,False positive.,Server
+ALT00060,Himalayan Healthcare Network,Critical,2025-12-03 07:17:00,2025-12-03 10:21:00,No,Closed as per standard procedure.,Server
+ALT00061,Himalayan Healthcare Network,High,2025-12-02 11:43:00,2025-12-02 14:57:00,No,No further action required.,Server
+ALT00062,Himalayan Healthcare Network,Low,2025-12-23 14:10:00,2025-12-23 16:55:00,No,False positive.,Network Device
+ALT00063,Himalayan Healthcare Network,Medium,2025-11-18 05:33:00,2025-11-18 08:42:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00064,Himalayan Healthcare Network,Medium,2025-11-08 15:40:00,2025-11-08 18:51:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00065,Himalayan Healthcare Network,Medium,2025-12-27 21:51:00,2025-12-28 01:18:00,Yes,No further action required.,Endpoint
+ALT00066,Himalayan Healthcare Network,Medium,2025-12-26 12:18:00,2025-12-26 15:29:00,No,No further action required.,Database
+ALT00067,Himalayan Healthcare Network,Low,2025-12-17 08:17:00,2025-12-17 11:19:00,No,Reviewed and closed.,Endpoint
+ALT00068,Himalayan Healthcare Network,High,2025-11-13 18:33:00,2025-11-13 21:46:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00069,Himalayan Healthcare Network,Low,2025-11-21 01:09:00,2025-11-21 03:56:00,No,Reviewed and closed.,IoT Device
+ALT00070,Himalayan Healthcare Network,Low,2025-10-08 01:54:00,2025-10-08 05:12:00,No,No further action required.,Network Device
+ALT00071,Himalayan Healthcare Network,High,2025-11-11 05:00:00,2025-11-11 08:10:00,No,Reviewed and closed.,Endpoint
+ALT00072,Himalayan Healthcare Network,Critical,2025-12-08 19:44:00,2025-12-08 22:22:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00073,Himalayan Healthcare Network,Low,2025-12-24 11:05:00,2025-12-24 13:51:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00074,Himalayan Healthcare Network,Medium,2025-11-15 11:02:00,2025-11-15 13:58:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00075,Himalayan Healthcare Network,High,2025-12-31 22:08:00,2025-12-31 23:59:59,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00076,Himalayan Healthcare Network,Medium,2025-12-12 11:48:00,2025-12-12 14:25:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00077,Himalayan Healthcare Network,Medium,2025-12-23 21:47:00,2025-12-24 00:54:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00078,Himalayan Healthcare Network,Medium,2025-10-03 01:41:00,2025-10-03 04:38:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00079,Himalayan Healthcare Network,Low,2025-12-04 01:47:00,2025-12-04 04:25:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Server
+ALT00080,Himalayan Healthcare Network,Medium,2025-11-22 17:12:00,2025-11-22 20:33:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00081,Himalayan Healthcare Network,Low,2025-11-22 08:41:00,2025-11-22 11:49:00,No,False positive.,Server
+ALT00082,Himalayan Healthcare Network,Low,2025-11-20 20:37:00,2025-11-20 23:14:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00083,Himalayan Healthcare Network,High,2025-12-23 00:53:00,2025-12-23 04:05:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00084,Himalayan Healthcare Network,High,2025-12-25 01:23:00,2025-12-25 04:35:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00085,Himalayan Healthcare Network,High,2025-11-26 04:53:00,2025-11-26 07:47:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00086,Himalayan Healthcare Network,High,2025-12-26 19:54:00,2025-12-26 22:33:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00087,Himalayan Healthcare Network,High,2025-10-06 19:42:00,2025-10-06 23:08:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00088,Himalayan Healthcare Network,Low,2025-12-31 04:24:00,2025-12-31 07:14:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00089,Himalayan Healthcare Network,High,2025-10-23 08:35:00,2025-10-23 11:30:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00090,Himalayan Healthcare Network,Critical,2025-12-09 11:01:00,2025-12-09 14:09:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00091,Himalayan Healthcare Network,Low,2025-11-24 11:39:00,2025-11-24 14:53:00,No,No further action required.,Server
+ALT00092,Himalayan Healthcare Network,High,2025-10-31 22:01:00,2025-11-01 01:13:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00093,Himalayan Healthcare Network,Critical,2025-10-13 22:11:00,2025-10-14 01:04:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00094,Himalayan Healthcare Network,Medium,2025-11-18 09:04:00,2025-11-18 11:58:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00095,Himalayan Healthcare Network,High,2025-11-15 23:08:00,2025-11-16 02:24:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00096,Himalayan Healthcare Network,High,2025-12-23 23:04:00,2025-12-24 01:40:00,Yes,Reviewed and closed.,IoT Device
+ALT00097,Himalayan Healthcare Network,Medium,2025-12-25 22:39:00,2025-12-26 01:27:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00098,Himalayan Healthcare Network,Medium,2025-11-18 02:55:00,2025-11-18 06:24:00,Yes,Closed as per standard procedure.,IoT Device
+ALT00099,Himalayan Healthcare Network,Low,2025-11-06 17:20:00,2025-11-06 20:32:00,No,Reviewed and closed.,Server
+ALT00100,Himalayan Healthcare Network,Low,2025-11-12 03:12:00,2025-11-12 06:25:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00101,Himalayan Healthcare Network,Low,2025-10-28 10:20:00,2025-10-28 13:41:00,Yes,Closed as per standard procedure.,Database
+ALT00102,Himalayan Healthcare Network,Medium,2025-11-03 04:46:00,2025-11-03 07:27:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00103,Himalayan Healthcare Network,Critical,2025-11-13 14:26:00,2025-11-13 16:57:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00104,Himalayan Healthcare Network,Medium,2025-11-14 18:05:00,2025-11-14 21:00:00,No,False positive.,Database
+ALT00105,Himalayan Healthcare Network,Medium,2025-11-07 18:33:00,2025-11-07 21:22:00,No,No further action required.,Server
+ALT00001,Apex Power Grid Ltd,Low,2025-11-13 15:54:00,2025-11-13 18:24:00,No,No further action required.,Server
+ALT00002,Apex Power Grid Ltd,Medium,2025-12-08 13:07:00,2025-12-08 15:38:00,No,Reviewed and closed.,IoT Device
+ALT00003,Apex Power Grid Ltd,Low,2025-10-07 03:15:00,2025-10-07 05:48:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Cloud Workload
+ALT00004,Apex Power Grid Ltd,Medium,2025-11-17 23:54:00,2025-11-18 02:24:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00005,Apex Power Grid Ltd,Medium,2025-11-29 18:16:00,2025-11-29 20:57:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00006,Apex Power Grid Ltd,High,2025-12-18 19:52:00,2025-12-18 22:41:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00007,Apex Power Grid Ltd,Low,2025-12-03 16:51:00,2025-12-03 19:34:00,No,No further action required.,Endpoint
+ALT00008,Apex Power Grid Ltd,High,2025-11-03 15:34:00,2025-11-03 18:22:00,Yes,Closed as per standard procedure.,Network Device
+ALT00009,Apex Power Grid Ltd,Low,2025-11-21 07:18:00,2025-11-21 10:47:00,No,False positive.,Server
+ALT00010,Apex Power Grid Ltd,High,2025-11-02 01:48:00,2025-11-02 05:09:00,Yes,False positive.,Network Device
+ALT00011,Apex Power Grid Ltd,Medium,2025-11-05 20:42:00,2025-11-05 23:29:00,No,False positive.,Endpoint
+ALT00012,Apex Power Grid Ltd,Medium,2025-11-04 21:13:00,2025-11-04 23:56:00,No,False positive.,Database
+ALT00013,Apex Power Grid Ltd,Critical,2025-11-13 11:24:00,2025-11-13 14:46:00,No,Closed as per standard procedure.,Network Device
+ALT00014,Apex Power Grid Ltd,Low,2025-11-07 09:40:00,2025-11-07 12:11:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00015,Apex Power Grid Ltd,Critical,2025-12-28 09:08:00,2025-12-28 11:54:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00016,Apex Power Grid Ltd,Medium,2025-10-19 01:10:00,2025-10-19 04:10:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00017,Apex Power Grid Ltd,Critical,2025-10-26 12:43:00,2025-10-26 15:27:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00018,Apex Power Grid Ltd,Low,2025-10-06 08:13:00,2025-10-06 11:43:00,Yes,No further action required.,Cloud Workload
+ALT00019,Apex Power Grid Ltd,High,2025-10-23 18:46:00,2025-10-23 22:13:00,Yes,Reviewed and closed.,Database
+ALT00020,Apex Power Grid Ltd,Low,2025-12-14 14:33:00,2025-12-14 17:25:00,Yes,Closed as per standard procedure.,Server
+ALT00021,Apex Power Grid Ltd,Medium,2025-11-01 03:40:00,2025-11-01 06:28:00,Yes,No further action required.,IoT Device
+ALT00022,Apex Power Grid Ltd,Critical,2025-11-16 21:03:00,2025-11-16 23:54:00,No,No further action required.,Cloud Workload
+ALT00023,Apex Power Grid Ltd,Critical,2025-10-17 12:19:00,2025-10-17 15:24:00,No,False positive.,Endpoint
+ALT00024,Apex Power Grid Ltd,High,2025-11-20 13:47:00,2025-11-20 16:25:00,Yes,Reviewed and closed.,Database
+ALT00025,Apex Power Grid Ltd,Critical,2025-10-02 01:47:00,2025-10-02 05:05:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Database
+ALT00026,Apex Power Grid Ltd,Medium,2025-12-16 12:11:00,2025-12-16 15:06:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00027,Apex Power Grid Ltd,Low,2025-10-29 02:11:00,2025-10-29 05:05:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00028,Apex Power Grid Ltd,Low,2025-10-21 17:12:00,2025-10-21 19:44:00,Yes,Reviewed and closed.,Database
+ALT00029,Apex Power Grid Ltd,Medium,2025-10-10 19:54:00,2025-10-10 23:02:00,No,No further action required.,Endpoint
+ALT00030,Apex Power Grid Ltd,Medium,2025-10-30 12:15:00,2025-10-30 15:31:00,No,False positive.,Endpoint
+ALT00031,Apex Power Grid Ltd,Medium,2025-12-31 12:27:00,2025-12-31 15:12:00,No,No further action required.,IoT Device
+ALT00032,Apex Power Grid Ltd,Low,2025-12-26 20:18:00,2025-12-26 23:38:00,No,No further action required.,IoT Device
+ALT00033,Apex Power Grid Ltd,Medium,2025-10-25 12:45:00,2025-10-25 15:23:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00034,Apex Power Grid Ltd,Medium,2025-12-20 02:52:00,2025-12-20 05:45:00,No,False positive.,Network Device
+ALT00035,Apex Power Grid Ltd,Medium,2025-10-11 02:47:00,2025-10-11 05:47:00,Yes,Reviewed and closed.,Database
+ALT00036,Apex Power Grid Ltd,Low,2025-11-25 21:17:00,2025-11-26 00:12:00,Yes,Closed as per standard procedure.,Cloud Workload
+ALT00037,Apex Power Grid Ltd,Medium,2025-11-12 16:19:00,2025-11-12 19:38:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00038,Apex Power Grid Ltd,Medium,2025-12-20 05:59:00,2025-12-20 09:22:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00039,Apex Power Grid Ltd,High,2025-10-16 11:46:00,2025-10-16 14:29:00,Yes,Reviewed and closed.,IoT Device
+ALT00040,Apex Power Grid Ltd,Low,2025-11-19 13:47:00,2025-11-19 16:22:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Database
+ALT00041,Apex Power Grid Ltd,Low,2025-12-27 15:45:00,2025-12-27 18:19:00,No,Closed as per standard procedure.,Endpoint
+ALT00042,Apex Power Grid Ltd,Low,2025-12-02 00:48:00,2025-12-02 03:44:00,No,False positive.,Server
+ALT00043,Apex Power Grid Ltd,Critical,2025-11-01 00:36:00,2025-11-01 04:05:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00044,Apex Power Grid Ltd,High,2025-12-11 06:24:00,2025-12-11 09:26:00,Yes,No further action required.,Endpoint
+ALT00045,Apex Power Grid Ltd,Medium,2025-10-14 20:23:00,2025-10-14 23:50:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Server
+ALT00046,Apex Power Grid Ltd,High,2025-12-25 10:18:00,2025-12-25 13:43:00,No,No further action required.,Database
+ALT00047,Apex Power Grid Ltd,Critical,2025-12-02 14:24:00,2025-12-02 17:08:00,No,Reviewed and closed.,Server
+ALT00048,Apex Power Grid Ltd,Low,2025-11-29 03:30:00,2025-11-29 06:17:00,Yes,Closed as per standard procedure.,IoT Device
+ALT00049,Apex Power Grid Ltd,Medium,2025-12-07 02:29:00,2025-12-07 05:51:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00050,Apex Power Grid Ltd,Medium,2025-12-22 06:06:00,2025-12-22 08:45:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00051,Apex Power Grid Ltd,Medium,2025-10-14 21:33:00,2025-10-15 00:16:00,No,No further action required.,Endpoint
+ALT00052,Apex Power Grid Ltd,Low,2025-12-08 07:34:00,2025-12-08 11:00:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00053,Apex Power Grid Ltd,High,2025-11-10 17:56:00,2025-11-10 20:51:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00054,Apex Power Grid Ltd,Medium,2025-10-25 18:13:00,2025-10-25 21:20:00,No,False positive.,Network Device
+ALT00055,Apex Power Grid Ltd,Low,2025-11-11 00:08:00,2025-11-11 03:26:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00056,Apex Power Grid Ltd,Low,2025-12-04 07:44:00,2025-12-04 10:26:00,Yes,Reviewed and closed.,Database
+ALT00057,Apex Power Grid Ltd,Low,2025-12-20 20:51:00,2025-12-21 00:01:00,No,No further action required.,Server
+ALT00058,Apex Power Grid Ltd,Low,2025-10-24 21:30:00,2025-10-25 00:47:00,Yes,Reviewed and closed.,Endpoint
+ALT00059,Apex Power Grid Ltd,High,2025-11-22 00:54:00,2025-11-22 03:56:00,Yes,No further action required.,IoT Device
+ALT00060,Apex Power Grid Ltd,High,2025-12-28 12:59:00,2025-12-28 15:42:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00061,Apex Power Grid Ltd,High,2025-11-28 07:05:00,2025-11-28 10:07:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00062,Apex Power Grid Ltd,Medium,2025-12-21 00:40:00,2025-12-21 03:29:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00063,Apex Power Grid Ltd,Medium,2025-12-28 06:08:00,2025-12-28 09:05:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00064,Apex Power Grid Ltd,Low,2025-11-23 01:00:00,2025-11-23 03:43:00,No,False positive.,IoT Device
+ALT00065,Apex Power Grid Ltd,Medium,2025-11-04 04:56:00,2025-11-04 08:05:00,No,Reviewed and closed.,Cloud Workload
+ALT00066,Apex Power Grid Ltd,Low,2025-10-14 20:25:00,2025-10-14 23:01:00,No,No further action required.,Endpoint
+ALT00067,Apex Power Grid Ltd,High,2025-10-16 21:55:00,2025-10-17 01:00:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Network Device
+ALT00068,Apex Power Grid Ltd,Critical,2025-12-25 08:32:00,2025-12-25 11:10:00,Yes,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00069,Apex Power Grid Ltd,Low,2025-11-22 00:10:00,2025-11-22 03:16:00,Yes,Reviewed and closed.,IoT Device
+ALT00070,Apex Power Grid Ltd,Low,2025-11-29 19:27:00,2025-11-29 22:11:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00071,Apex Power Grid Ltd,Medium,2025-11-13 05:05:00,2025-11-13 08:29:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00072,Apex Power Grid Ltd,Medium,2025-11-20 21:38:00,2025-11-21 00:39:00,No,False positive.,Server
+ALT00073,Apex Power Grid Ltd,Critical,2025-11-02 14:39:00,2025-11-02 17:42:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00074,Apex Power Grid Ltd,Low,2025-10-28 19:00:00,2025-10-28 22:19:00,Yes,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00075,Apex Power Grid Ltd,High,2025-10-26 20:20:00,2025-10-26 23:17:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00076,Apex Power Grid Ltd,Medium,2025-10-15 00:08:00,2025-10-15 03:24:00,No,No further action required.,IoT Device
+ALT00077,Apex Power Grid Ltd,Medium,2025-12-09 10:49:00,2025-12-09 13:37:00,No,No further action required.,Database
+ALT00078,Apex Power Grid Ltd,Medium,2025-12-26 10:49:00,2025-12-26 13:33:00,No,No further action required.,Endpoint
+ALT00079,Apex Power Grid Ltd,Medium,2025-12-05 17:59:00,2025-12-05 21:24:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00080,Apex Power Grid Ltd,Medium,2025-10-08 09:02:00,2025-10-08 11:36:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00081,Apex Power Grid Ltd,Low,2025-12-11 15:27:00,2025-12-11 18:53:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00082,Apex Power Grid Ltd,Low,2025-12-07 08:58:00,2025-12-07 12:13:00,No,Reviewed and closed.,Network Device
+ALT00083,Apex Power Grid Ltd,High,2025-11-30 18:43:00,2025-11-30 22:08:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00084,Apex Power Grid Ltd,Low,2025-10-19 16:59:00,2025-10-19 19:58:00,No,False positive.,Cloud Workload
+ALT00085,Apex Power Grid Ltd,Medium,2025-10-20 17:10:00,2025-10-20 20:25:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00086,Apex Power Grid Ltd,Low,2025-11-05 11:34:00,2025-11-05 15:03:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Database
+ALT00087,Apex Power Grid Ltd,Medium,2025-12-29 01:51:00,2025-12-29 05:05:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00088,Apex Power Grid Ltd,High,2025-11-21 08:21:00,2025-11-21 10:58:00,Yes,Reviewed and closed.,Endpoint
+ALT00089,Apex Power Grid Ltd,Low,2025-11-29 18:48:00,2025-11-29 21:34:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00090,Apex Power Grid Ltd,Critical,2025-11-06 01:29:00,2025-11-06 04:17:00,No,No further action required.,Endpoint
+ALT00091,Apex Power Grid Ltd,High,2025-10-16 21:57:00,2025-10-17 00:59:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Network Device
+ALT00092,Apex Power Grid Ltd,Medium,2025-10-17 16:50:00,2025-10-17 19:32:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00093,Apex Power Grid Ltd,Low,2025-10-20 02:09:00,2025-10-20 05:09:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",IoT Device
+ALT00094,Apex Power Grid Ltd,Low,2025-12-28 20:50:00,2025-12-28 23:33:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Cloud Workload
+ALT00095,Apex Power Grid Ltd,High,2025-10-28 11:15:00,2025-10-28 13:56:00,Yes,False positive.,Endpoint
+ALT00001,Continental Banking Corp,Low,2025-12-29 23:11:00,2025-12-30 01:44:00,Yes,Closed as per standard procedure.,Endpoint
+ALT00002,Continental Banking Corp,Low,2025-10-19 23:00:00,2025-10-20 02:00:00,Yes,False positive.,IoT Device
+ALT00003,Continental Banking Corp,High,2025-10-28 11:08:00,2025-10-28 11:12:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00004,Continental Banking Corp,Low,2025-11-25 14:38:00,2025-11-25 18:02:00,Yes,Closed as per standard procedure.,Database
+ALT00005,Continental Banking Corp,Medium,2025-10-05 12:59:00,2025-10-05 15:57:00,No,No further action required.,Endpoint
+ALT00006,Continental Banking Corp,Medium,2025-10-20 15:11:00,2025-10-20 17:52:00,No,False positive.,Cloud Workload
+ALT00007,Continental Banking Corp,Medium,2025-11-07 10:24:00,2025-11-07 13:03:00,No,Reviewed and closed.,Network Device
+ALT00008,Continental Banking Corp,High,2025-12-16 15:43:00,2025-12-16 15:46:00,No,Reviewed and closed.,IoT Device
+ALT00009,Continental Banking Corp,Medium,2025-12-03 00:59:00,2025-12-03 04:25:00,No,Closed as per standard procedure.,Endpoint
+ALT00010,Continental Banking Corp,Medium,2025-11-11 23:52:00,2025-11-12 02:29:00,Yes,False positive.,Database
+ALT00011,Continental Banking Corp,High,2025-12-09 08:17:00,2025-12-09 08:18:00,No,No further action required.,Network Device
+ALT00012,Continental Banking Corp,Low,2025-12-07 00:05:00,2025-12-07 03:30:00,No,No further action required.,Database
+ALT00013,Continental Banking Corp,Critical,2025-11-21 13:11:00,2025-11-21 13:14:00,No,False positive.,Cloud Workload
+ALT00014,Continental Banking Corp,Medium,2025-12-02 12:57:00,2025-12-02 15:42:00,Yes,Closed as per standard procedure.,Endpoint
+ALT00015,Continental Banking Corp,Medium,2025-10-06 22:51:00,2025-10-07 01:26:00,No,Closed as per standard procedure.,Endpoint
+ALT00016,Continental Banking Corp,High,2025-12-29 00:20:00,2025-12-29 00:22:00,No,Reviewed and closed.,Network Device
+ALT00017,Continental Banking Corp,Low,2025-10-22 22:41:00,2025-10-23 01:13:00,No,False positive.,Server
+ALT00018,Continental Banking Corp,Low,2025-12-07 19:54:00,2025-12-07 22:50:00,No,False positive.,IoT Device
+ALT00019,Continental Banking Corp,High,2025-12-24 07:17:00,2025-12-24 07:19:00,Yes,No further action required.,IoT Device
+ALT00020,Continental Banking Corp,Low,2025-12-31 22:13:00,2025-12-31 23:59:59,No,Reviewed and closed.,Cloud Workload
+ALT00021,Continental Banking Corp,Medium,2025-10-03 01:21:00,2025-10-03 04:24:00,No,No further action required.,Network Device
+ALT00022,Continental Banking Corp,Critical,2025-11-25 13:20:00,2025-11-25 13:21:00,No,Reviewed and closed.,Cloud Workload
+ALT00023,Continental Banking Corp,High,2025-11-17 14:04:00,2025-11-17 14:05:00,No,Reviewed and closed.,Cloud Workload
+ALT00024,Continental Banking Corp,High,2025-10-28 10:42:00,2025-10-28 10:43:00,No,Reviewed and closed.,Database
+ALT00025,Continental Banking Corp,Medium,2025-12-16 07:40:00,2025-12-16 10:51:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Network Device
+ALT00026,Continental Banking Corp,Low,2025-12-22 10:42:00,2025-12-22 13:23:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00027,Continental Banking Corp,High,2025-10-06 01:43:00,2025-10-06 04:51:00,No,No further action required.,Database
+ALT00028,Continental Banking Corp,High,2025-12-06 01:45:00,2025-12-06 01:49:00,Yes,No further action required.,Server
+ALT00029,Continental Banking Corp,Low,2025-10-23 01:02:00,2025-10-23 03:38:00,No,Closed as per standard procedure.,Cloud Workload
+ALT00030,Continental Banking Corp,Critical,2025-12-09 07:26:00,2025-12-09 10:44:00,No,False positive.,Database
+ALT00031,Continental Banking Corp,Critical,2025-11-09 07:15:00,2025-11-09 10:12:00,Yes,False positive.,Network Device
+ALT00032,Continental Banking Corp,Low,2025-12-02 07:46:00,2025-12-02 11:02:00,No,Closed as per standard procedure.,Endpoint
+ALT00033,Continental Banking Corp,Critical,2025-10-31 18:24:00,2025-10-31 21:44:00,No,No further action required.,Network Device
+ALT00001,Delta Rail Systems,Medium,2025-11-24 18:31:00,2025-11-24 21:14:00,No,No further action required.,Endpoint
+ALT00002,Delta Rail Systems,Low,2025-10-22 03:55:00,2025-10-22 07:01:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Endpoint
+ALT00003,Delta Rail Systems,Low,2025-11-12 08:03:00,2025-11-12 11:26:00,No,False positive.,IoT Device
+ALT00004,Delta Rail Systems,Low,2025-11-12 02:28:00,2025-11-12 05:33:00,No,False positive.,Endpoint
+ALT00005,Delta Rail Systems,Low,2025-11-14 06:02:00,2025-11-14 08:55:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00006,Delta Rail Systems,High,2025-10-15 01:44:00,2025-10-15 04:14:00,No,Closed as per standard procedure.,Server
+ALT00007,Delta Rail Systems,Low,2025-10-27 05:52:00,2025-10-27 08:41:00,No,Closed as per standard procedure.,IoT Device
+ALT00008,Delta Rail Systems,Low,2025-10-23 18:12:00,2025-10-23 20:47:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00009,Delta Rail Systems,Medium,2025-10-08 00:02:00,2025-10-08 02:59:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Endpoint
+ALT00010,Delta Rail Systems,Low,2025-11-17 18:39:00,2025-11-17 21:50:00,No,False positive.,Database
+ALT00011,Delta Rail Systems,Low,2025-11-22 01:24:00,2025-11-22 04:42:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00012,Delta Rail Systems,Low,2025-12-16 08:03:00,2025-12-16 10:51:00,No,No further action required.,Server
+ALT00013,Delta Rail Systems,Medium,2025-12-11 06:06:00,2025-12-11 08:36:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",IoT Device
+ALT00014,Delta Rail Systems,Critical,2025-11-06 20:10:00,2025-11-06 22:46:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00015,Delta Rail Systems,Medium,2025-12-03 17:29:00,2025-12-03 20:18:00,No,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00016,Delta Rail Systems,Low,2025-11-04 01:38:00,2025-11-04 04:23:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Endpoint
+ALT00017,Delta Rail Systems,Medium,2025-11-24 12:55:00,2025-11-24 15:35:00,No,False positive.,Network Device
+ALT00018,Delta Rail Systems,Medium,2025-12-24 11:06:00,2025-12-24 14:31:00,No,Closed as per standard procedure.,Endpoint
+ALT00019,Delta Rail Systems,Low,2025-10-31 01:39:00,2025-10-31 04:23:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Server
+ALT00020,Delta Rail Systems,Low,2025-11-12 18:31:00,2025-11-12 21:16:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Database
+ALT00021,Delta Rail Systems,High,2025-12-09 01:33:00,2025-12-09 04:23:00,Yes,Closed as per standard procedure.,Network Device
+ALT00022,Delta Rail Systems,Medium,2025-11-13 19:39:00,2025-11-13 22:52:00,No,Reviewed and closed.,Server
+ALT00023,Delta Rail Systems,Low,2025-12-20 15:08:00,2025-12-20 17:56:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Endpoint
+ALT00024,Delta Rail Systems,Medium,2025-12-25 21:14:00,2025-12-26 00:32:00,No,"Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",Cloud Workload
+ALT00025,Delta Rail Systems,Low,2025-10-13 04:37:00,2025-10-13 07:35:00,No,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00026,Delta Rail Systems,Critical,2025-11-12 13:19:00,2025-11-12 16:38:00,Yes,Reviewed and closed.,Cloud Workload
+ALT00027,Delta Rail Systems,Medium,2025-10-07 17:01:00,2025-10-07 20:06:00,No,Reviewed and closed.,IoT Device
+ALT00028,Delta Rail Systems,High,2025-12-19 10:40:00,2025-12-19 13:12:00,Yes,"Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",Server
+ALT00029,Delta Rail Systems,Low,2025-12-24 20:18:00,2025-12-24 22:53:00,No,No further action required.,Server
+ALT00030,Delta Rail Systems,Critical,2025-11-11 04:44:00,2025-11-11 07:52:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",IoT Device
+ALT00031,Delta Rail Systems,Medium,2025-11-14 04:54:00,2025-11-14 07:40:00,Yes,"Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",Cloud Workload
+ALT00032,Delta Rail Systems,Medium,2025-11-23 18:03:00,2025-11-23 20:43:00,No,False positive.,Cloud Workload
+ALT00033,Delta Rail Systems,Medium,2025-11-30 19:32:00,2025-11-30 22:51:00,No,"Performed forensic triage on affected host, isolated system, initiated containment protocol.",Network Device
+ALT00034,Delta Rail Systems,Low,2025-12-17 21:20:00,2025-12-17 23:58:00,No,Closed as per standard procedure.,Endpoint
+ALT00035,Delta Rail Systems,Critical,2025-11-21 18:06:00,2025-11-21 21:04:00,Yes,False positive.,Database

@@ -34,3 +34,8 @@ export async function getAuditRunDetail(runId) {
   const response = await client.get(`/audit/runs/${runId}`);
   return response.data;
 }
+
+export async function getEntityTrend(entityName) {
+  const response = await client.get(`/trends/${encodeURIComponent(entityName)}`);
+  return response.data;
+}

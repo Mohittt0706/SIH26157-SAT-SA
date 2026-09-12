@@ -4,22 +4,66 @@ import { Scale, Info } from "lucide-react";
  * ExpectedObserved Component
  *
  * Visualizes structured "Expected vs Observed" operational baselines
- * (e.g., peer expectation vs actual entity telemetry for Negative Space analysis).
+ * (peer expectation vs actual entity telemetry for Negative Space analysis).
  *
- * Interface accepts an array of structured items:
+ * Consumes the `expected_vs_observed` array from GET /api/entities/{name}
+ * (see ExpectedVsObservedItem in schemas.py), one row per metric:
  * [
  *   {
  *     metric: string,
- *     expected: string | number,
- *     observed: string | number,
- *     difference: string | number,
- *     status: "NORMAL" | "ELEVATED" | "DEVIANT" | "CRITICAL"
+ *     metric_key: string,
+ *     observed: number,
+ *     expected: number,
+ *     unit: string,
+ *     deviation_z: number,
+ *     direction: "below" | "above" | "aligned",
+ *     interpretation: string,
  *   }
  * ]
+ *
+ * The API has no `status` or `difference` field — the badge is derived here
+ * from `direction` plus the magnitude of `deviation_z`, and `deviation_z`
+ * itself (not a precomputed "difference") is what's shown in that column.
+ * `interpretation` is a ready-made plain-language sentence from the backend
+ * and is surfaced directly under each metric — it's the most useful single
+ * piece of information in the response for a supervisor scanning this table.
  *
  * If the current backend does NOT expose structured expected-vs-observed data,
  * it displays an honest, professional empty state without fabricating numbers.
  */
+
+const DEVIANT_Z_THRESHOLD = 2.5;
+const CRITICAL_Z_THRESHOLD = 5.0;
+
+/**
+ * Derive a status badge from `direction` and the magnitude of `deviation_z`.
+ *
+ * The API's `direction` already encodes "aligned" (|deviation_z| under the
+ * backend's own EXPECTED_ALIGNED_Z_THRESHOLD) vs "below"/"above" — this only
+ * adds a severity tier on top of "below"/"above", scaled the same way the
+ * negative_space/anomaly detectors already grade deviation magnitude
+ * elsewhere in this app, rather than inventing a new scale.
+ */
+function deriveStatus(direction, deviationZ) {
+  if (direction !== "below" && direction !== "above") {
+    return { label: "NORMAL", isDeviant: false };
+  }
+  const magnitude = Math.abs(deviationZ ?? 0);
+  if (magnitude >= CRITICAL_Z_THRESHOLD) {
+    return { label: "CRITICAL", isDeviant: true };
+  }
+  if (magnitude >= DEVIANT_Z_THRESHOLD) {
+    return { label: "DEVIANT", isDeviant: true };
+  }
+  return { label: "ELEVATED", isDeviant: true };
+}
+
+function formatDirection(direction) {
+  if (direction === "above") return "▲ above";
+  if (direction === "below") return "▼ below";
+  return "aligned";
+}
+
 export default function ExpectedObserved({ data = null }) {
   // Check if structured expected_vs_observed items were provided by the backend
   const items = Array.isArray(data) ? data : data?.expected_vs_observed;
@@ -98,14 +142,14 @@ export default function ExpectedObserved({ data = null }) {
                 <th style={{ padding: "14px 18px" }}>Metric</th>
                 <th style={{ padding: "14px 18px" }}>Expected Baseline</th>
                 <th style={{ padding: "14px 18px" }}>Observed Telemetry</th>
-                <th style={{ padding: "14px 18px" }}>Deviation</th>
+                <th style={{ padding: "14px 18px" }}>Deviation (z)</th>
                 <th style={{ padding: "14px 18px" }}>Status</th>
               </tr>
             </thead>
             <tbody>
               {items.map((row, idx) => {
-                const statusUpper = (row.status || "NORMAL").toUpperCase();
-                const isDeviant = statusUpper === "DEVIANT" || statusUpper === "CRITICAL" || statusUpper === "ELEVATED";
+                const { label: statusLabel, isDeviant } = deriveStatus(row.direction, row.deviation_z);
+                const unitSuffix = row.unit ? ` ${row.unit}` : "";
 
                 return (
                   <tr
@@ -115,14 +159,30 @@ export default function ExpectedObserved({ data = null }) {
                       backgroundColor: isDeviant ? "rgba(239, 107, 114, 0.04)" : "transparent",
                     }}
                   >
-                    <td style={{ padding: "14px 18px", color: "var(--text)", fontWeight: 600 }}>
-                      {row.metric}
+                    <td style={{ padding: "14px 18px", color: "var(--text)" }}>
+                      <div style={{ fontWeight: 600 }}>{row.metric}</div>
+                      {row.interpretation && (
+                        <div
+                          style={{
+                            marginTop: "4px",
+                            color: "var(--muted)",
+                            fontWeight: 400,
+                            fontSize: "11px",
+                            lineHeight: 1.5,
+                            maxWidth: "420px",
+                          }}
+                        >
+                          {row.interpretation}
+                        </div>
+                      )}
                     </td>
                     <td style={{ padding: "14px 18px", color: "var(--muted)" }}>
                       {row.expected}
+                      {unitSuffix}
                     </td>
                     <td style={{ padding: "14px 18px", color: "var(--text)" }}>
                       {row.observed}
+                      {unitSuffix}
                     </td>
                     <td
                       style={{
@@ -131,7 +191,10 @@ export default function ExpectedObserved({ data = null }) {
                         fontWeight: 600,
                       }}
                     >
-                      {row.difference}
+                      {typeof row.deviation_z === "number" ? row.deviation_z.toFixed(2) : row.deviation_z}
+                      <span style={{ marginLeft: "6px", color: "var(--muted)", fontWeight: 400, fontSize: "11px" }}>
+                        {formatDirection(row.direction)}
+                      </span>
                     </td>
                     <td style={{ padding: "14px 18px" }}>
                       <span
@@ -147,7 +210,7 @@ export default function ExpectedObserved({ data = null }) {
                           border: `1px solid ${isDeviant ? "rgba(239, 107, 114, 0.3)" : "rgba(87, 213, 140, 0.3)"}`,
                         }}
                       >
-                        {statusUpper}
+                        {statusLabel}
                       </span>
                     </td>
                   </tr>
