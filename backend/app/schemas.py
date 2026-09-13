@@ -3,7 +3,9 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
+
+from app.models import ConcernType, ManualPriority
 
 
 class AlertBase(BaseModel):
@@ -251,5 +253,159 @@ class PrioritySample(BaseModel):
     priority_score: float
     triggered_rules: list[str]
     reason: str
+
+
+# ---------------------------------------------------------------------------
+# Blind manual review — see app/routers/manual_review.py
+# ---------------------------------------------------------------------------
+
+class AlertEvidenceRow(BaseModel):
+    """One raw alert record as shown in the blind manual-review dossier.
+
+    Deliberately just the alert's own fields — no detector-derived value
+    (no rule name, no evidence "reason" string, nothing indicating this
+    particular alert was ever flagged by anything) appears here.
+    """
+
+    alert_id: str
+    severity: str
+    asset_type: str
+    created_time: datetime
+    closed_time: Optional[datetime] = None
+    closure_duration_seconds: Optional[float] = None
+    escalated: bool
+    investigation_notes: Optional[str] = None
+
+
+class EntityEvidenceAggregates(BaseModel):
+    """Descriptive aggregates over one entity's own alerts only.
+
+    Every figure here is something a human reviewer could compute themselves
+    by reading the alert list above — counts, an average, a distribution.
+    None of it compares this entity to any other (no peer median, no
+    percentile, nothing that would reveal where this entity ranks), since
+    that comparison is itself a VEIL-shaped conclusion.
+    """
+
+    total_alerts: int
+    open_alerts: int
+    closed_alerts: int
+    avg_closure_seconds: Optional[float] = None
+    escalated_count: int
+    escalated_rate: float
+    avg_investigation_note_length: float
+    severity_distribution: dict[str, int]
+    asset_type_distribution: dict[str, int]
+
+
+class EntityBlindEvidence(BaseModel):
+    """Response for GET /api/manual-review/{entity_name}/evidence.
+
+    Contains raw operational evidence and self-descriptive aggregates only.
+    Must never gain a risk_score, risk_band, primary_driver, component
+    score, detector/rule name, finding, evidence item produced by a
+    detector, priority_score, or peer-relative comparison — the blindness
+    of the manual-review workflow depends on this endpoint staying that way.
+    """
+
+    entity_name: str
+    alerts: list[AlertEvidenceRow]
+    aggregates: EntityEvidenceAggregates
+
+
+class ManualReviewCreate(BaseModel):
+    """Request body for POST /api/manual-review.
+
+    concern_type and manual_priority are strict enums (ConcernType,
+    ManualPriority from app.models) — FastAPI/Pydantic reject any value
+    outside them with a 422, no extra validation code needed here.
+    """
+
+    entity_name: str
+    reviewer_id: Optional[str] = None
+    supervisory_concern: bool
+    concern_type: ConcernType
+    manual_priority: ManualPriority
+    manual_review_recommended: bool
+    evidence_sufficient: bool
+    rationale: str = Field(min_length=1)
+
+
+class ManualReviewOut(BaseModel):
+    """One persisted manual review, as returned by the GET endpoints."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    entity_name: str
+    created_at: datetime
+    reviewer_id: Optional[str] = None
+    supervisory_concern: bool
+    concern_type: ConcernType
+    manual_priority: ManualPriority
+    manual_review_recommended: bool
+    evidence_sufficient: bool
+    rationale: str
+
+
+class ManualReviewComparison(BaseModel):
+    """Response for GET /api/manual-review/{entity_name}/comparison.
+
+    `available` is False (with every other field null) when no review has
+    ever been submitted for this entity, or when a review exists but the
+    entity isn't present in the currently-loaded dataset's VEIL results
+    (e.g. a fresh upload replaced it) — in both cases there is nothing real
+    to compare, so nothing is fabricated in its place.
+    """
+
+    available: bool
+    entity_name: str
+    reason: Optional[str] = None
+
+    review_id: Optional[int] = None
+    review_created_at: Optional[datetime] = None
+
+    manual_concern: Optional[bool] = None
+    veil_concern: Optional[bool] = None
+    concern_agrees: Optional[bool] = None
+
+    manual_priority: Optional[ManualPriority] = None
+    veil_risk_band: Optional[str] = None
+    priority_agrees: Optional[bool] = None
+
+    manual_review_recommended: Optional[bool] = None
+    veil_prioritized: Optional[bool] = None
+    recommendation_agrees: Optional[bool] = None
+
+    overall_agreement: Optional[bool] = None
+
+
+class ManualReviewMetrics(BaseModel):
+    """Response for GET /api/manual-review/metrics.
+
+    Aggregates every submitted review (not one-per-entity — a re-reviewed
+    entity contributes one data point per submission, since each submission
+    is itself a review event). `comparable_reviews` may be less than
+    `total_reviews` when a review's entity is no longer present in the
+    current dataset's VEIL results; those reviews are excluded from every
+    rate below rather than counted as either agreement or disagreement.
+    A rate is null (not 0.0) when its denominator is zero — an unmeasured
+    rate is not the same as a measured 0%.
+    """
+
+    total_reviews: int
+    comparable_reviews: int
+
+    concern_agreement_count: int
+    concern_agreement_rate: Optional[float] = None
+
+    priority_agreement_count: int
+    priority_agreement_rate: Optional[float] = None
+
+    recommendation_agreement_count: int
+    recommendation_agreement_rate: Optional[float] = None
+
+    overall_agreement_count: int
+    overall_agreement_rate: Optional[float] = None
 
 

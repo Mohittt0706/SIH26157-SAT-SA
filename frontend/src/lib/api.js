@@ -47,49 +47,53 @@ export async function getPrioritySamples(limit) {
 }
 
 /**
- * Step 5: Blind evidence API adapter.
- * Attempts to call backend blind-evidence endpoint if supported.
+ * Blind evidence dossier for one entity — GET /api/manual-review/{entity}/evidence.
+ * No fallback on failure: a failed blind fetch must surface as a real error
+ * to the caller, not silently resolve to null (that null previously drove a
+ * peer_metrics fallback built from VEIL's own drill-down response — exactly
+ * the peer-relative data this endpoint exists to withhold).
  */
 export async function getBlindEvidence(entityName) {
-  try {
-    const response = await client.get(`/blind-evidence/${encodeURIComponent(entityName)}`);
-    return response.data;
-  } catch (error) {
-    // If backend endpoint is not implemented (404/501), return null so UI can handle cleanly
-    if (error.response?.status === 404 || error.response?.status === 501) {
-      return null;
-    }
-    throw error;
-  }
+  const response = await client.get(`/manual-review/${encodeURIComponent(entityName)}/evidence`);
+  return response.data;
 }
 
 /**
- * Step 5: Manual review persistence adapter.
- * Attempts to POST manual review assessment to backend if supported.
+ * Submit a manual review — POST /api/manual-review. entity_name travels in
+ * the body (there is no path segment on this route); payload must already
+ * be shaped like the backend's ManualReviewCreate schema (flat top-level
+ * fields, enum values in their backend form, no `answers` wrapper).
  */
-export async function submitManualReview(entityName, reviewData) {
-  try {
-    const response = await client.post(`/manual-review/${encodeURIComponent(entityName)}`, reviewData);
-    return response.data;
-  } catch (error) {
-    if (error.response?.status === 404 || error.response?.status === 501) {
-      return null;
-    }
-    throw error;
-  }
+export async function submitManualReview(payload) {
+  const response = await client.post("/manual-review", payload);
+  return response.data;
 }
 
 /**
- * Step 5: Retrieve saved manual review response.
+ * Full review history for one entity, newest first — GET /api/manual-review/{entity}.
+ * Always a list (possibly empty), never a single object.
  */
-export async function getManualReview(entityName) {
-  try {
-    const response = await client.get(`/manual-review/${encodeURIComponent(entityName)}`);
-    return response.data;
-  } catch (error) {
-    if (error.response?.status === 404 || error.response?.status === 501) {
-      return null;
-    }
-    throw error;
-  }
+export async function getManualReviewHistory(entityName) {
+  const response = await client.get(`/manual-review/${encodeURIComponent(entityName)}`);
+  return response.data;
+}
+
+/**
+ * Manual-vs-VEIL comparison for one entity's most recent review —
+ * GET /api/manual-review/{entity}/comparison. Only meaningful after at
+ * least one review has been submitted; the backend returns
+ * `{available: false, ...}` otherwise rather than 404ing.
+ */
+export async function getManualReviewComparison(entityName) {
+  const response = await client.get(`/manual-review/${encodeURIComponent(entityName)}/comparison`);
+  return response.data;
+}
+
+/**
+ * Aggregate manual-vs-VEIL agreement across every submitted review —
+ * GET /api/manual-review/metrics.
+ */
+export async function getManualReviewMetrics() {
+  const response = await client.get("/manual-review/metrics");
+  return response.data;
 }

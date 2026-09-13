@@ -3,18 +3,21 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   CheckCircle2,
   AlertCircle,
+  AlertTriangle,
   EyeOff,
-  Eye,
   FileCheck,
   Send,
-  RotateCcw,
-  ExternalLink,
   Info,
+  ShieldCheck,
+  History,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import {
-  getEntityDetails,
   submitManualReview,
-  getManualReview,
+  getManualReviewHistory,
+  getManualReviewComparison,
+  getManualReviewMetrics,
   getBlindEvidence,
 } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
@@ -28,41 +31,274 @@ const EXACT_SIX_ENTITIES = [
   "Himalayan Healthcare Network",
 ];
 
-const LOCAL_STORAGE_KEY = "veil_manual_reviews_v1";
+// ---------------------------------------------------------------------------
+// UI-form-value <-> backend-enum-value conversion. The form shows the
+// human-readable labels below; the API boundary is the only place that
+// translates them into the backend's ManualReviewCreate field names/values
+// (supervisory_concern: bool, concern_type: snake_case, manual_priority:
+// lowercase, manual_review_recommended: bool, evidence_sufficient: bool).
+// ---------------------------------------------------------------------------
 
-function loadSavedReviews() {
-  try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
-  }
+const CONCERN_TYPE_OPTIONS = [
+  "Execution weakness",
+  "Missing evidence",
+  "Unusual behaviour",
+  "Other",
+  "No concern",
+];
+
+const CONCERN_TYPE_UI_TO_API = {
+  "Execution weakness": "execution_weakness",
+  "Missing evidence": "missing_evidence",
+  "Unusual behaviour": "unusual_behaviour",
+  "Other": "other",
+  "No concern": "no_concern",
+};
+
+const CONCERN_TYPE_API_TO_UI = Object.fromEntries(
+  Object.entries(CONCERN_TYPE_UI_TO_API).map(([ui, api]) => [api, ui])
+);
+
+const PRIORITY_OPTIONS = ["Critical", "High", "Medium", "Low"];
+
+function priorityUiToApi(ui) {
+  return (ui || "").toLowerCase();
 }
 
-function saveReviewLocally(entityName, review) {
-  try {
-    const current = loadSavedReviews();
-    current[entityName] = review;
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(current));
-  } catch (err) {
-    console.error("Failed to save review to localStorage:", err);
-  }
+function priorityApiToUi(api) {
+  if (!api) return "";
+  return api.charAt(0).toUpperCase() + api.slice(1);
 }
 
-function determineAlignment(manualPriority, veilRiskBand) {
-  if (!manualPriority || !veilRiskBand) return { label: "Indeterminate", class: "align-neutral" };
-  const mp = manualPriority.toLowerCase();
-  const vb = veilRiskBand.toLowerCase();
-  if (mp === vb) {
-    return { label: "Full Concordance", class: "align-full", desc: "Human assessment and VEIL composite output are in exact tier agreement." };
-  }
-  const tiers = ["low", "medium", "high", "critical"];
-  const mIdx = tiers.indexOf(mp);
-  const vIdx = tiers.indexOf(vb);
-  if (mIdx !== -1 && vIdx !== -1 && Math.abs(mIdx - vIdx) === 1) {
-    return { label: "Adjacent Alignment", class: "align-adjacent", desc: "Human assessment and VEIL output differ by exactly one priority tier." };
-  }
-  return { label: "Divergent Assessment", class: "align-divergent", desc: "Human assessment and VEIL output diverge significantly across multiple tiers." };
+function yesNoUiToBool(ui) {
+  return ui === "Yes";
+}
+
+function boolToYesNoUi(value) {
+  return value ? "Yes" : "No";
+}
+
+const EMPTY_FORM = {
+  q1_concern: "",
+  q2_concern_type: "",
+  q3_priority: "",
+  q4_recommended: "",
+  q5_sufficient: "",
+  q6_rationale: "",
+};
+
+/** UI-readable field values for one persisted ManualReviewOut row — used
+ * only to display a *past* review's own judgement in the history expander.
+ * Never used to prefill the live assessment form: a fresh blind review must
+ * start empty, otherwise the reviewer is anchored by their own past answer. */
+function formFromReview(review) {
+  return {
+    q1_concern: boolToYesNoUi(review.supervisory_concern),
+    q2_concern_type: CONCERN_TYPE_API_TO_UI[review.concern_type] || review.concern_type,
+    q3_priority: priorityApiToUi(review.manual_priority),
+    q4_recommended: boolToYesNoUi(review.manual_review_recommended),
+    q5_sufficient: boolToYesNoUi(review.evidence_sufficient),
+    q6_rationale: review.rationale,
+  };
+}
+
+/** Build the POST /api/manual-review body from the UI form — flat top-level
+ * fields in the backend's own vocabulary, no `answers` wrapper, no
+ * client-generated timestamp (the backend sets created_at itself). */
+function formToPayload(entityName, formData) {
+  return {
+    entity_name: entityName,
+    reviewer_id: "SUPERVISOR-EXP-01",
+    supervisory_concern: yesNoUiToBool(formData.q1_concern),
+    concern_type: CONCERN_TYPE_UI_TO_API[formData.q2_concern_type],
+    manual_priority: priorityUiToApi(formData.q3_priority),
+    manual_review_recommended: yesNoUiToBool(formData.q4_recommended),
+    evidence_sufficient: yesNoUiToBool(formData.q5_sufficient),
+    rationale: formData.q6_rationale.trim(),
+  };
+}
+
+function formatSeconds(seconds) {
+  if (seconds === null || seconds === undefined) return "—";
+  if (seconds < 60) return `${Math.round(seconds)}s`;
+  return `${(seconds / 60).toFixed(1)}m`;
+}
+
+function formatTimestamp(value) {
+  if (!value) return "—";
+  return new Date(value).toLocaleString();
+}
+
+// ---------------------------------------------------------------------------
+// Small aggregate-metrics panel — GET /api/manual-review/metrics.
+// Shown on the entity-selection screen: it aggregates across every review
+// already submitted, so surfacing it there doesn't leak anything about an
+// entity not yet reviewed.
+// ---------------------------------------------------------------------------
+
+function ValidationMetricsPanel() {
+  const [metrics, setMetrics] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getManualReviewMetrics()
+      .then((data) => {
+        if (!cancelled) setMetrics(data);
+      })
+      .catch((err) => {
+        console.error("Failed to load manual-review metrics:", err);
+        if (!cancelled) setError("Metrics unavailable.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const pct = (rate) => (rate === null || rate === undefined ? "—" : `${Math.round(rate * 100)}%`);
+
+  return (
+    <section
+      className="ranking-panel"
+      style={{ marginBottom: "28px", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "6px", padding: "24px" }}
+    >
+      <div className="panel-header" style={{ marginBottom: "16px" }}>
+        <div>
+          <div className="panel-label">VALIDATION METRICS</div>
+          <h2 style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <ShieldCheck size={20} color="var(--accent)" />
+            Manual-vs-VEIL Agreement
+          </h2>
+          <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--muted)" }}>
+            Aggregated across every manual review submitted so far, compared against VEIL&apos;s output at query time.
+          </p>
+        </div>
+      </div>
+
+      {error && <p style={{ fontSize: "13px", color: "var(--muted)" }}>{error}</p>}
+
+      {!error && !metrics && (
+        <div className="skeleton skeleton-card" style={{ height: "70px" }} />
+      )}
+
+      {!error && metrics && metrics.total_reviews === 0 && (
+        <p style={{ fontSize: "13px", color: "var(--muted)", margin: 0 }}>
+          No manual reviews have been submitted yet — metrics will appear here once at least one review exists.
+        </p>
+      )}
+
+      {!error && metrics && metrics.total_reviews > 0 && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "14px" }}>
+          <div style={{ background: "var(--surface-2)", padding: "14px 16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase" }}>Total Reviews</span>
+            <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--text)", marginTop: "4px" }}>{metrics.total_reviews}</div>
+            <small style={{ fontSize: "11px", color: "var(--muted)" }}>{metrics.comparable_reviews} comparable to current dataset</small>
+          </div>
+          <div style={{ background: "var(--surface-2)", padding: "14px 16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase" }}>Concern Agreement</span>
+            <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--text)", marginTop: "4px" }}>{pct(metrics.concern_agreement_rate)}</div>
+            <small style={{ fontSize: "11px", color: "var(--muted)" }}>{metrics.concern_agreement_count} of {metrics.comparable_reviews}</small>
+          </div>
+          <div style={{ background: "var(--surface-2)", padding: "14px 16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase" }}>Priority Agreement</span>
+            <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--text)", marginTop: "4px" }}>{pct(metrics.priority_agreement_rate)}</div>
+            <small style={{ fontSize: "11px", color: "var(--muted)" }}>{metrics.priority_agreement_count} of {metrics.comparable_reviews}</small>
+          </div>
+          <div style={{ background: "var(--surface-2)", padding: "14px 16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase" }}>Recommendation Agreement</span>
+            <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--text)", marginTop: "4px" }}>{pct(metrics.recommendation_agreement_rate)}</div>
+            <small style={{ fontSize: "11px", color: "var(--muted)" }}>{metrics.recommendation_agreement_count} of {metrics.comparable_reviews}</small>
+          </div>
+          <div style={{ background: "var(--surface-2)", padding: "14px 16px", borderRadius: "4px", border: "1px solid var(--accent)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase" }}>Overall Agreement</span>
+            <div style={{ fontSize: "22px", fontWeight: 700, color: "var(--accent)", marginTop: "4px" }}>{pct(metrics.overall_agreement_rate)}</div>
+            <small style={{ fontSize: "11px", color: "var(--muted)" }}>{metrics.overall_agreement_count} of {metrics.comparable_reviews}</small>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Prior-reviews notice + expander. Shows this reviewer's OWN past answers
+// and rationale for this entity — never a VEIL conclusion, and never the
+// backend comparison (that stays gated behind a *new* submission). A row
+// here is exactly the same shape returned by GET /manual-review/{entity},
+// which has no risk_score/risk_band/primary_driver/findings field at all.
+// ---------------------------------------------------------------------------
+
+function PriorReviewsPanel({ reviews }) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (!reviews || reviews.length === 0) return null;
+
+  return (
+    <div
+      style={{
+        background: "rgba(255, 255, 255, 0.03)",
+        border: "1px solid var(--line)",
+        borderRadius: "6px",
+        padding: "16px 20px",
+        marginBottom: "24px",
+      }}
+    >
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        style={{
+          background: "transparent",
+          border: "none",
+          padding: 0,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          cursor: "pointer",
+          color: "var(--text)",
+        }}
+      >
+        <span style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "13px", fontWeight: 600 }}>
+          <History size={16} color="var(--muted)" />
+          {reviews.length} previous {reviews.length === 1 ? "review" : "reviews"} recorded for this entity
+        </span>
+        {expanded ? <ChevronUp size={16} color="var(--muted)" /> : <ChevronDown size={16} color="var(--muted)" />}
+      </button>
+
+      {expanded && (
+        <div style={{ marginTop: "16px", display: "flex", flexDirection: "column", gap: "14px" }}>
+          {reviews.map((review) => {
+            const ui = formFromReview(review);
+            return (
+              <div
+                key={review.id}
+                style={{
+                  background: "var(--surface-2)",
+                  border: "1px solid var(--line)",
+                  borderRadius: "4px",
+                  padding: "14px 16px",
+                  fontSize: "12px",
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "8px" }}>
+                  <span style={{ color: "var(--muted)", fontFamily: "monospace" }}>{formatTimestamp(review.created_at)}</span>
+                  <span style={{ color: "var(--muted)" }}>Reviewer: {review.reviewer_id || "—"}</span>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "6px 16px", color: "var(--text)" }}>
+                  <span>Concern: <strong>{ui.q1_concern}</strong></span>
+                  <span>Type: <strong>{ui.q2_concern_type}</strong></span>
+                  <span>Priority: <strong>{ui.q3_priority}</strong></span>
+                  <span>Recommended: <strong>{ui.q4_recommended}</strong></span>
+                  <span>Evidence sufficient: <strong>{ui.q5_sufficient}</strong></span>
+                </div>
+                <p style={{ margin: "8px 0 0", color: "var(--muted)", lineHeight: 1.5, whiteSpace: "pre-wrap" }}>{ui.q6_rationale}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function ManualReviewPage() {
@@ -78,89 +314,74 @@ export default function ManualReviewPage() {
   const rawDecoded = paramEntityName ? decodeURIComponent(paramEntityName) : null;
   const selectedEntity = EXACT_SIX_ENTITIES.includes(rawDecoded) ? rawDecoded : null;
 
-  const [localReviews, setLocalReviews] = useState(loadSavedReviews);
   const [loadingEntity, setLoadingEntity] = useState(false);
-  const [telemetry, setTelemetry] = useState(null);
-  const [veilData, setVeilData] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-  const [apiPersistenceStatus, setApiPersistenceStatus] = useState(null);
+  const [evidence, setEvidence] = useState(null);
+  const [evidenceError, setEvidenceError] = useState(null);
 
-  // Assessment Form State
-  const [formData, setFormData] = useState({
-    q1_concern: "",
-    q2_concern_type: "",
-    q3_priority: "",
-    q4_recommended: "",
-    q5_sufficient: "",
-    q6_rationale: "",
-  });
+  // Reviews that existed *before* this page load — shown read-only in
+  // PriorReviewsPanel, never used to prefill the live form and never the
+  // trigger for showing a comparison.
+  const [priorReviews, setPriorReviews] = useState([]);
+  const [historyError, setHistoryError] = useState(null);
 
+  // The review created by THIS session's submission, if any. Its presence
+  // (not `priorReviews.length > 0`) is what gates the comparison view —
+  // selecting an already-reviewed entity must always land back in the blind
+  // phase, never resume showing a previous comparison.
+  const [justSubmittedReview, setJustSubmittedReview] = useState(null);
+  const [comparison, setComparison] = useState(null);
+  const [comparisonError, setComparisonError] = useState(null);
+
+  const [formData, setFormData] = useState(EMPTY_FORM);
   const [formError, setFormError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
-  // Load entity operational telemetry and existing review
+  // Blind phase only: fetch the blind dossier and this entity's own review
+  // history (for the "N previous reviews" notice — their own past answers,
+  // never VEIL output). Deliberately never calls getEntityDetails or
+  // getManualReviewComparison here — those must not run until a *new*
+  // review is submitted in this session, even if older reviews already
+  // exist for this entity.
   useEffect(() => {
-    if (!selectedEntity) {
-      return;
-    }
+    if (!selectedEntity) return;
 
     let isCancelled = false;
 
     const loadData = async () => {
       setLoadingEntity(true);
       setFormError(null);
-      setApiPersistenceStatus(null);
-
-      // Reset form
-      setFormData({
-        q1_concern: "",
-        q2_concern_type: "",
-        q3_priority: "",
-        q4_recommended: "",
-        q5_sufficient: "",
-        q6_rationale: "",
-      });
+      setSubmitError(null);
+      setEvidence(null);
+      setEvidenceError(null);
+      setPriorReviews([]);
+      setHistoryError(null);
+      setJustSubmittedReview(null);
+      setComparison(null);
+      setComparisonError(null);
+      setFormData(EMPTY_FORM);
 
       try {
-        let backendReview = null;
-        try {
-          backendReview = await getManualReview(selectedEntity);
-        } catch {
-          // Backend endpoint not present
-        }
-
-        const existingReview = backendReview || localReviews[selectedEntity];
-        if (existingReview && existingReview.answers && !isCancelled) {
-          setFormData(existingReview.answers);
-        }
-
-        let blindEvidence = null;
-        try {
-          blindEvidence = await getBlindEvidence(selectedEntity);
-        } catch {
-          // Ignored
-        }
-
-        const details = await getEntityDetails(selectedEntity);
-        if (!isCancelled) {
-          setVeilData(details);
-          if (blindEvidence) {
-            setTelemetry(blindEvidence);
-          } else if (details) {
-            setTelemetry({
-              entity_name: details.entity_name,
-              alert_count: details.alert_count,
-              peer_metrics: details.peer_metrics || {},
-              raw_alerts_available: false,
-            });
-          }
-        }
+        const historyResult = await getManualReviewHistory(selectedEntity);
+        if (!isCancelled) setPriorReviews(historyResult);
       } catch (err) {
-        console.error("Error loading entity data for review:", err);
-      } finally {
+        console.error("Failed to load review history:", err);
+        if (!isCancelled) setHistoryError("Failed to load prior review history for this entity.");
+      }
+
+      try {
+        const evidenceResult = await getBlindEvidence(selectedEntity);
+        if (!isCancelled) setEvidence(evidenceResult);
+      } catch (err) {
+        console.error("Failed to load blind evidence:", err);
         if (!isCancelled) {
-          setLoadingEntity(false);
+          setEvidenceError(
+            err.response?.data?.detail || "Failed to load the blind evidence dossier for this entity."
+          );
         }
       }
+
+      if (!isCancelled) setLoadingEntity(false);
     };
 
     loadData();
@@ -168,10 +389,7 @@ export default function ManualReviewPage() {
     return () => {
       isCancelled = true;
     };
-  }, [selectedEntity, localReviews]);
-
-  const activeReview = selectedEntity ? localReviews[selectedEntity] : null;
-  const isCompleted = Boolean(activeReview);
+  }, [selectedEntity]);
 
   const handleSelectEntity = (entity) => {
     navigate(`/manual-review/${encodeURIComponent(entity)}`);
@@ -208,64 +426,32 @@ export default function ManualReviewPage() {
 
     setSubmitting(true);
     setFormError(null);
+    setSubmitError(null);
 
-    const reviewPayload = {
-      entity_name: selectedEntity,
-      timestamp: new Date().toISOString(),
-      reviewer_id: "SUPERVISOR-EXP-01",
-      answers: {
-        q1_concern: formData.q1_concern,
-        q2_concern_type: formData.q2_concern_type,
-        q3_priority: formData.q3_priority,
-        q4_recommended: formData.q4_recommended,
-        q5_sufficient: formData.q5_sufficient,
-        q6_rationale: formData.q6_rationale.trim(),
-      },
-    };
+    const payload = formToPayload(selectedEntity, formData);
 
     try {
-      const backendResult = await submitManualReview(selectedEntity, reviewPayload);
-      if (backendResult) {
-        setApiPersistenceStatus({
-          savedToBackend: true,
-          message: "Assessment successfully stored in backend repository.",
-        });
-      } else {
-        setApiPersistenceStatus({
-          savedToBackend: false,
-          message: "Backend API required for this workflow is not currently available.",
-        });
-      }
+      const created = await submitManualReview(payload);
+      setJustSubmittedReview(created);
 
-      saveReviewLocally(selectedEntity, reviewPayload);
-      setLocalReviews((prev) => ({ ...prev, [selectedEntity]: reviewPayload }));
+      try {
+        const comparisonResult = await getManualReviewComparison(selectedEntity);
+        setComparison(comparisonResult);
+      } catch (err) {
+        console.error("Failed to load comparison after submission:", err);
+        setComparisonError("Review saved, but the comparison could not be loaded.");
+      }
     } catch (err) {
       console.error("Submission error:", err);
-      saveReviewLocally(selectedEntity, reviewPayload);
-      setLocalReviews((prev) => ({ ...prev, [selectedEntity]: reviewPayload }));
-      setApiPersistenceStatus({
-        savedToBackend: false,
-        message: "Backend API required for this workflow is not currently available.",
-      });
+      const detail = err.response?.data?.detail;
+      setSubmitError(
+        typeof detail === "string"
+          ? detail
+          : "Failed to submit the review to the backend. Nothing was saved — please retry."
+      );
     } finally {
       setSubmitting(false);
     }
-  };
-
-  const handleResetReview = () => {
-    if (!selectedEntity) return;
-    const current = { ...localReviews };
-    delete current[selectedEntity];
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(current));
-    setLocalReviews(current);
-    setFormData({
-      q1_concern: "",
-      q2_concern_type: "",
-      q3_priority: "",
-      q4_recommended: "",
-      q5_sufficient: "",
-      q6_rationale: "",
-    });
   };
 
   return (
@@ -276,9 +462,7 @@ export default function ManualReviewPage() {
           <div className="dashboard-brand-mark">V</div>
           <div>
             <div className="dashboard-brand-name">VEIL</div>
-            <div className="dashboard-brand-subtitle">
-              Supervisory Intelligence for SOC Assessment
-            </div>
+            <div className="dashboard-brand-subtitle">Supervisory Intelligence for SOC Assessment</div>
           </div>
         </Link>
         <div className="dashboard-nav-links">
@@ -297,9 +481,7 @@ export default function ManualReviewPage() {
         {/* HEADER */}
         <div className="dashboard-header" style={{ marginBottom: "32px" }}>
           <div>
-            <div className="dashboard-eyebrow">
-              03 / HUMAN-IN-THE-LOOP SUPERVISORY REVIEW
-            </div>
+            <div className="dashboard-eyebrow">03 / HUMAN-IN-THE-LOOP SUPERVISORY REVIEW</div>
             <h1>
               MANUAL
               <br />
@@ -317,10 +499,12 @@ export default function ManualReviewPage() {
         </div>
 
         {/* ========================================================
-            VIEW 1: ENTITY SELECTION SCREEN (When no entity is chosen)
+            VIEW 1: ENTITY SELECTION SCREEN
             ======================================================== */}
         {!selectedEntity && (
           <div>
+            <ValidationMetricsPanel />
+
             <div className="panel-header" style={{ marginBottom: "16px" }}>
               <div>
                 <div className="panel-label">TARGET SELECTION</div>
@@ -332,176 +516,74 @@ export default function ManualReviewPage() {
               <span className="panel-meta">6 EVALUATION ENTITIES</span>
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))",
-                gap: "20px",
-                marginTop: "20px",
-              }}
-            >
-              {EXACT_SIX_ENTITIES.map((name, idx) => {
-                const review = localReviews[name];
-                const reviewed = Boolean(review);
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "20px", marginTop: "20px" }}>
+              {EXACT_SIX_ENTITIES.map((name, idx) => (
+                <div
+                  key={name}
+                  style={{
+                    background: "var(--surface)",
+                    border: "1px solid var(--line)",
+                    borderRadius: "6px",
+                    padding: "24px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+                      <span style={{ fontSize: "11px", fontFamily: "monospace", color: "var(--muted)", fontWeight: 700 }}>
+                        {(idx + 1).toString().padStart(2, "0")} / 06
+                      </span>
+                    </div>
+                    <h3 style={{ fontSize: "18px", margin: "0 0 8px", color: "var(--text)" }}>{name}</h3>
+                    <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 16px", lineHeight: "1.4" }}>
+                      Operational evidence dossier available for blind review. Analytical scores remain hidden until a review is submitted.
+                    </p>
+                  </div>
 
-                return (
-                  <div
-                    key={name}
+                  <button
+                    onClick={() => handleSelectEntity(name)}
                     style={{
-                      background: "var(--surface)",
-                      border: `1px solid ${reviewed ? "rgba(87, 213, 140, 0.3)" : "var(--line)"}`,
-                      borderRadius: "6px",
-                      padding: "24px",
+                      padding: "10px 16px",
+                      background: "rgba(86, 199, 255, 0.12)",
+                      border: "1px solid var(--accent)",
+                      color: "var(--accent)",
+                      borderRadius: "4px",
+                      fontWeight: 600,
+                      fontSize: "13px",
+                      cursor: "pointer",
                       display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      transition: "all 0.2s ease",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      marginTop: "16px",
                     }}
                   >
-                    <div>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
-                        <span style={{ fontSize: "11px", fontFamily: "monospace", color: "var(--muted)", fontWeight: 700 }}>
-                          {(idx + 1).toString().padStart(2, "0")} / 06
-                        </span>
-                        {reviewed ? (
-                          <span
-                            style={{
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "5px",
-                              padding: "2px 8px",
-                              borderRadius: "3px",
-                              background: "rgba(87, 213, 140, 0.12)",
-                              border: "1px solid rgba(87, 213, 140, 0.3)",
-                              color: "var(--green)",
-                              fontSize: "11px",
-                              fontWeight: 700,
-                            }}
-                          >
-                            <CheckCircle2 size={12} />
-                            COMPLETED
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "5px",
-                              padding: "2px 8px",
-                              borderRadius: "3px",
-                              background: "rgba(255, 255, 255, 0.04)",
-                              border: "1px solid var(--line)",
-                              color: "var(--muted)",
-                              fontSize: "11px",
-                              fontWeight: 600,
-                            }}
-                          >
-                            <EyeOff size={12} />
-                            PENDING REVIEW
-                          </span>
-                        )}
-                      </div>
-
-                      <h3 style={{ fontSize: "18px", margin: "0 0 8px", color: "var(--text)" }}>
-                        {name}
-                      </h3>
-
-                      <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 16px", lineHeight: "1.4" }}>
-                        {reviewed
-                          ? `Reviewed on ${new Date(review.timestamp).toLocaleDateString()} — Priority assessed: ${review.answers.q3_priority}`
-                          : "Operational evidence dossier unreviewed. Analytical scores remain blinded until manual assessment submission."}
-                      </p>
-                    </div>
-
-                    <button
-                      onClick={() => handleSelectEntity(name)}
-                      style={{
-                        padding: "10px 16px",
-                        background: reviewed ? "var(--surface-2)" : "rgba(86, 199, 255, 0.12)",
-                        border: `1px solid ${reviewed ? "var(--line)" : "var(--accent)"}`,
-                        color: reviewed ? "var(--text)" : "var(--accent)",
-                        borderRadius: "4px",
-                        fontWeight: 600,
-                        fontSize: "13px",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                        marginTop: "16px",
-                        transition: "all 0.2s ease",
-                      }}
-                    >
-                      {reviewed ? (
-                        <>
-                          <Eye size={15} />
-                          <span>View Review & Comparison</span>
-                        </>
-                      ) : (
-                        <>
-                          <FileCheck size={15} />
-                          <span>Start Manual Review</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                );
-              })}
+                    <FileCheck size={15} />
+                    <span>Open Review Dossier</span>
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         )}
 
         {/* ========================================================
-            VIEW 2: WORKFLOW SCREEN (When an entity is selected)
+            VIEW 2: WORKFLOW SCREEN
             ======================================================== */}
         {selectedEntity && (
           <div>
-            {/* BACK BUTTON & ENTITY HEADER */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px", flexWrap: "wrap", gap: "12px" }}>
               <button
                 onClick={handleBackToSelection}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "var(--accent)",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  padding: 0,
-                }}
+                style={{ background: "transparent", border: "none", color: "var(--accent)", fontSize: "13px", fontWeight: 600, cursor: "pointer", padding: 0 }}
               >
                 ← Return to Entity Selection
               </button>
-
-              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                <span style={{ fontSize: "13px", color: "var(--muted)" }}>
-                  Target: <strong style={{ color: "var(--text)" }}>{selectedEntity}</strong>
-                </span>
-                {isCompleted && (
-                  <button
-                    onClick={handleResetReview}
-                    title="Clear saved review and conduct re-assessment"
-                    style={{
-                      background: "rgba(255, 255, 255, 0.04)",
-                      border: "1px solid var(--line)",
-                      color: "var(--muted)",
-                      padding: "4px 10px",
-                      borderRadius: "3px",
-                      fontSize: "11px",
-                      cursor: "pointer",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "4px",
-                    }}
-                  >
-                    <RotateCcw size={11} />
-                    Re-evaluate
-                  </button>
-                )}
-              </div>
+              <span style={{ fontSize: "13px", color: "var(--muted)" }}>
+                Target: <strong style={{ color: "var(--text)" }}>{selectedEntity}</strong>
+              </span>
             </div>
 
             {loadingEntity && (
@@ -513,10 +595,7 @@ export default function ManualReviewPage() {
 
             {!loadingEntity && (
               <div>
-                {/* ----------------------------------------------------
-                    BLIND REVIEW PROTOCOL BANNER
-                    ---------------------------------------------------- */}
-                {!isCompleted && (
+                {!justSubmittedReview && (
                   <div
                     style={{
                       background: "rgba(86, 199, 255, 0.05)",
@@ -531,150 +610,203 @@ export default function ManualReviewPage() {
                   >
                     <EyeOff size={24} color="var(--accent)" style={{ flexShrink: 0, marginTop: "2px" }} />
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "4px" }}>
-                        <strong style={{ fontSize: "14px", letterSpacing: "0.08em", color: "var(--accent)", textTransform: "uppercase" }}>
-                          BLIND REVIEW IN EFFECT
-                        </strong>
-                        <span style={{ fontSize: "11px", background: "rgba(86, 199, 255, 0.15)", padding: "2px 6px", borderRadius: "2px", color: "var(--accent)" }}>
-                          SUPERVISORY INTEGRITY PROTOCOL
-                        </span>
-                      </div>
-                      <p style={{ margin: 0, fontSize: "13px", color: "var(--text)", lineHeight: "1.5" }}>
-                        VEIL analytical conclusions (risk score, risk band, primary driver, anomaly scores, and model recommendations) are intentionally hidden until you submit your independent assessment.
+                      <strong style={{ fontSize: "14px", letterSpacing: "0.08em", color: "var(--accent)", textTransform: "uppercase" }}>
+                        BLIND REVIEW IN EFFECT
+                      </strong>
+                      <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--text)", lineHeight: "1.5" }}>
+                        VEIL analytical conclusions (risk score, risk band, primary driver, and detector findings) are never
+                        requested by this page until after you submit an assessment in this session — even if this entity
+                        was reviewed before.
                       </p>
                     </div>
                   </div>
                 )}
 
+                {historyError && (
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--amber)", fontSize: "13px", marginBottom: "16px" }}>
+                    <AlertTriangle size={16} />
+                    <span>{historyError}</span>
+                  </div>
+                )}
+
+                {!justSubmittedReview && <PriorReviewsPanel reviews={priorReviews} />}
+
                 {/* ----------------------------------------------------
-                    1. BLIND EVIDENCE DOSSIER (Descriptive Operational Telemetry)
+                    1. BLIND EVIDENCE DOSSIER
                     ---------------------------------------------------- */}
                 <section
                   className="ranking-panel"
-                  style={{
-                    background: "var(--surface)",
-                    border: "1px solid var(--line)",
-                    borderRadius: "6px",
-                    padding: "24px",
-                    marginBottom: "30px",
-                  }}
+                  style={{ background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "6px", padding: "24px", marginBottom: "30px" }}
                 >
                   <div className="panel-header" style={{ marginBottom: "20px" }}>
                     <div>
                       <div className="panel-label">SECTION 01 / EVIDENCE DOSSIER</div>
                       <h2>Operational Telemetry Evidence</h2>
                       <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--muted)" }}>
-                        Factual descriptive metrics derived from SOC alert telemetry for {selectedEntity}.
+                        Factual descriptive metrics and raw alert records for {selectedEntity}. No peer comparison of any kind
+                        is included here by design.
                       </p>
                     </div>
                     <span className="panel-meta">RAW TELEMETRY</span>
                   </div>
 
-                  {/* Operational Telemetry Grid */}
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                      gap: "16px",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
-                      <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                        Total Alert Volume
-                      </span>
-                      <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
-                        {telemetry?.alert_count ?? "—"}
-                      </div>
-                      <small style={{ fontSize: "11px", color: "var(--muted)" }}>
-                        Peer median: {telemetry?.peer_metrics?.alert_count?.peer_median ?? "—"} alerts
-                      </small>
+                  {evidenceError && (
+                    <div className="error-state" style={{ minHeight: "120px", padding: "24px" }}>
+                      <AlertTriangle size={22} color="var(--amber)" />
+                      <h3 style={{ fontSize: "14px", margin: "8px 0 4px" }}>Evidence Unavailable</h3>
+                      <p style={{ fontSize: "12px", color: "var(--muted)" }}>{evidenceError}</p>
                     </div>
+                  )}
 
-                    <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
-                      <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                        Avg Alert Closure Duration
-                      </span>
-                      <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
-                        {telemetry?.peer_metrics?.avg_closure_seconds?.entity != null
-                          ? `${Number(telemetry.peer_metrics.avg_closure_seconds.entity).toFixed(0)}s`
-                          : "—"}
+                  {!evidenceError && !evidence && (
+                    <div className="skeleton skeleton-card" style={{ height: "160px" }} />
+                  )}
+
+                  {!evidenceError && evidence && (
+                    <>
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
+                          gap: "16px",
+                          marginBottom: "20px",
+                        }}
+                      >
+                        <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+                          <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                            Total Alerts
+                          </span>
+                          <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
+                            {evidence.aggregates.total_alerts}
+                          </div>
+                          <small style={{ fontSize: "11px", color: "var(--muted)" }}>
+                            {evidence.aggregates.open_alerts} open · {evidence.aggregates.closed_alerts} closed
+                          </small>
+                        </div>
+
+                        <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+                          <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                            Avg Closure Duration
+                          </span>
+                          <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
+                            {evidence.aggregates.avg_closure_seconds != null
+                              ? formatSeconds(evidence.aggregates.avg_closure_seconds)
+                              : "—"}
+                          </div>
+                          <small style={{ fontSize: "11px", color: "var(--muted)" }}>this entity only</small>
+                        </div>
+
+                        <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+                          <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                            Escalated Rate
+                          </span>
+                          <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
+                            {(evidence.aggregates.escalated_rate * 100).toFixed(1)}%
+                          </div>
+                          <small style={{ fontSize: "11px", color: "var(--muted)" }}>
+                            {evidence.aggregates.escalated_count} of {evidence.aggregates.total_alerts}
+                          </small>
+                        </div>
+
+                        <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+                          <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                            Avg Note Length
+                          </span>
+                          <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
+                            {Math.round(evidence.aggregates.avg_investigation_note_length)} chars
+                          </div>
+                          <small style={{ fontSize: "11px", color: "var(--muted)" }}>this entity only</small>
+                        </div>
                       </div>
-                      <small style={{ fontSize: "11px", color: "var(--muted)" }}>
-                        Peer median: {telemetry?.peer_metrics?.avg_closure_seconds?.peer_median != null
-                          ? `${Number(telemetry.peer_metrics.avg_closure_seconds.peer_median).toFixed(0)}s`
-                          : "—"}
-                      </small>
-                    </div>
 
-                    <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
-                      <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                        Escalation Rate
-                      </span>
-                      <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
-                        {telemetry?.peer_metrics?.escalation_rate?.entity != null
-                          ? `${(Number(telemetry.peer_metrics.escalation_rate.entity) * 100).toFixed(1)}%`
-                          : "—"}
+                      {/* Severity / asset-type breakdown */}
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px", marginBottom: "24px" }}>
+                        <div style={{ background: "var(--surface-2)", padding: "14px 16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+                          <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase" }}>Severity Distribution</span>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+                            {Object.entries(evidence.aggregates.severity_distribution).map(([sev, count]) => (
+                              <span key={sev} style={{ fontSize: "12px", color: "var(--text)", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "3px", padding: "3px 8px" }}>
+                                {sev}: {count}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div style={{ background: "var(--surface-2)", padding: "14px 16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
+                          <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase" }}>Asset Type Distribution</span>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginTop: "8px" }}>
+                            {Object.entries(evidence.aggregates.asset_type_distribution).map(([type, count]) => (
+                              <span key={type} style={{ fontSize: "12px", color: "var(--text)", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "3px", padding: "3px 8px" }}>
+                                {type}: {count}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                      <small style={{ fontSize: "11px", color: "var(--muted)" }}>
-                        Peer median: {telemetry?.peer_metrics?.escalation_rate?.peer_median != null
-                          ? `${(Number(telemetry.peer_metrics.escalation_rate.peer_median) * 100).toFixed(1)}%`
-                          : "—"}
-                      </small>
-                    </div>
 
-                    <div style={{ background: "var(--surface-2)", padding: "16px", borderRadius: "4px", border: "1px solid var(--line)" }}>
-                      <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                        Avg Investigation Note Length
-                      </span>
-                      <div style={{ fontSize: "24px", fontWeight: 700, margin: "8px 0 4px", color: "var(--text)" }}>
-                        {telemetry?.peer_metrics?.avg_note_length?.entity != null
-                          ? `${Number(telemetry.peer_metrics.avg_note_length.entity).toFixed(0)} chars`
-                          : "—"}
+                      {/* The actual evidence a supervisor reviews: every alert record. */}
+                      <div style={{ overflowX: "auto", width: "100%", maxHeight: "420px", overflowY: "auto", border: "1px solid var(--line)", borderRadius: "4px" }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px", textAlign: "left", minWidth: "760px" }}>
+                          <thead>
+                            <tr
+                              style={{
+                                borderBottom: "1px solid var(--line)",
+                                color: "var(--muted)",
+                                fontSize: "10px",
+                                letterSpacing: "0.08em",
+                                textTransform: "uppercase",
+                                position: "sticky",
+                                top: 0,
+                                background: "var(--surface)",
+                              }}
+                            >
+                              <th style={{ padding: "10px 14px" }}>Alert ID</th>
+                              <th style={{ padding: "10px 14px" }}>Severity</th>
+                              <th style={{ padding: "10px 14px" }}>Asset Type</th>
+                              <th style={{ padding: "10px 14px" }}>Created</th>
+                              <th style={{ padding: "10px 14px" }}>Closed</th>
+                              <th style={{ padding: "10px 14px" }}>Duration</th>
+                              <th style={{ padding: "10px 14px" }}>Escalated</th>
+                              <th style={{ padding: "10px 14px" }}>Investigation Notes</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {evidence.alerts.map((alert) => (
+                              <tr key={alert.alert_id} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                                <td style={{ padding: "10px 14px", fontFamily: "monospace", color: "var(--text)" }}>{alert.alert_id}</td>
+                                <td style={{ padding: "10px 14px", color: "var(--text)", textTransform: "capitalize" }}>{alert.severity}</td>
+                                <td style={{ padding: "10px 14px", color: "var(--muted)" }}>{alert.asset_type}</td>
+                                <td style={{ padding: "10px 14px", color: "var(--muted)" }}>{formatTimestamp(alert.created_time)}</td>
+                                <td style={{ padding: "10px 14px", color: "var(--muted)" }}>{formatTimestamp(alert.closed_time)}</td>
+                                <td style={{ padding: "10px 14px", color: "var(--muted)" }}>{formatSeconds(alert.closure_duration_seconds)}</td>
+                                <td style={{ padding: "10px 14px" }}>
+                                  <span style={{ color: alert.escalated ? "var(--green)" : "var(--muted)" }}>
+                                    {alert.escalated ? "Yes" : "No"}
+                                  </span>
+                                </td>
+                                <td style={{ padding: "10px 14px", color: "var(--muted)", maxWidth: "320px" }}>
+                                  {alert.investigation_notes || "—"}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
-                      <small style={{ fontSize: "11px", color: "var(--muted)" }}>
-                        Peer median: {telemetry?.peer_metrics?.avg_note_length?.peer_median != null
-                          ? `${Number(telemetry.peer_metrics.avg_note_length.peer_median).toFixed(0)} chars`
-                          : "—"}
-                      </small>
-                    </div>
-                  </div>
-
-                  {/* Backend Status Note on Raw Alert Records */}
-                  <div
-                    style={{
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid var(--line)",
-                      borderRadius: "4px",
-                      padding: "12px 16px",
-                      fontSize: "12px",
-                      color: "var(--muted)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                    }}
-                  >
-                    <Info size={16} color="var(--accent)" style={{ flexShrink: 0 }} />
-                    <span>
-                      <strong>Operational Telemetry Integrity Notice:</strong> Evidence provided contains strictly factual operational records. No automated verdicts, risk scores, or diagnostic interpretations are included in this blind phase.
-                    </span>
-                  </div>
+                    </>
+                  )}
                 </section>
 
                 {/* ----------------------------------------------------
-                    2. REVIEWER ASSESSMENT FORM (Before submission)
+                    2. REVIEWER ASSESSMENT FORM — always shown for a fresh
+                    blind review, regardless of prior review history. Only
+                    disappears once THIS session has submitted a new review.
+                    Always starts empty (EMPTY_FORM) — never prefilled from
+                    a past review, so the reviewer isn't anchored.
                     ---------------------------------------------------- */}
-                {!isCompleted && (
+                {!justSubmittedReview && (
                   <form
                     onSubmit={handleSubmitReview}
                     className="ranking-panel"
-                    style={{
-                      background: "var(--surface)",
-                      border: "1px solid var(--line)",
-                      borderRadius: "6px",
-                      padding: "28px",
-                      marginBottom: "30px",
-                    }}
+                    style={{ background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "6px", padding: "28px", marginBottom: "30px" }}
                   >
                     <div className="panel-header" style={{ marginBottom: "24px" }}>
                       <div>
@@ -688,27 +820,21 @@ export default function ManualReviewPage() {
                     </div>
 
                     {formError && (
-                      <div
-                        style={{
-                          background: "rgba(239, 107, 114, 0.12)",
-                          border: "1px solid rgba(239, 107, 114, 0.3)",
-                          borderRadius: "4px",
-                          padding: "12px 16px",
-                          marginBottom: "20px",
-                          color: "var(--red)",
-                          fontSize: "13px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "10px",
-                        }}
-                      >
+                      <div style={{ background: "rgba(239, 107, 114, 0.12)", border: "1px solid rgba(239, 107, 114, 0.3)", borderRadius: "4px", padding: "12px 16px", marginBottom: "20px", color: "var(--red)", fontSize: "13px", display: "flex", alignItems: "center", gap: "10px" }}>
                         <AlertCircle size={16} />
                         <span>{formError}</span>
                       </div>
                     )}
 
+                    {submitError && (
+                      <div style={{ background: "rgba(239, 107, 114, 0.12)", border: "1px solid rgba(239, 107, 114, 0.3)", borderRadius: "4px", padding: "12px 16px", marginBottom: "20px", color: "var(--red)", fontSize: "13px", display: "flex", alignItems: "center", gap: "10px" }}>
+                        <AlertCircle size={16} />
+                        <span>{submitError}</span>
+                      </div>
+                    )}
+
                     <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
-                      {/* Q1: Supervisory concern present? */}
+                      {/* Q1 */}
                       <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "var(--text)", marginBottom: "10px" }}>
                           1. Supervisory concern present? <span style={{ color: "var(--red)" }}>*</span>
@@ -725,7 +851,6 @@ export default function ManualReviewPage() {
                                 fontSize: "13px",
                                 fontWeight: 600,
                                 cursor: "pointer",
-                                transition: "all 0.15s ease",
                                 background: formData.q1_concern === opt ? "rgba(86, 199, 255, 0.18)" : "var(--surface-2)",
                                 border: `1px solid ${formData.q1_concern === opt ? "var(--accent)" : "var(--line)"}`,
                                 color: formData.q1_concern === opt ? "var(--accent)" : "var(--text)",
@@ -737,13 +862,13 @@ export default function ManualReviewPage() {
                         </div>
                       </div>
 
-                      {/* Q2: Concern type */}
+                      {/* Q2 */}
                       <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "var(--text)", marginBottom: "10px" }}>
                           2. Concern type <span style={{ color: "var(--red)" }}>*</span>
                         </label>
                         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                          {["Execution weakness", "Missing evidence", "Unusual behaviour", "Other", "No concern"].map((opt) => (
+                          {CONCERN_TYPE_OPTIONS.map((opt) => (
                             <button
                               type="button"
                               key={opt}
@@ -754,7 +879,6 @@ export default function ManualReviewPage() {
                                 fontSize: "13px",
                                 fontWeight: 600,
                                 cursor: "pointer",
-                                transition: "all 0.15s ease",
                                 background: formData.q2_concern_type === opt ? "rgba(86, 199, 255, 0.18)" : "var(--surface-2)",
                                 border: `1px solid ${formData.q2_concern_type === opt ? "var(--accent)" : "var(--line)"}`,
                                 color: formData.q2_concern_type === opt ? "var(--accent)" : "var(--text)",
@@ -766,20 +890,15 @@ export default function ManualReviewPage() {
                         </div>
                       </div>
 
-                      {/* Q3: Manual reviewer priority */}
+                      {/* Q3 */}
                       <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "var(--text)", marginBottom: "10px" }}>
                           3. Manual reviewer priority <span style={{ color: "var(--red)" }}>*</span>
                         </label>
                         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                          {["Critical", "High", "Medium", "Low"].map((opt) => {
+                          {PRIORITY_OPTIONS.map((opt) => {
                             const isSelected = formData.q3_priority === opt;
-                            const colorMap = {
-                              Critical: "var(--red)",
-                              High: "var(--amber)",
-                              Medium: "var(--accent)",
-                              Low: "var(--green)",
-                            };
+                            const colorMap = { Critical: "var(--red)", High: "var(--amber)", Medium: "var(--accent)", Low: "var(--green)" };
                             return (
                               <button
                                 type="button"
@@ -791,7 +910,6 @@ export default function ManualReviewPage() {
                                   fontSize: "13px",
                                   fontWeight: 700,
                                   cursor: "pointer",
-                                  transition: "all 0.15s ease",
                                   background: isSelected ? "rgba(255, 255, 255, 0.08)" : "var(--surface-2)",
                                   border: `1px solid ${isSelected ? colorMap[opt] : "var(--line)"}`,
                                   color: isSelected ? colorMap[opt] : "var(--text)",
@@ -804,7 +922,7 @@ export default function ManualReviewPage() {
                         </div>
                       </div>
 
-                      {/* Q4: Manual review recommended? */}
+                      {/* Q4 */}
                       <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "var(--text)", marginBottom: "10px" }}>
                           4. Manual review recommended? <span style={{ color: "var(--red)" }}>*</span>
@@ -821,7 +939,6 @@ export default function ManualReviewPage() {
                                 fontSize: "13px",
                                 fontWeight: 600,
                                 cursor: "pointer",
-                                transition: "all 0.15s ease",
                                 background: formData.q4_recommended === opt ? "rgba(86, 199, 255, 0.18)" : "var(--surface-2)",
                                 border: `1px solid ${formData.q4_recommended === opt ? "var(--accent)" : "var(--line)"}`,
                                 color: formData.q4_recommended === opt ? "var(--accent)" : "var(--text)",
@@ -833,7 +950,7 @@ export default function ManualReviewPage() {
                         </div>
                       </div>
 
-                      {/* Q5: Evidence sufficient? */}
+                      {/* Q5 */}
                       <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "var(--text)", marginBottom: "10px" }}>
                           5. Evidence sufficient? <span style={{ color: "var(--red)" }}>*</span>
@@ -850,7 +967,6 @@ export default function ManualReviewPage() {
                                 fontSize: "13px",
                                 fontWeight: 600,
                                 cursor: "pointer",
-                                transition: "all 0.15s ease",
                                 background: formData.q5_sufficient === opt ? "rgba(86, 199, 255, 0.18)" : "var(--surface-2)",
                                 border: `1px solid ${formData.q5_sufficient === opt ? "var(--accent)" : "var(--line)"}`,
                                 color: formData.q5_sufficient === opt ? "var(--accent)" : "var(--text)",
@@ -862,7 +978,7 @@ export default function ManualReviewPage() {
                         </div>
                       </div>
 
-                      {/* Q6: Reviewer rationale */}
+                      {/* Q6 */}
                       <div>
                         <label style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "var(--text)", marginBottom: "8px" }}>
                           6. Reviewer rationale <span style={{ color: "var(--red)" }}>*</span>
@@ -891,7 +1007,6 @@ export default function ManualReviewPage() {
                       </div>
                     </div>
 
-                    {/* SUBMIT BUTTON */}
                     <div style={{ marginTop: "32px", display: "flex", justifyContent: "flex-end" }}>
                       <button
                         type="submit"
@@ -909,7 +1024,6 @@ export default function ManualReviewPage() {
                           display: "inline-flex",
                           alignItems: "center",
                           gap: "8px",
-                          transition: "all 0.2s ease",
                         }}
                       >
                         <Send size={15} />
@@ -920,11 +1034,11 @@ export default function ManualReviewPage() {
                 )}
 
                 {/* ----------------------------------------------------
-                    3. POST-SUBMISSION CONFIRMATION & COMPARISON
+                    3. POST-SUBMISSION CONFIRMATION & COMPARISON — only
+                    once THIS session has actually submitted a new review.
                     ---------------------------------------------------- */}
-                {isCompleted && (
+                {justSubmittedReview && (
                   <div>
-                    {/* CONFIRMATION BANNER */}
                     <div
                       style={{
                         background: "rgba(87, 213, 140, 0.08)",
@@ -940,51 +1054,52 @@ export default function ManualReviewPage() {
                       <CheckCircle2 size={24} color="var(--green)" style={{ flexShrink: 0, marginTop: "2px" }} />
                       <div style={{ flex: 1 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", marginBottom: "4px" }}>
-                          <strong style={{ fontSize: "15px", color: "var(--green)" }}>
-                            Supervisory Assessment Submitted & Recorded
-                          </strong>
+                          <strong style={{ fontSize: "15px", color: "var(--green)" }}>Supervisory Assessment Recorded</strong>
                           <span style={{ fontSize: "11px", color: "var(--muted)", fontFamily: "monospace" }}>
-                            {activeReview?.timestamp ? new Date(activeReview.timestamp).toLocaleString() : ""}
+                            {formatTimestamp(justSubmittedReview.created_at)}
                           </span>
                         </div>
                         <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--text)" }}>
-                          Blind review complete. Analytical VEIL conclusions are now revealed below for supervisory concordance verification.
+                          Blind review complete. VEIL&apos;s conclusions are now revealed below for comparison.
                         </p>
-                        {apiPersistenceStatus && !apiPersistenceStatus.savedToBackend && (
-                          <div style={{ marginTop: "10px", fontSize: "12px", color: "var(--amber)", display: "flex", alignItems: "center", gap: "6px" }}>
-                            <Info size={13} />
-                            <span>Backend API required for persistent storage is not currently available. Review preserved in session state.</span>
-                          </div>
-                        )}
                       </div>
                     </div>
 
-                    {/* COMPARISON SECTION: MANUAL REVIEW VS VEIL OUTPUT */}
                     <section
                       className="ranking-panel"
-                      style={{
-                        background: "var(--surface)",
-                        border: "1px solid var(--line)",
-                        borderRadius: "6px",
-                        padding: "28px",
-                        marginBottom: "30px",
-                      }}
+                      style={{ background: "var(--surface)", border: "1px solid var(--line)", borderRadius: "6px", padding: "28px", marginBottom: "30px" }}
                     >
                       <div className="panel-header" style={{ marginBottom: "24px" }}>
                         <div>
                           <div className="panel-label">SECTION 03 / COMPARISON ANALYSIS</div>
                           <h2>Manual Review vs VEIL Output</h2>
                           <p style={{ margin: "4px 0 0", fontSize: "13px", color: "var(--muted)" }}>
-                            Comparative analysis contrasting independent human supervisory findings with automated VEIL model conclusions.
+                            Computed by the backend from the review just submitted — not re-derived here.
                           </p>
                         </div>
                         <span className="panel-meta">VERIFICATION MATRIX</span>
                       </div>
 
-                      {/* ALIGNMENT STATUS BADGE */}
-                      {(() => {
-                        const align = determineAlignment(activeReview?.answers?.q3_priority, veilData?.risk_band);
-                        return (
+                      {comparisonError && (
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--amber)", fontSize: "13px", marginBottom: "16px" }}>
+                          <AlertTriangle size={16} />
+                          <span>{comparisonError}</span>
+                        </div>
+                      )}
+
+                      {!comparisonError && !comparison && (
+                        <div className="skeleton skeleton-card" style={{ height: "160px" }} />
+                      )}
+
+                      {!comparisonError && comparison && !comparison.available && (
+                        <div className="empty-state" style={{ minHeight: "120px", padding: "24px" }}>
+                          <Info size={20} color="var(--muted)" />
+                          <p style={{ fontSize: "13px", color: "var(--muted)", margin: "8px 0 0" }}>{comparison.reason}</p>
+                        </div>
+                      )}
+
+                      {!comparisonError && comparison && comparison.available && (
+                        <>
                           <div
                             style={{
                               background: "var(--surface-2)",
@@ -1001,248 +1116,74 @@ export default function ManualReviewPage() {
                           >
                             <div>
                               <span style={{ fontSize: "11px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                                Supervisory Concordance Assessment
+                                Overall Agreement
                               </span>
-                              <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--text)", marginTop: "4px" }}>
-                                {align.label}
+                              <div style={{ fontSize: "18px", fontWeight: 700, color: comparison.overall_agreement ? "var(--green)" : "var(--amber)", marginTop: "4px" }}>
+                                {comparison.overall_agreement ? "Concordant" : "Discrepant"}
                               </div>
-                              <small style={{ color: "var(--muted)", fontSize: "12px" }}>
-                                {align.desc}
-                              </small>
                             </div>
-                            <div style={{ display: "flex", gap: "10px" }}>
-                              <Link
-                                to={`/entities/${encodeURIComponent(selectedEntity)}`}
-                                style={{
-                                  display: "inline-flex",
-                                  alignItems: "center",
-                                  gap: "6px",
-                                  fontSize: "12px",
-                                  padding: "6px 12px",
-                                  borderRadius: "4px",
-                                  background: "rgba(86, 199, 255, 0.1)",
-                                  border: "1px solid var(--accent)",
-                                  color: "var(--accent)",
-                                  textDecoration: "none",
-                                  fontWeight: 600,
-                                }}
-                              >
-                                <span>Inspect Full VEIL Dossier</span>
-                                <ExternalLink size={12} />
-                              </Link>
-                            </div>
-                          </div>
-                        );
-                      })()}
-
-                      {/* COMPARISON TABLE */}
-                      <div style={{ overflowX: "auto", width: "100%", marginBottom: "28px" }}>
-                        <table
-                          style={{
-                            width: "100%",
-                            borderCollapse: "collapse",
-                            fontSize: "13px",
-                            textAlign: "left",
-                            minWidth: "680px",
-                          }}
-                        >
-                          <thead>
-                            <tr
-                              style={{
-                                borderBottom: "1px solid var(--line)",
-                                color: "var(--muted)",
-                                fontSize: "11px",
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                              }}
+                            <Link
+                              to={`/entities/${encodeURIComponent(selectedEntity)}`}
+                              style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12px", padding: "6px 12px", borderRadius: "4px", background: "rgba(86, 199, 255, 0.1)", border: "1px solid var(--accent)", color: "var(--accent)", textDecoration: "none", fontWeight: 600 }}
                             >
-                              <th style={{ padding: "12px 16px", width: "220px" }}>Dimension</th>
-                              <th style={{ padding: "12px 16px" }}>Independent Human Review</th>
-                              <th style={{ padding: "12px 16px" }}>VEIL Automated Output</th>
-                              <th style={{ padding: "12px 16px", width: "140px" }}>Status</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {/* 1. Supervisory Concern */}
-                            <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-                              <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--text)" }}>
-                                Supervisory Concern
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <strong style={{ color: activeReview?.answers?.q1_concern === "Yes" ? "var(--amber)" : "var(--green)" }}>
-                                  {activeReview?.answers?.q1_concern || "—"}
-                                </strong>
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <strong style={{ color: (veilData?.risk_band || "").toLowerCase() !== "low" ? "var(--amber)" : "var(--green)" }}>
-                                  {(veilData?.risk_band || "").toLowerCase() !== "low" ? "Elevated Risk Flagged" : "Normal Baseline"}
-                                </strong>
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                {(() => {
-                                  const humanConcern = activeReview?.answers?.q1_concern === "Yes";
-                                  const veilConcern = (veilData?.risk_band || "").toLowerCase() !== "low";
-                                  const match = humanConcern === veilConcern;
-                                  return (
-                                    <span style={{ color: match ? "var(--green)" : "var(--amber)", fontWeight: 600, fontSize: "12px" }}>
-                                      {match ? "Agreement" : "Discrepancy"}
-                                    </span>
-                                  );
-                                })()}
-                              </td>
-                            </tr>
-
-                            {/* 2. Concern Classification */}
-                            <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-                              <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--text)" }}>
-                                Primary Issue / Driver
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <span>{activeReview?.answers?.q2_concern_type || "—"}</span>
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <span>{veilData?.primary_driver || "Baseline Alignment"}</span>
-                              </td>
-                              <td style={{ padding: "14px 16px", color: "var(--muted)", fontSize: "12px" }}>
-                                Operational Context
-                              </td>
-                            </tr>
-
-                            {/* 3. Priority / Risk Tier */}
-                            <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-                              <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--text)" }}>
-                                Priority / Risk Band
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <span
-                                  style={{
-                                    display: "inline-block",
-                                    padding: "3px 8px",
-                                    borderRadius: "2px",
-                                    fontSize: "11px",
-                                    fontWeight: 700,
-                                    textTransform: "uppercase",
-                                    background: "rgba(255, 255, 255, 0.08)",
-                                    border: "1px solid var(--line)",
-                                    color: "var(--text)",
-                                  }}
-                                >
-                                  {activeReview?.answers?.q3_priority}
-                                </span>
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <span
-                                  style={{
-                                    display: "inline-block",
-                                    padding: "3px 8px",
-                                    borderRadius: "2px",
-                                    fontSize: "11px",
-                                    fontWeight: 700,
-                                    textTransform: "uppercase",
-                                    background: "rgba(86, 199, 255, 0.12)",
-                                    border: "1px solid rgba(86, 199, 255, 0.3)",
-                                    color: "var(--accent)",
-                                  }}
-                                >
-                                  {veilData?.risk_band} ({Number(veilData?.risk_score || 0).toFixed(1)}/100)
-                                </span>
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                {(() => {
-                                  const mp = (activeReview?.answers?.q3_priority || "").toLowerCase();
-                                  const vb = (veilData?.risk_band || "").toLowerCase();
-                                  const match = mp === vb;
-                                  return (
-                                    <span style={{ color: match ? "var(--green)" : "var(--amber)", fontWeight: 600, fontSize: "12px" }}>
-                                      {match ? "Exact Match" : "Tier Shift"}
-                                    </span>
-                                  );
-                                })()}
-                              </td>
-                            </tr>
-
-                            {/* 4. Manual Review Recommendation */}
-                            <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
-                              <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--text)" }}>
-                                Supervisory Review Required
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <strong>{activeReview?.answers?.q4_recommended}</strong>
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                <strong>
-                                  {(veilData?.risk_score || 0) >= 45 ? "Yes (High/Critical Tier)" : "No (Baseline Monitoring)"}
-                                </strong>
-                              </td>
-                              <td style={{ padding: "14px 16px" }}>
-                                {(() => {
-                                  const hRec = activeReview?.answers?.q4_recommended === "Yes";
-                                  const vRec = (veilData?.risk_score || 0) >= 45;
-                                  const match = hRec === vRec;
-                                  return (
-                                    <span style={{ color: match ? "var(--green)" : "var(--amber)", fontWeight: 600, fontSize: "12px" }}>
-                                      {match ? "Agreement" : "Discrepancy"}
-                                    </span>
-                                  );
-                                })()}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-
-                      {/* RATIONALE & EVIDENCE CONTRAST */}
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                          gap: "20px",
-                          marginTop: "20px",
-                        }}
-                      >
-                        {/* Human Rationale */}
-                        <div
-                          style={{
-                            background: "var(--surface-2)",
-                            border: "1px solid var(--line)",
-                            borderRadius: "4px",
-                            padding: "18px",
-                          }}
-                        >
-                          <div style={{ fontSize: "12px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
-                            Recorded Human Rationale
+                              <span>Inspect Full VEIL Dossier</span>
+                            </Link>
                           </div>
-                          <p style={{ margin: 0, fontSize: "13px", lineHeight: "1.5", color: "var(--text)", whiteSpace: "pre-wrap" }}>
-                            {activeReview?.answers?.q6_rationale || "No rationale provided."}
-                          </p>
-                        </div>
 
-                        {/* VEIL Automated Evidence Findings */}
-                        <div
-                          style={{
-                            background: "var(--surface-2)",
-                            border: "1px solid var(--line)",
-                            borderRadius: "4px",
-                            padding: "18px",
-                          }}
-                        >
-                          <div style={{ fontSize: "12px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
-                            VEIL Automated Findings Summary
+                          <div style={{ overflowX: "auto", width: "100%" }}>
+                            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px", textAlign: "left", minWidth: "620px" }}>
+                              <thead>
+                                <tr style={{ borderBottom: "1px solid var(--line)", color: "var(--muted)", fontSize: "11px", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                                  <th style={{ padding: "12px 16px", width: "200px" }}>Dimension</th>
+                                  <th style={{ padding: "12px 16px" }}>Manual Review</th>
+                                  <th style={{ padding: "12px 16px" }}>VEIL Output</th>
+                                  <th style={{ padding: "12px 16px", width: "130px" }}>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
+                                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--text)" }}>Concern Present</td>
+                                  <td style={{ padding: "14px 16px" }}>{comparison.manual_concern ? "Yes" : "No"}</td>
+                                  <td style={{ padding: "14px 16px" }}>{comparison.veil_concern ? "Yes" : "No"}</td>
+                                  <td style={{ padding: "14px 16px" }}>
+                                    <span style={{ color: comparison.concern_agrees ? "var(--green)" : "var(--amber)", fontWeight: 600, fontSize: "12px" }}>
+                                      {comparison.concern_agrees ? "Agreement" : "Discrepancy"}
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
+                                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--text)" }}>Priority / Risk Band</td>
+                                  <td style={{ padding: "14px 16px", textTransform: "capitalize" }}>{comparison.manual_priority}</td>
+                                  <td style={{ padding: "14px 16px", textTransform: "capitalize" }}>{comparison.veil_risk_band}</td>
+                                  <td style={{ padding: "14px 16px" }}>
+                                    <span style={{ color: comparison.priority_agrees ? "var(--green)" : "var(--amber)", fontWeight: 600, fontSize: "12px" }}>
+                                      {comparison.priority_agrees ? "Exact Match" : "Tier Mismatch"}
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr style={{ borderBottom: "1px solid rgba(255, 255, 255, 0.04)" }}>
+                                  <td style={{ padding: "14px 16px", fontWeight: 600, color: "var(--text)" }}>Review Recommended</td>
+                                  <td style={{ padding: "14px 16px" }}>{comparison.manual_review_recommended ? "Yes" : "No"}</td>
+                                  <td style={{ padding: "14px 16px" }}>{comparison.veil_prioritized ? "Yes" : "No"}</td>
+                                  <td style={{ padding: "14px 16px" }}>
+                                    <span style={{ color: comparison.recommendation_agrees ? "var(--green)" : "var(--amber)", fontWeight: 600, fontSize: "12px" }}>
+                                      {comparison.recommendation_agrees ? "Agreement" : "Discrepancy"}
+                                    </span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
                           </div>
-                          {veilData?.findings && veilData.findings.length > 0 ? (
-                            <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "13px", color: "var(--text)", lineHeight: "1.6" }}>
-                              {veilData.findings.map((f, i) => (
-                                <li key={i}>
-                                  <strong>{f.rule}</strong>: {f.description} ({f.evidence_count} evidence items)
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p style={{ margin: 0, fontSize: "13px", color: "var(--muted)" }}>
-                              No anomalous rule violations identified by automated detectors.
-                            </p>
-                          )}
+                        </>
+                      )}
+
+                      <div style={{ marginTop: "20px" }}>
+                        <div style={{ fontSize: "12px", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "8px" }}>
+                          Recorded Human Rationale
                         </div>
+                        <p style={{ margin: 0, fontSize: "13px", lineHeight: "1.5", color: "var(--text)", whiteSpace: "pre-wrap" }}>
+                          {justSubmittedReview.rationale || "No rationale recorded."}
+                        </p>
                       </div>
                     </section>
                   </div>

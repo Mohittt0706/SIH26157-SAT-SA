@@ -111,7 +111,11 @@ def compute_risk_scores(db: Session) -> list[dict]:
         for entity_name in entity_names
     ]
 
-    rows.sort(key=lambda row: row["risk_score"], reverse=True)
+    # risk_score DESC, entity_name ASC as a tie-break — two entities landing
+    # on the exact same risk_score previously fell back to set-iteration
+    # order (non-deterministic across runs/processes); this makes the order
+    # reproducible without introducing a new ranking criterion.
+    rows.sort(key=lambda row: (-row["risk_score"], row["entity_name"]))
     return rows
 
 
@@ -151,7 +155,10 @@ def compute_risk_scores_from_csv(csv_path) -> list[dict]:
         for entity_name in entity_names
     ]
 
-    rows.sort(key=lambda row: row["risk_score"], reverse=True)
+    # risk_score DESC, entity_name ASC — see the matching comment in
+    # compute_risk_scores; kept identical between the DB-backed and
+    # CSV-backed paths.
+    rows.sort(key=lambda row: (-row["risk_score"], row["entity_name"]))
     return rows
 
 

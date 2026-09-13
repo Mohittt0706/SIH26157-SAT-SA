@@ -170,7 +170,9 @@ def compute_sample_priority(db: Session, limit: int = 25) -> list[dict]:
     -------
     list[dict]
         Up to *limit* dicts, sorted by ``priority_score`` descending (ties
-        broken by entity_risk_score descending, then alert_id ascending, for
+        broken by entity_risk_score descending, then alert_id descending —
+        the sort key is a single tuple with ``reverse=True``, which orders
+        every element of the tuple descending, not just the first — for
         a deterministic order), each shaped:
         ``{"alert_id": str, "entity_name": str, "entity_risk_score": float,
         "severity": str, "created_time": datetime, "priority_score": float,
