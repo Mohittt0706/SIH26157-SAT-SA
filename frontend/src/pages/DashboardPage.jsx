@@ -10,6 +10,7 @@ import {
 import { getRiskScores, getAuditRuns } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
 import SupervisoryReviewPriority from "../components/SupervisoryReviewPriority";
+import AlertReviewQueue from "../components/AlertReviewQueue";
 import DatasetScale from "../components/DatasetScale";
 
 export default function DashboardPage() {
@@ -64,6 +65,7 @@ export default function DashboardPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <span className="active">OVERVIEW</span>
+            <Link to="/manual-review">MANUAL REVIEW</Link>
             <Link to="/audit">AUDIT</Link>
           </div>
           <div className="dashboard-status">
@@ -109,6 +111,7 @@ export default function DashboardPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <span className="active">OVERVIEW</span>
+            <Link to="/manual-review">MANUAL REVIEW</Link>
             <Link to="/audit">AUDIT</Link>
           </div>
           <div className="dashboard-status">
@@ -172,6 +175,7 @@ export default function DashboardPage() {
         <div className="dashboard-nav-links">
           <Link to="/upload">ANALYZE</Link>
           <span className="active">OVERVIEW</span>
+          <Link to="/manual-review">MANUAL REVIEW</Link>
           <Link to="/audit">AUDIT</Link>
         </div>
         <div className="dashboard-status">
@@ -237,6 +241,9 @@ export default function DashboardPage() {
         {/* 2. SUPERVISORY REVIEW PRIORITIZATION (Answers: WHO should I review first?) */}
         <SupervisoryReviewPriority entities={entities} />
 
+        {/* 2b. PRIORITIZED ALERT SAMPLES (Answers: WHICH alert should I review first?) */}
+        <AlertReviewQueue />
+
         {/* 3. RISK & SIGNAL DISTRIBUTION (Answers: WHAT is the posture & findings?) */}
         <div className="dashboard-main-grid" style={{ marginTop: "30px" }}>
           {/* RANKING PANEL */}
@@ -264,7 +271,7 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 [...entities]
-                  .sort((a, b) => b.risk_score - a.risk_score)
+                  .sort((a, b) => (b.risk_score - a.risk_score) || (a.entity_name || "").localeCompare(b.entity_name || ""))
                   .map((entity, idx) => {
                     const rank = (idx + 1).toString().padStart(2, "0");
                     const bandLower = (entity.risk_band || "low").toLowerCase();

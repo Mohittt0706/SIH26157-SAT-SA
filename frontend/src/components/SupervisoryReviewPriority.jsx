@@ -68,7 +68,9 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
     );
   }
 
-  const sorted = [...entities].sort((a, b) => (b.risk_score || 0) - (a.risk_score || 0));
+  const sorted = [...entities].sort(
+    (a, b) => (b.risk_score || 0) - (a.risk_score || 0) || (a.entity_name || "").localeCompare(b.entity_name || "")
+  );
 
   return (
     <section className="ranking-panel" style={{ marginTop: "30px" }}>

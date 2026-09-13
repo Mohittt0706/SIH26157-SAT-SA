@@ -131,6 +131,7 @@ export default function AuditPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
+            <Link to="/manual-review">MANUAL REVIEW</Link>
             <span className="active">AUDIT</span>
           </div>
           <div className="dashboard-status">
@@ -166,6 +167,7 @@ export default function AuditPage() {
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
+            <Link to="/manual-review">MANUAL REVIEW</Link>
             <span className="active">AUDIT</span>
           </div>
           <div className="dashboard-status">
@@ -201,6 +203,7 @@ export default function AuditPage() {
         <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
+            <Link to="/manual-review">MANUAL REVIEW</Link>
             <span className="active">AUDIT</span>
         </div>
         <div className="dashboard-status">
