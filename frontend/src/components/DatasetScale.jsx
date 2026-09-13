@@ -13,7 +13,7 @@ export default function DatasetScale({
         <div>
           <div className="panel-label">OPERATIONAL TELEMETRY SCALE</div>
           <h2>Dataset / Analysis Scale</h2>
-          <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+          <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--muted)", maxWidth: "600px" }}>
             Real metrics detailing the operational scope, record volume, and ingestion integrity for the active assessment run.
           </p>
         </div>
@@ -41,7 +41,7 @@ export default function DatasetScale({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: "10px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
               ALERTS ANALYZED
             </span>
             <Database size={15} color="var(--accent)" />
@@ -49,7 +49,7 @@ export default function DatasetScale({
           <strong style={{ fontSize: "28px", color: "var(--text)", lineHeight: 1 }}>
             {totalAlerts.toLocaleString()}
           </strong>
-          <small style={{ fontSize: "11px", color: "var(--muted)" }}>
+          <small style={{ fontSize: "12px", color: "var(--muted)" }}>
             Normalized operational alert records
           </small>
         </div>
@@ -65,7 +65,7 @@ export default function DatasetScale({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: "10px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
               ENTITIES ASSESSED
             </span>
             <Building2 size={15} color="var(--accent)" />
@@ -73,7 +73,7 @@ export default function DatasetScale({
           <strong style={{ fontSize: "28px", color: "var(--text)", lineHeight: 1 }}>
             {entitiesCount}
           </strong>
-          <small style={{ fontSize: "11px", color: "var(--muted)" }}>
+          <small style={{ fontSize: "12px", color: "var(--muted)" }}>
             Distinct peer organizations evaluated
           </small>
         </div>
@@ -89,7 +89,7 @@ export default function DatasetScale({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: "10px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
               ASSESSMENT RUNS
             </span>
             <History size={15} color="var(--accent)" />
@@ -97,7 +97,7 @@ export default function DatasetScale({
           <strong style={{ fontSize: "28px", color: "var(--text)", lineHeight: 1 }}>
             {auditRunsCount !== null ? auditRunsCount : "—"}
           </strong>
-          <small style={{ fontSize: "11px", color: "var(--muted)" }}>
+          <small style={{ fontSize: "12px", color: "var(--muted)" }}>
             Historical runs in persistent audit trail
           </small>
         </div>
@@ -113,7 +113,7 @@ export default function DatasetScale({
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ fontSize: "10px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
               INGESTION FORMAT
             </span>
             <FileCode size={15} color="var(--accent)" />
@@ -121,7 +121,7 @@ export default function DatasetScale({
           <strong style={{ fontSize: "24px", color: "var(--text)", lineHeight: 1 }}>
             {latestRun?.format ? latestRun.format.toUpperCase() : inputFormat}
           </strong>
-          <small style={{ fontSize: "11px", color: "var(--muted)" }}>
+          <small style={{ fontSize: "12px", color: "var(--muted)" }}>
             {latestRun
               ? `${latestRun.rows_inserted || 0} inserted / ${latestRun.rows_received || 0} received`
               : "Air-gapped offline ingestion"}

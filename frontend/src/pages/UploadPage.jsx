@@ -443,7 +443,7 @@ export default function UploadPage() {
                 <div
                   style={{
                     color: "var(--accent)",
-                    fontSize: "10px",
+                    fontSize: "11px",
                     fontWeight: "700",
                     letterSpacing: "0.15em",
                     marginBottom: "4px",
@@ -456,7 +456,7 @@ export default function UploadPage() {
                 </strong>
                 <span
                   style={{
-                    fontSize: "11px",
+                    fontSize: "12px",
                     color: "var(--muted)",
                     marginLeft: "12px",
                   }}
@@ -477,7 +477,7 @@ export default function UploadPage() {
                   display: "flex",
                   alignItems: "center",
                   gap: "6px",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   fontWeight: "700",
                 }}
               >
@@ -491,7 +491,7 @@ export default function UploadPage() {
                 style={{
                   width: "100%",
                   borderCollapse: "collapse",
-                  fontSize: "11px",
+                  fontSize: "12px",
                   textAlign: "left",
                 }}
               >
@@ -506,7 +506,7 @@ export default function UploadPage() {
                       style={{
                         padding: "12px 16px",
                         color: "var(--muted)",
-                        fontSize: "9px",
+                        fontSize: "11px",
                         letterSpacing: "0.1em",
                       }}
                     >
@@ -518,7 +518,7 @@ export default function UploadPage() {
                         style={{
                           padding: "12px 16px",
                           color: "var(--accent)",
-                          fontSize: "9px",
+                          fontSize: "11px",
                           letterSpacing: "0.1em",
                           textTransform: "uppercase",
                         }}
@@ -540,7 +540,7 @@ export default function UploadPage() {
                         style={{
                           padding: "10px 16px",
                           color: "var(--muted)",
-                          fontSize: "10px",
+                          fontSize: "11px",
                         }}
                       >
                         {rIdx + 1}

@@ -31,7 +31,7 @@ export default function ExpectedObserved({ data = null }) {
         <div>
           <div className="panel-label">NEGATIVE SPACE ANALYSIS</div>
           <h2>Expected vs Observed</h2>
-          <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+          <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--muted)", maxWidth: "600px" }}>
             Contrasts peer baseline operational expectations against observed entity metrics to detect absence of expected security activity.
           </p>
         </div>
@@ -48,7 +48,7 @@ export default function ExpectedObserved({ data = null }) {
             style={{
               maxWidth: "520px",
               color: "var(--muted)",
-              fontSize: "12px",
+              fontSize: "14px",
               lineHeight: 1.6,
               marginTop: "6px",
             }}
@@ -66,7 +66,7 @@ export default function ExpectedObserved({ data = null }) {
               background: "rgba(86, 199, 255, 0.08)",
               border: "1px solid rgba(86, 199, 255, 0.2)",
               color: "var(--accent)",
-              fontSize: "11px",
+              fontSize: "12px",
               fontWeight: 600,
             }}
           >
@@ -80,7 +80,7 @@ export default function ExpectedObserved({ data = null }) {
             style={{
               width: "100%",
               borderCollapse: "collapse",
-              fontSize: "12px",
+              fontSize: "13px",
               textAlign: "left",
               minWidth: "600px",
             }}
@@ -90,7 +90,7 @@ export default function ExpectedObserved({ data = null }) {
                 style={{
                   borderBottom: "1px solid var(--line)",
                   color: "var(--muted)",
-                  fontSize: "10px",
+                  fontSize: "11px",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                 }}
@@ -139,7 +139,7 @@ export default function ExpectedObserved({ data = null }) {
                           display: "inline-block",
                           padding: "2px 8px",
                           borderRadius: "2px",
-                          fontSize: "9px",
+                          fontSize: "11px",
                           fontWeight: 700,
                           letterSpacing: "0.08em",
                           backgroundColor: isDeviant ? "rgba(239, 107, 114, 0.15)" : "rgba(87, 213, 140, 0.12)",

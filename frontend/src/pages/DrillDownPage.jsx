@@ -342,7 +342,7 @@ export default function DrillDownPage() {
             <div>
               <div className="panel-label">PEER BENCHMARKING</div>
               <h2>Peer Deviation Breakdown</h2>
-              <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+              <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--muted)", maxWidth: "600px" }}>
                 Comparison of this entity&apos;s operational indicators against median peer baseline values across the cohort.
               </p>
             </div>
@@ -371,12 +371,12 @@ export default function DrillDownPage() {
                     />
                     <XAxis
                       dataKey="metric"
-                      tick={{ fill: "#8e96a0", fontSize: 10 }}
+                      tick={{ fill: "#8e96a0", fontSize: 11 }}
                       axisLine={false}
                       tickLine={false}
                     />
                     <YAxis
-                      tick={{ fill: "#8e96a0", fontSize: 10 }}
+                      tick={{ fill: "#8e96a0", fontSize: 11 }}
                       axisLine={false}
                       tickLine={false}
                     />
@@ -385,7 +385,7 @@ export default function DrillDownPage() {
                         background: "#11151a",
                         border: "1px solid #2a3038",
                         color: "#f2f4f7",
-                        fontSize: "11px",
+                        fontSize: "12px",
                       }}
                     />
                     <Bar
@@ -439,7 +439,7 @@ export default function DrillDownPage() {
               <div>
                 <div className="panel-label">DETAILED EVIDENCE AUDIT</div>
                 <h2>Rule Findings & Sampled Alerts</h2>
-                <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+                <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--muted)", maxWidth: "600px" }}>
                   Exhaustive audit breakdown of all triggered detector rules with concrete alert identifiers and rationale.
                 </p>
               </div>
@@ -486,9 +486,9 @@ export default function DrillDownPage() {
                             ev.alert_id ||
                             (ev.detail
                               ? ev.detail.includes(" — ")
-                                ? ev.detail.split(" — ").pop()
-                                : ev.detail
-                              : `EVIDENCE-${i + 1}`);
+                              : ev.detail
+                                ? ev.detail
+                                : `EVIDENCE-${i + 1}`);
                           return (
                             <div key={i} style={{ display: "flex", gap: "8px" }}>
                               <span
@@ -496,7 +496,7 @@ export default function DrillDownPage() {
                                   color: "#f2f4f7",
                                   whiteSpace: "nowrap",
                                   fontFamily: "monospace",
-                                  fontSize: "11px",
+                                  fontSize: "12px",
                                 }}
                               >
                                 {alertId}

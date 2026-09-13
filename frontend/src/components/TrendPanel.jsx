@@ -168,7 +168,7 @@ export default function TrendPanel({ entityName }) {
         <div>
           <div className="panel-label">TEMPORAL ANALYSIS</div>
           <h2>Temporal / Trend Analysis</h2>
-          <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+          <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--muted)", maxWidth: "600px" }}>
             Traces this entity&apos;s risk trajectory across persistent assessment runs. Requires at least two runs to determine directional progress.
           </p>
         </div>
@@ -187,10 +187,10 @@ export default function TrendPanel({ entityName }) {
             }}
           >
             <trajectory.icon size={15} />
-            <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.08em" }}>
+            <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em" }}>
               {trajectory.direction.toUpperCase()}
             </span>
-            <span style={{ fontSize: "10px", color: "var(--muted)" }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)" }}>
               ({trajectory.delta > 0 ? `+${trajectory.delta}` : trajectory.delta})
             </span>
           </div>
@@ -217,7 +217,7 @@ export default function TrendPanel({ entityName }) {
           <h3 style={{ marginTop: "12px", color: "var(--text)" }}>
             Historical trend data is not available for this entity.
           </h3>
-          <p style={{ maxWidth: "480px", color: "var(--muted)", fontSize: "12px", lineHeight: 1.6 }}>
+          <p style={{ maxWidth: "480px", color: "var(--muted)", fontSize: "14px", lineHeight: 1.6 }}>
             At least two assessment runs are required to compute a temporal trajectory. Currently, only {history.length} assessment snapshot is available for {entityName}. Future uploads will automatically build this entity&apos;s chronological trend.
           </p>
         </div>
@@ -235,7 +235,7 @@ export default function TrendPanel({ entityName }) {
               gap: "10px",
             }}
           >
-            <div style={{ fontSize: "12px", color: "var(--muted)" }}>
+            <div style={{ fontSize: "13px", color: "var(--muted)" }}>
               Tracking across <strong>{history.length}</strong> assessment runs ·{" "}
               {trajectory?.description}
             </div>
@@ -249,9 +249,9 @@ export default function TrendPanel({ entityName }) {
                 background: showComponents ? "rgba(86, 199, 255, 0.15)" : "rgba(255, 255, 255, 0.04)",
                 border: `1px solid ${showComponents ? "var(--accent)" : "var(--line)"}`,
                 color: showComponents ? "var(--accent)" : "var(--muted)",
-                padding: "4px 10px",
+                padding: "5px 12px",
                 borderRadius: "2px",
-                fontSize: "10px",
+                fontSize: "11px",
                 fontWeight: 700,
                 cursor: "pointer",
                 letterSpacing: "0.06em",
@@ -271,13 +271,13 @@ export default function TrendPanel({ entityName }) {
                 <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
                 <XAxis
                   dataKey="label"
-                  tick={{ fill: "#8e96a0", fontSize: 10 }}
+                  tick={{ fill: "#8e96a0", fontSize: 11 }}
                   axisLine={{ stroke: "var(--line)" }}
                   tickLine={false}
                 />
                 <YAxis
                   domain={[0, 100]}
-                  tick={{ fill: "#8e96a0", fontSize: 10 }}
+                  tick={{ fill: "#8e96a0", fontSize: 11 }}
                   axisLine={{ stroke: "var(--line)" }}
                   tickLine={false}
                 />
@@ -292,7 +292,7 @@ export default function TrendPanel({ entityName }) {
                           border: "1px solid var(--line)",
                           padding: "10px 14px",
                           borderRadius: "2px",
-                          fontSize: "11px",
+                          fontSize: "12px",
                           boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
                         }}
                       >
@@ -311,7 +311,7 @@ export default function TrendPanel({ entityName }) {
                               flexDirection: "column",
                               gap: "2px",
                               color: "var(--muted)",
-                              fontSize: "10px",
+                              fontSize: "11px",
                             }}
                           >
                             <span>Execution Gap: {item.execution_gap ?? "—"}</span>
@@ -363,7 +363,7 @@ export default function TrendPanel({ entityName }) {
                     />
                   </>
                 )}
-                {showComponents && <Legend wrapperStyle={{ fontSize: "10px", paddingTop: "10px" }} />}
+                {showComponents && <Legend wrapperStyle={{ fontSize: "11px", paddingTop: "10px" }} />}
               </LineChart>
             </ResponsiveContainer>
           </div>

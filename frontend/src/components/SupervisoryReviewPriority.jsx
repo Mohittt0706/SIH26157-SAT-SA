@@ -60,7 +60,7 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
         <div className="empty-state" style={{ minHeight: "180px", padding: "40px 20px" }}>
           <CheckCircle2 size={28} color="var(--green)" />
           <h3 style={{ marginTop: "12px", color: "var(--text)" }}>No Review Items Pending</h3>
-          <p style={{ maxWidth: "480px", color: "var(--muted)", fontSize: "12px" }}>
+          <p style={{ maxWidth: "480px", color: "var(--muted)", fontSize: "14px" }}>
             No entities are currently prioritized for supervisory review. Upload a SOC alert dataset from the Analyze page to populate the priority queue.
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
         <div>
           <div className="panel-label">SUPERVISORY REVIEW PRIORITIZATION</div>
           <h2>Supervisory Review Priority</h2>
-          <p style={{ margin: "4px 0 0", fontSize: "12px", color: "var(--muted)", maxWidth: "600px" }}>
+          <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--muted)", maxWidth: "600px" }}>
             Prioritized order for supervisory assessment based on composite risk signals and peer deviations. Final determinations remain with the human supervisor.
           </p>
         </div>
@@ -88,7 +88,7 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
           style={{
             width: "100%",
             borderCollapse: "collapse",
-            fontSize: "12px",
+            fontSize: "13px",
             textAlign: "left",
             minWidth: "720px",
           }}
@@ -98,7 +98,7 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
               style={{
                 borderBottom: "1px solid var(--line)",
                 color: "var(--muted)",
-                fontSize: "10px",
+                fontSize: "11px",
                 letterSpacing: "0.1em",
                 textTransform: "uppercase",
               }}
@@ -159,10 +159,10 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
                     </Link>
                   </td>
                   <td style={{ padding: "14px 16px" }}>
-                    <span className={`entity-score ${scoreClass}`} style={{ fontSize: "13px", fontWeight: 700 }}>
+                    <span className={`entity-score ${scoreClass}`} style={{ fontSize: "14px", fontWeight: 700 }}>
                       {Number(entity.risk_score || 0).toFixed(1)}
                     </span>
-                    <span style={{ color: "var(--muted)", fontSize: "10px", marginLeft: "4px" }}>/ 100</span>
+                    <span style={{ color: "var(--muted)", fontSize: "11px", marginLeft: "4px" }}>/ 100</span>
                   </td>
                   <td style={{ padding: "14px 16px" }}>
                     <span
@@ -170,7 +170,7 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
                         display: "inline-block",
                         padding: "3px 8px",
                         borderRadius: "2px",
-                        fontSize: "9px",
+                        fontSize: "11px",
                         fontWeight: 700,
                         letterSpacing: "0.08em",
                         textTransform: "uppercase",
@@ -210,7 +210,7 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
                         {formatPrimaryDriver(entity.primary_driver)}
                       </span>
                       {entity.findings_summary && entity.findings_summary.length > 0 && (
-                        <small style={{ color: "var(--muted)", fontSize: "10px" }}>
+                        <small style={{ color: "var(--muted)", fontSize: "11px" }}>
                           {entity.findings_summary.join(" · ")}
                         </small>
                       )}
@@ -224,7 +224,7 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
                         gap: "6px",
                         padding: "4px 10px",
                         borderRadius: "2px",
-                        fontSize: "10px",
+                        fontSize: "11px",
                         fontWeight: 700,
                         letterSpacing: "0.06em",
                         backgroundColor:

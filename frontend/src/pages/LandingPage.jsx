@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import usePageMetadata from "../hooks/usePageMetadata";
+import veilLogo from "../assets/veil-logo.png";
 
 const capabilities = [
   {
@@ -48,6 +50,25 @@ const entities = [
 ];
 
 export default function LandingPage() {
+  const [isOnline, setIsOnline] = useState(() =>
+    typeof navigator !== "undefined" && typeof navigator.onLine === "boolean"
+      ? navigator.onLine
+      : true
+  );
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
   usePageMetadata({
     title: "VEIL | Supervisory Intelligence",
     description: "Evidence-backed signals for human review — not definitive security verdicts.",
@@ -58,7 +79,13 @@ export default function LandingPage() {
       {/* NAVBAR */}
       <nav className="navbar">
         <div className="brand">
-          <div className="brand-mark">V</div>
+          <div className="brand-mark">
+            <img
+              src={veilLogo}
+              alt="VEIL logo"
+              className="brand-logo"
+            />
+          </div>
           <div>
             <div className="brand-name">VEIL</div>
             <div className="brand-subtitle">Supervisory Intelligence for SOC Assessment</div>
@@ -72,8 +99,11 @@ export default function LandingPage() {
         </div>
 
         <div className="nav-status">
-          <span className="status-dot" />
-          OFFLINE MODE
+          <span
+            className={`status-dot ${isOnline ? "online" : "offline"}`}
+            style={{ background: isOnline ? "var(--green)" : "var(--red)" }}
+          />
+          {isOnline ? "ONLINE" : "OFFLINE"}
         </div>
       </nav>
 

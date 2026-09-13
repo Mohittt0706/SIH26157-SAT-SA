@@ -75,14 +75,28 @@ a {
 }
 
 .brand-mark {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--accent);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f1015;
+  border: 1px solid rgba(77, 163, 255, 0.28);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(77, 163, 255, 0.08);
   color: var(--accent);
   font-size: 14px;
   font-weight: 700;
+}
+
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.36);
+  display: block;
 }
 
 .brand-name {
@@ -94,8 +108,8 @@ a {
 .brand-subtitle {
   margin-top: 3px;
   color: var(--muted);
-  font-size: 8px;
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  letter-spacing: 0.14em;
 }
 
 .nav-links {
@@ -106,7 +120,7 @@ a {
 
 .nav-links a {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.06em;
   transition: color 0.2s ease;
 }
@@ -121,7 +135,7 @@ a {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
 }
 
@@ -131,6 +145,10 @@ a {
   border-radius: 50%;
   background: var(--green);
   display: inline-block;
+}
+
+.status-dot.offline {
+  background: var(--red);
 }
 
 .hero-section {
@@ -146,7 +164,7 @@ a {
 .eyebrow,
 .section-label {
   color: var(--accent);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
 }
@@ -187,7 +205,7 @@ a {
   justify-content: center;
   gap: 18px;
   padding: 0 20px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.11em;
   transition:
@@ -247,7 +265,7 @@ button.loading::after {
   align-items: center;
   gap: 14px;
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .hero-note span {
@@ -270,7 +288,7 @@ button.loading::after {
 
 .preview-kicker {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.14em;
 }
 
@@ -298,7 +316,7 @@ button.loading::after {
 .metric span {
   display: block;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -326,7 +344,7 @@ button.loading::after {
 
 .chart-header {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -343,12 +361,12 @@ button.loading::after {
 
 .chart-row {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .chart-row b {
   color: var(--text);
-  font-size: 10px;
+  font-size: 12px;
   text-align: right;
 }
 
@@ -384,7 +402,7 @@ button.loading::after {
 .table-heading {
   padding: 17px 0;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   border-bottom: 1px solid var(--line);
 }
@@ -396,7 +414,7 @@ button.loading::after {
   padding: 15px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.055);
   align-items: center;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .table-row:last-child {
@@ -471,7 +489,7 @@ button.loading::after {
 
 .section-index {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.12em;
 }
 
@@ -491,7 +509,7 @@ button.loading::after {
 
 .capability-number {
   color: var(--accent);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
@@ -537,13 +555,13 @@ button.loading::after {
 
 .workflow-step span {
   color: var(--accent);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
 }
 
 .workflow-step h3 {
   margin: 12px 0 9px;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.13em;
 }
 
@@ -552,7 +570,7 @@ button.loading::after {
   max-width: 170px;
   color: var(--muted);
   line-height: 1.55;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .workflow-connector {
@@ -572,7 +590,7 @@ button.loading::after {
 
 .positioning-number {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .positioning-copy h2 {
@@ -628,13 +646,13 @@ button.loading::after {
 }
 
 .footer strong {
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.12em;
 }
 
 .footer span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .footer-meta {
@@ -889,8 +907,8 @@ button.loading::after {
 .upload-brand-subtitle {
   margin-top: 3px;
   color: var(--muted);
-  font-size: 8px;
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  letter-spacing: 0.14em;
 }
 
 .upload-nav-status {
@@ -898,7 +916,7 @@ button.loading::after {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
 }
 
@@ -920,7 +938,7 @@ button.loading::after {
 .workspace-label,
 .success-label {
   color: var(--accent);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
 }
@@ -966,7 +984,7 @@ button.loading::after {
 
 .workspace-format {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.12em;
 }
 
@@ -1017,7 +1035,7 @@ button.loading::after {
 .drop-hint {
   margin-top: 18px;
   color: #68717c;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -1052,7 +1070,7 @@ button.loading::after {
 
 .file-information span {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .remove-file {
@@ -1080,7 +1098,7 @@ button.loading::after {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .upload-error span {
@@ -1103,14 +1121,14 @@ button.loading::after {
 
 .upload-info span {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.12em;
 }
 
 .upload-info p {
   margin: 8px 0 0;
   color: #727b86;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -1127,7 +1145,7 @@ button.loading::after {
   gap: 16px;
   white-space: nowrap;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.11em;
 }
@@ -1165,7 +1183,7 @@ button.loading::after {
   align-items: center;
   gap: 8px;
   color: var(--green);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
 }
@@ -1186,7 +1204,7 @@ button.loading::after {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -1203,7 +1221,7 @@ button.loading::after {
 
 .upload-warning code {
   font-family: inherit;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .result-grid strong.skipped-highlight {
@@ -1229,7 +1247,7 @@ button.loading::after {
 .date-range span {
   display: block;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -1333,15 +1351,15 @@ button.loading::after {
 .dashboard-brand-subtitle {
   margin-top: 3px;
   color: var(--muted);
-  font-size: 8px;
-  letter-spacing: 0.16em;
+  font-size: 11px;
+  letter-spacing: 0.14em;
 }
 
 .dashboard-nav-links {
   display: flex;
   gap: 28px;
   align-items: center;
-  font-size: 9px;
+  font-size: 13px;
   letter-spacing: 0.12em;
 }
 
@@ -1359,7 +1377,7 @@ button.loading::after {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
 }
 
@@ -1385,7 +1403,7 @@ button.loading::after {
 
 .dashboard-eyebrow {
   color: var(--accent);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
 }
@@ -1417,14 +1435,14 @@ button.loading::after {
 .dataset-info small {
   display: block;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.12em;
 }
 
 .dataset-info strong {
   display: block;
   margin: 8px 0;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .dashboard-metrics {
@@ -1460,7 +1478,7 @@ button.loading::after {
 .dashboard-metric span {
   display: block;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -1497,7 +1515,7 @@ button.loading::after {
 
 .panel-label {
   color: var(--accent);
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.13em;
 }
@@ -1510,7 +1528,7 @@ button.loading::after {
 
 .panel-meta {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   white-space: nowrap;
 }
@@ -1527,7 +1545,7 @@ button.loading::after {
   min-height: 40px;
   padding: 0 21px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
   border-bottom: 1px solid var(--line);
 }
@@ -1536,7 +1554,7 @@ button.loading::after {
   min-height: 65px;
   padding: 0 21px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.055);
-  font-size: 11px;
+  font-size: 13px;
   transition: background 0.2s ease;
 }
 
@@ -1550,7 +1568,7 @@ button.loading::after {
 
 .entity-rank {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .entity-title {
@@ -1562,7 +1580,7 @@ button.loading::after {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .signal-dot {
@@ -1632,16 +1650,16 @@ button.loading::after {
 
 .signal-number {
   color: var(--accent);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .signal-item strong {
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .signal-percent {
   color: var(--muted);
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .review-note {
@@ -1653,14 +1671,14 @@ button.loading::after {
 
 .review-note span {
   color: var(--accent);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.12em;
 }
 
 .review-note p {
   margin: 8px 0 0;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
 }
 
@@ -1682,7 +1700,7 @@ button.loading::after {
   display: flex;
   gap: 20px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -1722,7 +1740,7 @@ button.loading::after {
 .benchmark-item span {
   display: block;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -1735,7 +1753,7 @@ button.loading::after {
 
 .benchmark-item strong span {
   display: inline;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0;
 }
 
@@ -1743,7 +1761,7 @@ button.loading::after {
   display: block;
   margin-top: 6px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 .dashboard-footnote {
@@ -1758,20 +1776,20 @@ button.loading::after {
 
 .dashboard-footnote>span {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
 .dashboard-footnote strong {
   color: var(--green);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.09em;
 }
 
 .dashboard-footnote p {
   margin: 0 0 0 auto;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 @media (max-width: 1050px) {
@@ -1864,7 +1882,7 @@ button.loading::after {
   align-items: center;
   gap: 12px;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   transition: color 0.2s ease;
@@ -1884,7 +1902,7 @@ button.loading::after {
 
 .drilldown-eyebrow {
   color: var(--accent);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.18em;
 }
@@ -1913,7 +1931,7 @@ button.loading::after {
 .drilldown-score-panel span {
   display: block;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.12em;
 }
 
@@ -1967,7 +1985,7 @@ button.loading::after {
 
 .review-banner p {
   margin: 6px 0 0;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--muted);
 }
 
@@ -2011,7 +2029,7 @@ button.loading::after {
 .finding-desc {
   margin: 14px 0 20px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
@@ -2025,7 +2043,7 @@ button.loading::after {
 
 .finding-meta span {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -2056,7 +2074,7 @@ button.loading::after {
 
 .peer-metric-item span {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.1em;
 }
 
@@ -2073,7 +2091,7 @@ button.loading::after {
   display: block;
   margin-top: 4px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
 }
 
 @media (max-width: 1050px) {
@@ -2152,7 +2170,7 @@ button.loading::after {
   margin: 0;
   max-width: 640px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.65;
   font-style: italic;
 }
@@ -2174,7 +2192,7 @@ button.loading::after {
   text-align: left;
   padding: 15px 20px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
   border-bottom: 1px solid var(--line);
@@ -2215,7 +2233,7 @@ button.loading::after {
   color: var(--text);
   padding: 7px 14px;
   border-radius: 3px;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
   cursor: pointer;
@@ -2247,7 +2265,7 @@ button.loading::after {
 .section-nav a {
   display: inline-flex;
   color: var(--accent);
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.08em;
 }
 
@@ -2274,7 +2292,7 @@ button.loading::after {
 
 .detail-card .card-header h3 {
   margin: 0;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   color: var(--accent);
@@ -2300,7 +2318,7 @@ button.loading::after {
 
 .detail-label {
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.08em;
   white-space: nowrap;
 }
@@ -2322,7 +2340,7 @@ button.loading::after {
 }
 
 .config-group-header span {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--accent);
@@ -2365,7 +2383,7 @@ button.loading::after {
   text-align: left;
   padding: 12px 14px;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
   border-bottom: 1px solid var(--line);
@@ -2381,7 +2399,7 @@ button.loading::after {
 .risk-band-high,
 .risk-band-medium,
 .risk-band-low {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.08em;
 }

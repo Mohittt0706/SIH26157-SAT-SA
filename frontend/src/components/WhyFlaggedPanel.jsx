@@ -83,12 +83,12 @@ export default function WhyFlaggedPanel({ data }) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
-            <span style={{ fontSize: "10px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
+            <span style={{ fontSize: "11px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700 }}>
               PRIMARY DRIVER
             </span>
             <span
               style={{
-                fontSize: "11px",
+                fontSize: "12px",
                 fontWeight: 700,
                 color: primaryDriverLevel.color,
                 letterSpacing: "0.08em",
@@ -102,7 +102,7 @@ export default function WhyFlaggedPanel({ data }) {
             <h3 style={{ margin: "0 0 6px", fontSize: "16px", color: "var(--text)" }}>
               {mainFinding?.rule ? `${formatDetectorName(mainFinding.detector)}: ${mainFinding.rule.replace(/_/g, " ")}` : "Operational Baseline Alignment"}
             </h3>
-            <p style={{ margin: 0, fontSize: "13px", color: "var(--muted)", lineHeight: 1.6 }}>
+            <p style={{ margin: 0, fontSize: "14px", color: "var(--muted)", lineHeight: 1.6 }}>
               {mainFinding?.description ||
                 "This entity's operational telemetry aligns with expected peer baselines. No significant deviations or performative closure patterns were detected."}
             </p>
@@ -111,12 +111,12 @@ export default function WhyFlaggedPanel({ data }) {
           {/* Primary Evidence Items */}
           {mainFinding?.evidence && mainFinding.evidence.length > 0 && (
             <div style={{ marginTop: "8px", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "12px" }}>
-              <span style={{ fontSize: "10px", color: "var(--accent)", letterSpacing: "0.08em", fontWeight: 700, display: "block", marginBottom: "8px" }}>
+              <span style={{ fontSize: "11px", color: "var(--accent)", letterSpacing: "0.08em", fontWeight: 700, display: "block", marginBottom: "8px" }}>
                 SUPPORTING OPERATIONAL EVIDENCE ({mainFinding.evidence.length} SAMPLED ROWS)
               </span>
               <ul style={{ margin: 0, paddingLeft: "18px", display: "flex", flexDirection: "column", gap: "6px" }}>
                 {mainFinding.evidence.map((ev, i) => (
-                  <li key={i} style={{ fontSize: "12px", color: "var(--text)", lineHeight: 1.5 }}>
+                  <li key={i} style={{ fontSize: "13px", color: "var(--text)", lineHeight: 1.5 }}>
                     <strong>{ev.detail}</strong>
                     <span style={{ color: "var(--muted)", marginLeft: "6px" }}>— {ev.reason}</span>
                   </li>
@@ -126,7 +126,7 @@ export default function WhyFlaggedPanel({ data }) {
           )}
 
           {(!mainFinding || !mainFinding.evidence || mainFinding.evidence.length === 0) && (
-            <div style={{ marginTop: "4px", fontSize: "12px", color: "var(--muted)", fontStyle: "italic" }}>
+            <div style={{ marginTop: "4px", fontSize: "13px", color: "var(--muted)", fontStyle: "italic" }}>
               No specific evidence items available for this signal.
             </div>
           )}
@@ -134,7 +134,7 @@ export default function WhyFlaggedPanel({ data }) {
 
         {/* Secondary Signal Breakdown Grid */}
         <div>
-          <div style={{ fontSize: "10px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700, marginBottom: "10px" }}>
+          <div style={{ fontSize: "11px", color: "var(--muted)", letterSpacing: "0.1em", fontWeight: 700, marginBottom: "10px" }}>
             DETECTOR SIGNAL LEVELS
           </div>
 
@@ -155,12 +155,12 @@ export default function WhyFlaggedPanel({ data }) {
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text)" }}>Execution Gap</span>
-                <span style={{ fontSize: "10px", fontWeight: 700, color: egLevel.color }}>
+                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text)" }}>Execution Gap</span>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: egLevel.color }}>
                   {egLevel.label} ({egScore.toFixed(2)})
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: "11px", color: "var(--muted)", lineHeight: 1.4 }}>
+              <p style={{ margin: 0, fontSize: "12px", color: "var(--muted)", lineHeight: 1.4 }}>
                 {egScore >= 0.3
                   ? "Elevated fast closure rates or template investigation notes observed."
                   : "Investigation notes and closure times are consistent with genuine analysis."}
@@ -177,12 +177,12 @@ export default function WhyFlaggedPanel({ data }) {
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text)" }}>Negative Space</span>
-                <span style={{ fontSize: "10px", fontWeight: 700, color: nsLevel.color }}>
+                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text)" }}>Negative Space</span>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: nsLevel.color }}>
                   {nsLevel.label} ({nsScore.toFixed(2)})
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: "11px", color: "var(--muted)", lineHeight: 1.4 }}>
+              <p style={{ margin: 0, fontSize: "12px", color: "var(--muted)", lineHeight: 1.4 }}>
                 {nsScore >= 0.3
                   ? "Suspicious silence, missing severity categories, or asset blindness detected."
                   : "Expected telemetry distribution aligns with peer volume and severity baselines."}
@@ -199,12 +199,12 @@ export default function WhyFlaggedPanel({ data }) {
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                <span style={{ fontSize: "11px", fontWeight: 600, color: "var(--text)" }}>Isolation Anomaly</span>
-                <span style={{ fontSize: "10px", fontWeight: 700, color: anLevel.color }}>
+                <span style={{ fontSize: "12px", fontWeight: 600, color: "var(--text)" }}>Isolation Anomaly</span>
+                <span style={{ fontSize: "11px", fontWeight: 700, color: anLevel.color }}>
                   {anLevel.label} ({anScore.toFixed(2)})
                 </span>
               </div>
-              <p style={{ margin: 0, fontSize: "11px", color: "var(--muted)", lineHeight: 1.4 }}>
+              <p style={{ margin: 0, fontSize: "12px", color: "var(--muted)", lineHeight: 1.4 }}>
                 {anScore >= 0.3
                   ? "Multi-dimensional feature vector isolates entity significantly from cluster peers."
                   : "Operational metrics cluster naturally within the peer cohort."}
