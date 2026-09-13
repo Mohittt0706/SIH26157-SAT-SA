@@ -8,3 +8,5 @@ pandas
 python-multipart
 pytest
 joblib
+psutil
+httpx

@@ -32,26 +32,20 @@ export default function WhyFlaggedPanel({ data }) {
   const nsLevel = getSignalLevel(nsScore);
   const anLevel = getSignalLevel(anScore);
 
-  // Identify the highest component driver
-  const components = [
-    { key: "execution_gap", name: "Execution Gap", score: egScore, level: egLevel },
-    { key: "negative_space", name: "Negative Space", score: nsScore, level: nsLevel },
-    { key: "anomaly", name: "Anomaly", score: anScore, level: anLevel },
-  ];
-  components.sort((a, b) => b.score - a.score);
-  const topComponent = components[0];
+  // primary_driver comes straight from risk_score.py's weighted-contribution
+  // logic (see _combine_entity) — the score highest by raw value is not
+  // necessarily the one with the highest WEIGHT_* contribution, so this is
+  // not simply "whichever of the three scores above is largest".
+  const componentScoreByKey = { execution_gap: egScore, negative_space: nsScore, anomaly: anScore };
+  const componentLevelByKey = { execution_gap: egLevel, negative_space: nsLevel, anomaly: anLevel };
 
-  const primaryDriverName = data.primary_driver
-    ? formatDetectorName(data.primary_driver)
-    : topComponent.name;
-
-  const primaryDriverLevel = getSignalLevel(topComponent.score);
+  const primaryDriverName = formatDetectorName(data.primary_driver);
+  const primaryDriverLevel = componentLevelByKey[data.primary_driver] ?? getSignalLevel(componentScoreByKey[data.primary_driver] ?? 0);
 
   // Collect all real evidence items from findings
   const findings = data.findings || [];
   const primaryFindings = findings.filter(
-    (f) =>
-      f.detector?.toLowerCase() === (data.primary_driver || topComponent.key).toLowerCase()
+    (f) => f.detector?.toLowerCase() === (data.primary_driver || "").toLowerCase()
   );
 
   const mainFinding = primaryFindings[0] || findings[0];

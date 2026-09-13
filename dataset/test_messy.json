@@ -1,0 +1,82 @@
+[
+  {
+    "alert_id": "ALT9001",
+    "entity_name": "Rivera Logistics",
+    "severity": "CRITICAL",
+    "created_time": "2026-08-02 10:00:00",
+    "closed_time": "2026-08-02 10:02:00",
+    "escalated": "YES",
+    "investigation_notes": "",
+    "asset_type": "server"
+  },
+  {
+    "alert_id": "ALT9002",
+    "entity_name": "Rivera Logistics",
+    "severity": "Critical",
+    "created_time": "2026-08-02 11:00:00",
+    "closed_time": "2026-08-02 14:30:00",
+    "escalated": "No",
+    "investigation_notes": "   ",
+    "asset_type": "endpoint"
+  },
+  {
+    "alert_id": "ALT9003",
+    "entity_name": "rivera logistics",
+    "severity": "high",
+    "created_time": "2026-08-02 12:00:00",
+    "closed_time": "",
+    "escalated": true,
+    "investigation_notes": "Under active investigation, pending vendor response.",
+    "asset_type": "firewall"
+  },
+  {
+    "alert_id": "ALT9001",
+    "entity_name": "Rivera Logistics",
+    "severity": "low",
+    "created_time": "2026-08-02 13:00:00",
+    "closed_time": "2026-08-02 13:40:00",
+    "escalated": 0,
+    "investigation_notes": "Duplicate alert id on purpose.",
+    "asset_type": "server"
+  },
+  {
+    "alert_id": "ALT9004",
+    "entity_name": "Vantage Health Group",
+    "severity": "medium",
+    "created_time": "NOT A DATE",
+    "closed_time": "2026-08-02 15:00:00",
+    "escalated": 1,
+    "investigation_notes": "Bad created_time, should be skipped.",
+    "asset_type": "database"
+  },
+  {
+    "alert_id": "",
+    "entity_name": "Vantage Health Group",
+    "severity": "low",
+    "created_time": "2026-08-02 16:00:00",
+    "closed_time": "2026-08-02 17:00:00",
+    "escalated": "no",
+    "investigation_notes": "Missing alert_id, should be skipped.",
+    "asset_type": "server"
+  },
+  {
+    "alert_id": "ALT9005",
+    "entity_name": "",
+    "severity": "medium",
+    "created_time": "2026-08-02 18:00:00",
+    "closed_time": "2026-08-02 19:00:00",
+    "escalated": "no",
+    "investigation_notes": "Missing entity, should be skipped.",
+    "asset_type": "endpoint"
+  },
+  {
+    "alert_id": "ALT9006",
+    "entity_name": "Vantage Health Group",
+    "severity": "HIGH",
+    "created_time": "2026-08-03 09:00:00",
+    "closed_time": "2026-08-03 12:15:00",
+    "escalated": "Yes",
+    "investigation_notes": "Reviewed and escalated to L2 after confirming lateral movement indicators.",
+    "asset_type": "identity"
+  }
+]

@@ -3,6 +3,7 @@ import {
   TrendingDown,
   TrendingUp,
   Minus,
+  Activity,
   Clock,
   AlertCircle,
   Layers,
@@ -17,10 +18,63 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import { getAuditRuns, getAuditRunDetail } from "../lib/api";
+import { getEntityTrend } from "../lib/api";
+
+const TRAJECTORY_BY_DIRECTION = {
+  improving: {
+    label: "Improving",
+    color: "var(--green)",
+    bg: "rgba(87, 213, 140, 0.12)",
+    borderColor: "rgba(87, 213, 140, 0.3)",
+    icon: TrendingDown,
+  },
+  deteriorating: {
+    label: "Deteriorating",
+    color: "var(--red)",
+    bg: "rgba(239, 107, 114, 0.12)",
+    borderColor: "rgba(239, 107, 114, 0.3)",
+    icon: TrendingUp,
+  },
+  stable: {
+    label: "Stable",
+    color: "var(--accent)",
+    bg: "rgba(86, 199, 255, 0.12)",
+    borderColor: "rgba(86, 199, 255, 0.3)",
+    icon: Minus,
+  },
+  volatile: {
+    label: "Volatile",
+    color: "var(--amber)",
+    bg: "rgba(229, 173, 90, 0.12)",
+    borderColor: "rgba(229, 173, 90, 0.3)",
+    icon: Activity,
+  },
+};
+
+/**
+ * Builds the "since the first tracked run" description. `direction` now
+ * comes from a least-squares slope over every run (see _compute_entity_trend
+ * in app/routers/analytics.py), not from `change` — an entity can have a
+ * near-zero first-to-last `change` while still reading "volatile" because it
+ * swung widely in between (e.g. 85 -> 30.9 -> ... -> 85), which is exactly
+ * what `volatility` (the series' own standard deviation) is for.
+ */
+function describeChange(direction, change, volatility) {
+  if (direction === "volatile") {
+    return `Risk score has swung by roughly ±${volatility} pts (σ) across tracked runs, with no clear net direction — net change since the first run is ${change >= 0 ? `+${change}` : change} pts.`;
+  }
+  if (change === null || change === undefined) return null;
+  if (direction === "improving") {
+    return `Risk score reduced by ${Math.abs(change)} pts since the first tracked run.`;
+  }
+  if (direction === "deteriorating") {
+    return `Risk score increased by ${change} pts since the first tracked run.`;
+  }
+  return `Risk score remained stable (Δ ${change >= 0 ? `+${change}` : change} pts since the first tracked run).`;
+}
 
 export default function TrendPanel({ entityName }) {
-  const [history, setHistory] = useState([]);
+  const [trend, setTrend] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showComponents, setShowComponents] = useState(false);
@@ -28,80 +82,15 @@ export default function TrendPanel({ entityName }) {
   useEffect(() => {
     let isMounted = true;
 
-    async function fetchEntityHistory() {
+    async function fetchEntityTrend() {
       if (!entityName) return;
       try {
         setLoading(true);
         setError(null);
 
-        const runs = await getAuditRuns();
-        if (!runs || runs.length < 2) {
-          if (isMounted) {
-            setHistory([]);
-            setLoading(false);
-          }
-          return;
-        }
-
-        // Sort runs chronologically (oldest to newest)
-        const chronologicalRuns = [...runs].sort((a, b) => a.id - b.id);
-
-        // Fetch detail for each run to inspect results_snapshot
-        const runDetails = await Promise.all(
-          chronologicalRuns.map((r) =>
-            getAuditRunDetail(r.id).catch(() => null)
-          )
-        );
-
-        const entityPoints = [];
-        const normTarget = entityName.trim().toLowerCase();
-
-        runDetails.forEach((detail) => {
-          if (!detail || !detail.results_snapshot) return;
-
-          const snapshot = detail.results_snapshot.find(
-            (s) => (s.entity_name || "").trim().toLowerCase() === normTarget
-          );
-
-          if (snapshot) {
-            const dateObj = detail.timestamp ? new Date(detail.timestamp) : null;
-            const formattedDate = dateObj
-              ? dateObj.toLocaleDateString(undefined, {
-                  month: "short",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })
-              : `Run #${detail.id}`;
-
-            entityPoints.push({
-              runId: detail.id,
-              rawTimestamp: detail.timestamp,
-              label: `Run #${detail.id}`,
-              date: formattedDate,
-              risk_score: Number(snapshot.risk_score || 0),
-              risk_band: (snapshot.risk_band || "LOW").toUpperCase(),
-              execution_gap:
-                snapshot.execution_gap_component_score !== null &&
-                snapshot.execution_gap_component_score !== undefined
-                  ? Number((snapshot.execution_gap_component_score * 100).toFixed(1))
-                  : null,
-              negative_space:
-                snapshot.negative_space_component_score !== null &&
-                snapshot.negative_space_component_score !== undefined
-                  ? Number((snapshot.negative_space_component_score * 100).toFixed(1))
-                  : null,
-              anomaly:
-                snapshot.anomaly_component_score !== null &&
-                snapshot.anomaly_component_score !== undefined
-                  ? Number((snapshot.anomaly_component_score * 100).toFixed(1))
-                  : null,
-            });
-          }
-        });
-
+        const detail = await getEntityTrend(entityName);
         if (isMounted) {
-          setHistory(entityPoints);
+          setTrend(detail);
         }
       } catch (err) {
         console.error("TrendPanel fetch error:", err);
@@ -115,52 +104,40 @@ export default function TrendPanel({ entityName }) {
       }
     }
 
-    fetchEntityHistory();
+    fetchEntityTrend();
 
     return () => {
       isMounted = false;
     };
   }, [entityName]);
 
-  // Derive trend direction strictly when at least 2 data points exist
-  let trajectory = null;
-  if (history.length >= 2) {
-    const latest = history[history.length - 1];
-    const previous = history[history.length - 2];
-    const delta = Number((latest.risk_score - previous.risk_score).toFixed(1));
+  const points = trend?.points || [];
+  const history = points.map((p) => ({
+    runId: p.run_id,
+    rawTimestamp: p.timestamp,
+    label: `Run #${p.run_id}`,
+    date: p.timestamp
+      ? new Date(p.timestamp).toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      : `Run #${p.run_id}`,
+    risk_score: Number(p.risk_score || 0),
+    risk_band: (p.risk_band || "LOW").toUpperCase(),
+    // Raw 0.0-1.0 detector scores, exactly as the endpoint returns them —
+    // not rescaled to the 0-100 risk_score axis.
+    execution_gap: p.execution_gap ?? null,
+    negative_space: p.negative_space ?? null,
+    anomaly: p.anomaly ?? null,
+  }));
 
-    if (delta <= -1.0) {
-      trajectory = {
-        direction: "Improving",
-        delta,
-        description: `Risk score reduced by ${Math.abs(delta)} pts since prior run.`,
-        color: "var(--green)",
-        bg: "rgba(87, 213, 140, 0.12)",
-        borderColor: "rgba(87, 213, 140, 0.3)",
-        icon: TrendingDown,
-      };
-    } else if (delta >= 1.0) {
-      trajectory = {
-        direction: "Deteriorating",
-        delta,
-        description: `Risk score increased by ${delta} pts since prior run.`,
-        color: "var(--red)",
-        bg: "rgba(239, 107, 114, 0.12)",
-        borderColor: "rgba(239, 107, 114, 0.3)",
-        icon: TrendingUp,
-      };
-    } else {
-      trajectory = {
-        direction: "Stable",
-        delta,
-        description: `Risk score remained stable (Δ ${delta >= 0 ? `+${delta}` : delta} pts).`,
-        color: "var(--accent)",
-        bg: "rgba(86, 199, 255, 0.12)",
-        borderColor: "rgba(86, 199, 255, 0.3)",
-        icon: Minus,
-      };
-    }
-  }
+  const direction = trend?.direction;
+  const trajectory = direction ? TRAJECTORY_BY_DIRECTION[direction] : null;
+  const changeDescription = trajectory ? describeChange(direction, trend.change, trend.volatility) : null;
+
+  const hasEnoughHistory = direction && direction !== "insufficient_data" && history.length >= 2;
 
   return (
     <section className="ranking-panel" style={{ marginTop: "30px" }}>
@@ -188,11 +165,18 @@ export default function TrendPanel({ entityName }) {
           >
             <trajectory.icon size={15} />
             <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em" }}>
-              {trajectory.direction.toUpperCase()}
+              {trajectory.label.toUpperCase()}
             </span>
-            <span style={{ fontSize: "11px", color: "var(--muted)" }}>
-              ({trajectory.delta > 0 ? `+${trajectory.delta}` : trajectory.delta})
-            </span>
+            {direction === "volatile" && trend.volatility !== null && trend.volatility !== undefined && (
+              <span style={{ fontSize: "11px", color: "var(--muted)" }}>
+                (σ {trend.volatility})
+              </span>
+            )}
+            {direction !== "volatile" && trend.change !== null && trend.change !== undefined && (
+              <span style={{ fontSize: "11px", color: "var(--muted)" }}>
+                ({trend.change > 0 ? `+${trend.change}` : trend.change})
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -211,19 +195,19 @@ export default function TrendPanel({ entityName }) {
         </div>
       )}
 
-      {!loading && !error && history.length < 2 && (
+      {!loading && !error && !hasEnoughHistory && (
         <div className="empty-state" style={{ minHeight: "180px", padding: "40px 20px" }}>
           <Clock size={28} color="var(--muted)" />
           <h3 style={{ marginTop: "12px", color: "var(--text)" }}>
             Historical trend data is not available for this entity.
           </h3>
           <p style={{ maxWidth: "480px", color: "var(--muted)", fontSize: "14px", lineHeight: 1.6 }}>
-            At least two assessment runs are required to compute a temporal trajectory. Currently, only {history.length} assessment snapshot is available for {entityName}. Future uploads will automatically build this entity&apos;s chronological trend.
+            At least two assessment runs are required to compute a temporal trajectory for {entityName}. Future uploads will automatically build this entity&apos;s chronological trend.
           </p>
         </div>
       )}
 
-      {!loading && !error && history.length >= 2 && (
+      {!loading && !error && hasEnoughHistory && (
         <div style={{ padding: "20px" }}>
           <div
             style={{
@@ -237,7 +221,7 @@ export default function TrendPanel({ entityName }) {
           >
             <div style={{ fontSize: "13px", color: "var(--muted)" }}>
               Tracking across <strong>{history.length}</strong> assessment runs ·{" "}
-              {trajectory?.description}
+              {changeDescription}
             </div>
 
             <button
@@ -314,9 +298,9 @@ export default function TrendPanel({ entityName }) {
                               fontSize: "11px",
                             }}
                           >
-                            <span>Execution Gap: {item.execution_gap ?? "—"}</span>
-                            <span>Negative Space: {item.negative_space ?? "—"}</span>
-                            <span>Anomaly: {item.anomaly ?? "—"}</span>
+                            <span>Execution Gap: {item.execution_gap?.toFixed(2) ?? "—"}</span>
+                            <span>Negative Space: {item.negative_space?.toFixed(2) ?? "—"}</span>
+                            <span>Anomaly: {item.anomaly?.toFixed(2) ?? "—"}</span>
                           </div>
                         )}
                       </div>
