@@ -35,7 +35,7 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
+dataset/answer_key_extended_INTERNAL_ONLY.csv
 # Unit test / coverage reports
 htmlcov/
 .tox/

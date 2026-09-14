@@ -21,6 +21,7 @@ import {
   getBlindEvidence,
 } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
+import BrandBlock from "../components/BrandBlock";
 
 const EXACT_SIX_ENTITIES = [
   "Delta Rail Systems",
@@ -458,13 +459,7 @@ export default function ManualReviewPage() {
     <main className="dashboard-shell">
       {/* NAVBAR */}
       <nav className="dashboard-nav">
-        <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-          <div className="dashboard-brand-mark">V</div>
-          <div>
-            <div className="dashboard-brand-name">VEIL</div>
-            <div className="dashboard-brand-subtitle">Supervisory Intelligence for SOC Assessment</div>
-          </div>
-        </Link>
+        <BrandBlock />
         <div className="dashboard-nav-links">
           <Link to="/upload">ANALYZE</Link>
           <Link to="/dashboard">OVERVIEW</Link>
@@ -473,7 +468,7 @@ export default function ManualReviewPage() {
         </div>
         <div className="dashboard-status">
           <span />
-          OFFLINE MODE
+          AIR-GAPPED
         </div>
       </nav>
 

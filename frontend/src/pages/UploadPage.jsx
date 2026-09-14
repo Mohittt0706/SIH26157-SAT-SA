@@ -3,6 +3,7 @@ import { Upload, FileText, X, ArrowRight, AlertTriangle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { uploadCSV } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
+import BrandBlock from "../components/BrandBlock";
 
 // A skip rate at or above this share of received rows is surfaced as a
 // prominent warning rather than left as a quiet number in the stat grid.
@@ -159,20 +160,11 @@ export default function UploadPage() {
   return (
     <main className="upload-shell">
       <nav className="upload-nav">
-        <Link to="/" className="upload-brand" aria-label="VEIL Home">
-          <div className="upload-brand-mark">V</div>
-
-          <div>
-            <div className="upload-brand-name">VEIL</div>
-            <div className="upload-brand-subtitle">
-              Supervisory Intelligence for SOC Assessment
-            </div>
-          </div>
-        </Link>
+        <BrandBlock />
 
         <div className="upload-nav-status">
           <span />
-          OFFLINE MODE
+          AIR-GAPPED
         </div>
       </nav>
 

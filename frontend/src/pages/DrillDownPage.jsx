@@ -15,6 +15,7 @@ import { getEntityDetails } from "../lib/api";
 import WhyFlaggedPanel from "../components/WhyFlaggedPanel";
 import ExpectedObserved from "../components/ExpectedObserved";
 import TrendPanel from "../components/TrendPanel";
+import BrandBlock from "../components/BrandBlock";
 
 export default function DrillDownPage() {
   const { entityName: paramEntityName } = useParams();
@@ -62,15 +63,7 @@ export default function DrillDownPage() {
     return (
       <main className="drilldown-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-            <div className="dashboard-brand-mark">V</div>
-            <div>
-              <div className="dashboard-brand-name">VEIL</div>
-              <div className="dashboard-brand-subtitle">
-                Supervisory Intelligence for SOC Assessment
-              </div>
-            </div>
-          </Link>
+          <BrandBlock />
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
@@ -79,7 +72,7 @@ export default function DrillDownPage() {
           </div>
           <div className="dashboard-status">
             <span />
-            OFFLINE MODE
+            AIR-GAPPED
           </div>
         </nav>
         <section className="drilldown-page" style={{ paddingTop: "20px" }}>
@@ -110,15 +103,7 @@ export default function DrillDownPage() {
     return (
       <main className="drilldown-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-            <div className="dashboard-brand-mark">V</div>
-            <div>
-              <div className="dashboard-brand-name">VEIL</div>
-              <div className="dashboard-brand-subtitle">
-                Supervisory Intelligence for SOC Assessment
-              </div>
-            </div>
-          </Link>
+          <BrandBlock />
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
@@ -198,15 +183,7 @@ export default function DrillDownPage() {
     <main className="drilldown-shell">
       {/* NAVBAR */}
       <nav className="dashboard-nav">
-        <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-          <div className="dashboard-brand-mark">V</div>
-          <div>
-            <div className="dashboard-brand-name">VEIL</div>
-            <div className="dashboard-brand-subtitle">
-              Supervisory Intelligence for SOC Assessment
-            </div>
-          </div>
-        </Link>
+        <BrandBlock />
         <div className="dashboard-nav-links">
           <Link to="/upload">ANALYZE</Link>
           <Link to="/dashboard">OVERVIEW</Link>
@@ -215,7 +192,7 @@ export default function DrillDownPage() {
         </div>
         <div className="dashboard-status">
           <span />
-          OFFLINE MODE
+          AIR-GAPPED
         </div>
       </nav>
 

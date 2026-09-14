@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ShieldAlert } from "lucide-react";
 import usePageMetadata from "../hooks/usePageMetadata";
+import BrandBlock from "../components/BrandBlock";
 
 export default function NotFoundPage() {
   usePageMetadata({
@@ -11,18 +12,10 @@ export default function NotFoundPage() {
   return (
     <main className="dashboard-shell" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <nav className="dashboard-nav">
-        <Link to="/" className="dashboard-brand">
-          <div className="dashboard-brand-mark">V</div>
-          <div>
-            <div className="dashboard-brand-name">VEIL</div>
-            <div className="dashboard-brand-subtitle">
-              Supervisory Intelligence for SOC Assessment
-            </div>
-          </div>
-        </Link>
+        <BrandBlock />
         <div className="dashboard-status">
           <span />
-          OFFLINE MODE
+          AIR-GAPPED
         </div>
       </nav>
 

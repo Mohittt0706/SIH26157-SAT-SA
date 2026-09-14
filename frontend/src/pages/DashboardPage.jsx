@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowUpRight,
   ShieldAlert,
   Activity,
   BarChart3,
@@ -12,6 +11,7 @@ import usePageMetadata from "../hooks/usePageMetadata";
 import SupervisoryReviewPriority from "../components/SupervisoryReviewPriority";
 import AlertReviewQueue from "../components/AlertReviewQueue";
 import DatasetScale from "../components/DatasetScale";
+import BrandBlock from "../components/BrandBlock";
 
 export default function DashboardPage() {
   usePageMetadata({
@@ -53,15 +53,7 @@ export default function DashboardPage() {
     return (
       <main className="dashboard-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-            <div className="dashboard-brand-mark">V</div>
-            <div>
-              <div className="dashboard-brand-name">VEIL</div>
-              <div className="dashboard-brand-subtitle">
-                Supervisory Intelligence for SOC Assessment
-              </div>
-            </div>
-          </Link>
+          <BrandBlock />
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <span className="active">OVERVIEW</span>
@@ -70,7 +62,7 @@ export default function DashboardPage() {
           </div>
           <div className="dashboard-status">
             <span />
-            OFFLINE MODE
+            AIR-GAPPED
           </div>
         </nav>
         <section className="dashboard-page" style={{ paddingTop: "20px" }}>
@@ -99,15 +91,7 @@ export default function DashboardPage() {
     return (
       <main className="dashboard-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-            <div className="dashboard-brand-mark">V</div>
-            <div>
-              <div className="dashboard-brand-name">VEIL</div>
-              <div className="dashboard-brand-subtitle">
-                Supervisory Intelligence for SOC Assessment
-              </div>
-            </div>
-          </Link>
+          <BrandBlock />
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <span className="active">OVERVIEW</span>
@@ -116,7 +100,7 @@ export default function DashboardPage() {
           </div>
           <div className="dashboard-status">
             <span />
-            OFFLINE MODE
+            AIR-GAPPED
           </div>
         </nav>
         <div className="error-state">
@@ -145,33 +129,11 @@ export default function DashboardPage() {
 
   const latestRun = auditRuns && auditRuns.length > 0 ? auditRuns[0] : null;
 
-  const getSignalText = (entity) => {
-    if (entity.findings_summary && entity.findings_summary.length > 0) {
-      return entity.findings_summary.join(", ");
-    }
-    const band = (entity.risk_band || "").toLowerCase();
-    if (band === "medium") {
-      return "No specific findings — statistical deviation only";
-    }
-    if (band === "low") {
-      return "No significant findings";
-    }
-    return entity.primary_driver || "Normal";
-  };
-
   return (
     <main className="dashboard-shell">
       {/* NAVBAR */}
       <nav className="dashboard-nav">
-        <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-          <div className="dashboard-brand-mark">V</div>
-          <div>
-            <div className="dashboard-brand-name">VEIL</div>
-            <div className="dashboard-brand-subtitle">
-              Supervisory Intelligence for SOC Assessment
-            </div>
-          </div>
-        </Link>
+        <BrandBlock />
         <div className="dashboard-nav-links">
           <Link to="/upload">ANALYZE</Link>
           <span className="active">OVERVIEW</span>
@@ -180,7 +142,7 @@ export default function DashboardPage() {
         </div>
         <div className="dashboard-status">
           <span />
-          OFFLINE MODE
+          AIR-GAPPED
         </div>
       </nav>
 
@@ -244,100 +206,47 @@ export default function DashboardPage() {
         {/* 2b. PRIORITIZED ALERT SAMPLES (Answers: WHICH alert should I review first?) */}
         <AlertReviewQueue />
 
-        {/* 3. RISK & SIGNAL DISTRIBUTION (Answers: WHAT is the posture & findings?) */}
-        <div className="dashboard-main-grid" style={{ marginTop: "30px" }}>
-          {/* RANKING PANEL */}
-          <section className="ranking-panel">
-            <div className="panel-header">
-              <div>
-                <div className="panel-label">RISK RANKING</div>
-                <h2>Entities requiring attention</h2>
-              </div>
-              <span className="panel-meta">SCORE / 100</span>
+        {/* 3. SIGNAL DISTRIBUTION (Answers: WHAT kinds of findings are firing?)
+            Ranking now lives solely in the Supervisory Review Priority table
+            above — this used to sit in a two-column grid alongside a second,
+            redundant ranking table; now the sole occupant, so it renders as
+            a plain full-width section instead of leaving the grid's second
+            column empty. */}
+        <section className="signals-panel" style={{ marginTop: "30px" }}>
+          <div className="panel-header">
+            <div>
+              <div className="panel-label">SIGNAL DISTRIBUTION</div>
+              <h2>Review signals</h2>
             </div>
-            <div className="entity-table">
-              <div className="entity-table-head">
-                <span>#</span>
-                <span>ENTITY</span>
-                <span>SIGNAL</span>
-                <span>SCORE</span>
-                <span />
+          </div>
+          <div className="signal-list">
+            {driverEntries.length === 0 ? (
+              <div className="empty-state" style={{ minHeight: "150px", padding: "20px" }}>
+                <p>No elevated review signals identified.</p>
               </div>
-              {entities.length === 0 ? (
-                <div className="empty-state" style={{ minHeight: "200px", gridColumn: "1 / -1" }}>
-                  <ShieldAlert size={24} />
-                  <h3>No Entities</h3>
-                  <p>No entities were found in the active dataset. Please upload a new dataset containing entity records.</p>
-                </div>
-              ) : (
-                [...entities]
-                  .sort((a, b) => (b.risk_score - a.risk_score) || (a.entity_name || "").localeCompare(b.entity_name || ""))
-                  .map((entity, idx) => {
-                    const rank = (idx + 1).toString().padStart(2, "0");
-                    const bandLower = (entity.risk_band || "low").toLowerCase();
-                    const scoreClass = `score-${bandLower}`;
-                    return (
-                      <Link
-                        key={entity.entity_name}
-                        to={`/entities/${encodeURIComponent(entity.entity_name)}`}
-                        className="entity-row"
-                      >
-                        <span className="entity-rank">{rank}</span>
-                        <span className="entity-title">{entity.entity_name}</span>
-                        <span className={`entity-signal ${bandLower}`}>
-                          <span className="signal-dot" />
-                          {getSignalText(entity)}
-                        </span>
-                        <span className={`entity-score ${scoreClass}`}>
-                          {Number(entity.risk_score).toFixed(1)}
-                        </span>
-                        <span className="entity-arrow">
-                          <ArrowUpRight size={15} />
-                        </span>
-                      </Link>
-                    );
-                  })
-              )}
-            </div>
-          </section>
-
-          {/* SIGNALS SIDE PANEL */}
-          <section className="signals-panel">
-            <div className="panel-header">
-              <div>
-                <div className="panel-label">SIGNAL DISTRIBUTION</div>
-                <h2>Review signals</h2>
-              </div>
-            </div>
-            <div className="signal-list">
-              {driverEntries.length === 0 ? (
-                <div className="empty-state" style={{ minHeight: "150px", padding: "20px" }}>
-                  <p>No elevated review signals identified.</p>
-                </div>
-              ) : (
-                driverEntries.map(([driver, count], idx) => {
-                  const percent = totalDrivers > 0 ? Math.round((count / totalDrivers) * 100) : 0;
-                  const num = (idx + 1).toString().padStart(2, "0");
-                  return (
-                    <div className="signal-item" key={driver}>
-                      <div>
-                        <span className="signal-number">{num}</span>
-                        <strong>{driver}</strong>
-                      </div>
-                      <span className="signal-percent">{percent}%</span>
+            ) : (
+              driverEntries.map(([driver, count], idx) => {
+                const percent = totalDrivers > 0 ? Math.round((count / totalDrivers) * 100) : 0;
+                const num = (idx + 1).toString().padStart(2, "0");
+                return (
+                  <div className="signal-item" key={driver}>
+                    <div>
+                      <span className="signal-number">{num}</span>
+                      <strong>{driver}</strong>
                     </div>
-                  );
-                })
-              )}
-            </div>
-            <div className="review-note">
-              <span>SUPERVISORY PRINCIPLE</span>
-              <p>
-                Signals identify operational anomalies requiring human supervisory review. They do not constitute an automatic verdict.
-              </p>
-            </div>
-          </section>
-        </div>
+                    <span className="signal-percent">{percent}%</span>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          <div className="review-note">
+            <span>SUPERVISORY PRINCIPLE</span>
+            <p>
+              Signals identify operational anomalies requiring human supervisory review. They do not constitute an automatic verdict.
+            </p>
+          </div>
+        </section>
 
         {/* 4. DATASET / ANALYSIS SCALE (Answers: HOW large is the analyzed dataset?) */}
         <DatasetScale

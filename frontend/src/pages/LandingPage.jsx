@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import usePageMetadata from "../hooks/usePageMetadata";
-import veilLogo from "../assets/veil-logo.png";
+import BrandBlock from "../components/BrandBlock";
 
 const capabilities = [
   {
@@ -50,25 +49,6 @@ const entities = [
 ];
 
 export default function LandingPage() {
-  const [isOnline, setIsOnline] = useState(() =>
-    typeof navigator !== "undefined" && typeof navigator.onLine === "boolean"
-      ? navigator.onLine
-      : true
-  );
-
-  useEffect(() => {
-    const handleOnline = () => setIsOnline(true);
-    const handleOffline = () => setIsOnline(false);
-
-    window.addEventListener("online", handleOnline);
-    window.addEventListener("offline", handleOffline);
-
-    return () => {
-      window.removeEventListener("online", handleOnline);
-      window.removeEventListener("offline", handleOffline);
-    };
-  }, []);
-
   usePageMetadata({
     title: "VEIL | Supervisory Intelligence",
     description: "Evidence-backed signals for human review — not definitive security verdicts.",
@@ -78,19 +58,7 @@ export default function LandingPage() {
     <main className="site-shell">
       {/* NAVBAR */}
       <nav className="navbar">
-        <div className="brand">
-          <div className="brand-mark">
-            <img
-              src={veilLogo}
-              alt="VEIL logo"
-              className="brand-logo"
-            />
-          </div>
-          <div>
-            <div className="brand-name">VEIL</div>
-            <div className="brand-subtitle">Supervisory Intelligence for SOC Assessment</div>
-          </div>
-        </div>
+        <BrandBlock />
 
         <div className="nav-links">
           <a href="#platform">Platform</a>
@@ -99,11 +67,13 @@ export default function LandingPage() {
         </div>
 
         <div className="nav-status">
-          <span
-            className={`status-dot ${isOnline ? "online" : "offline"}`}
-            style={{ background: isOnline ? "var(--green)" : "var(--red)" }}
-          />
-          {isOnline ? "ONLINE" : "OFFLINE"}
+          {/* Static — describes how VEIL is deployed (air-gapped, no
+              external network dependency), not the browser's own
+              connectivity. A machine inside an air-gapped network reports
+              navigator.onLine === false, which would say nothing true or
+              useful about this system, so this never reads it. */}
+          <span className="status-dot" />
+          AIR-GAPPED
         </div>
       </nav>
 

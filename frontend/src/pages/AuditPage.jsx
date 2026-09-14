@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { getAuditRuns, getAuditRunDetail } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
+import BrandBlock from "../components/BrandBlock";
 
 export default function AuditPage() {
   const [runs, setRuns] = useState([]);
@@ -119,15 +120,7 @@ export default function AuditPage() {
     return (
       <main className="audit-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-            <div className="dashboard-brand-mark">V</div>
-            <div>
-              <div className="dashboard-brand-name">VEIL</div>
-              <div className="dashboard-brand-subtitle">
-                Supervisory Intelligence for SOC Assessment
-              </div>
-            </div>
-          </Link>
+          <BrandBlock />
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
@@ -136,7 +129,7 @@ export default function AuditPage() {
           </div>
           <div className="dashboard-status">
             <span />
-            OFFLINE MODE
+            AIR-GAPPED
           </div>
         </nav>
         <section className="audit-page">
@@ -155,15 +148,7 @@ export default function AuditPage() {
     return (
       <main className="audit-shell">
         <nav className="dashboard-nav">
-          <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-            <div className="dashboard-brand-mark">V</div>
-            <div>
-              <div className="dashboard-brand-name">VEIL</div>
-              <div className="dashboard-brand-subtitle">
-                Supervisory Intelligence for SOC Assessment
-              </div>
-            </div>
-          </Link>
+          <BrandBlock />
           <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
@@ -172,7 +157,7 @@ export default function AuditPage() {
           </div>
           <div className="dashboard-status">
             <span />
-            OFFLINE MODE
+            AIR-GAPPED
           </div>
         </nav>
         <section className="audit-page">
@@ -191,15 +176,7 @@ export default function AuditPage() {
   return (
     <main className="audit-shell">
       <nav className="dashboard-nav">
-        <Link to="/" className="dashboard-brand" aria-label="VEIL Home">
-          <div className="dashboard-brand-mark">V</div>
-          <div>
-            <div className="dashboard-brand-name">VEIL</div>
-            <div className="dashboard-brand-subtitle">
-              Supervisory Intelligence for SOC Assessment
-            </div>
-          </div>
-        </Link>
+        <BrandBlock />
         <div className="dashboard-nav-links">
             <Link to="/upload">ANALYZE</Link>
             <Link to="/dashboard">OVERVIEW</Link>
@@ -208,7 +185,7 @@ export default function AuditPage() {
         </div>
         <div className="dashboard-status">
           <span />
-          OFFLINE MODE
+          AIR-GAPPED
         </div>
       </nav>
 

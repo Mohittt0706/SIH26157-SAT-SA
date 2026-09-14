@@ -46,6 +46,25 @@ function formatPrimaryDriver(driver) {
   return driver.replace(/_/g, " ");
 }
 
+/**
+ * Subtitle text shown under the primary driver when findings_summary is
+ * empty — carried over from the dashboard's old second ranking table
+ * (DashboardPage.jsx's getSignalText) when that table was removed, since
+ * this was the one thing it showed that this table didn't. Returns null
+ * (render nothing extra) for critical/high entities with empty findings,
+ * since the primary driver above already names the signal in that case.
+ */
+function getEmptyFindingsFallback(entity) {
+  const band = (entity.risk_band || "").toLowerCase();
+  if (band === "medium") {
+    return "No specific findings — statistical deviation only";
+  }
+  if (band === "low") {
+    return "No significant findings";
+  }
+  return null;
+}
+
 export default function SupervisoryReviewPriority({ entities = [] }) {
   if (!entities || entities.length === 0) {
     return (
@@ -211,10 +230,16 @@ export default function SupervisoryReviewPriority({ entities = [] }) {
                       <span style={{ color: "var(--text)", fontWeight: 500 }}>
                         {formatPrimaryDriver(entity.primary_driver)}
                       </span>
-                      {entity.findings_summary && entity.findings_summary.length > 0 && (
+                      {entity.findings_summary && entity.findings_summary.length > 0 ? (
                         <small style={{ color: "var(--muted)", fontSize: "11px" }}>
                           {entity.findings_summary.join(" · ")}
                         </small>
+                      ) : (
+                        getEmptyFindingsFallback(entity) && (
+                          <small style={{ color: "var(--muted)", fontSize: "11px" }}>
+                            {getEmptyFindingsFallback(entity)}
+                          </small>
+                        )
                       )}
                     </div>
                   </td>
