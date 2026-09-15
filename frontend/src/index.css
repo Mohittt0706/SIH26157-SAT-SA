@@ -2313,3 +2313,179 @@ button.loading::after {
 .priority-table-row:hover {
   background-color: rgba(255, 255, 255, 0.03) !important;
 }
+
+/* =========================
+   DOWNLOAD REPORT MENU
+========================= */
+
+.download-report-menu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 210px;
+}
+
+.download-report-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.download-report-trigger:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.download-report-trigger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.download-report-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.download-report-chevron {
+  transition: transform 0.15s;
+}
+
+.download-report-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Reuses the existing `spin` keyframe defined above */
+.download-report-spinner {
+  animation: spin 0.9s linear infinite;
+  flex-shrink: 0;
+}
+
+.download-report-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 50;
+  min-width: 180px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 4px 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.download-report-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+.download-report-item:hover {
+  background: var(--surface-2);
+  color: var(--accent);
+}
+
+.download-report-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.download-report-item svg {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: color 0.12s;
+}
+
+.download-report-item:hover svg {
+  color: var(--accent);
+}
+
+.download-report-error {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--red);
+  text-align: right;
+}
+
+/* Responsive: collapse below dashboard header breakpoint */
+@media (max-width: 860px) {
+  .download-report-menu {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .download-report-trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .download-report-dropdown {
+    left: 0;
+    right: auto;
+    width: 100%;
+  }
+
+  .download-report-error {
+    text-align: left;
+  }
+}
+
+/* ── Download report: toast + CSV hint (additions to DOWNLOAD REPORT MENU) ── */
+
+.download-report-toast {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+  padding: 7px 11px;
+  background: var(--surface);
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  animation: toast-in 0.18s ease forwards;
+}
+
+.download-report-toast svg {
+  flex-shrink: 0;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.download-report-item-hint {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}

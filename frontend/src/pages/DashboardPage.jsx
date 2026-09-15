@@ -12,6 +12,7 @@ import SupervisoryReviewPriority from "../components/SupervisoryReviewPriority";
 import AlertReviewQueue from "../components/AlertReviewQueue";
 import DatasetScale from "../components/DatasetScale";
 import BrandBlock from "../components/BrandBlock";
+import DownloadReportMenu from "../components/DownloadReportMenu";
 
 export default function DashboardPage() {
   usePageMetadata({
@@ -162,10 +163,13 @@ export default function DashboardPage() {
               Evidence-backed supervisory assessment generated from structured SOC operational telemetry.
             </p>
           </div>
-          <div className="dataset-info">
-            <span>ACTIVE DATASET</span>
-            <strong>ACTIVE SOC DATASET</strong>
-            <small>{totalAlerts.toLocaleString()} records · {entities.length} entities</small>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "12px" }}>
+            <div className="dataset-info">
+              <span>ACTIVE DATASET</span>
+              <strong>ACTIVE SOC DATASET</strong>
+              <small>{totalAlerts.toLocaleString()} records · {entities.length} entities</small>
+            </div>
+            <DownloadReportMenu entities={entities} auditRuns={auditRuns} />
           </div>
         </div>
 
