@@ -20,10 +20,16 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, FileText, FileJson, FileSpreadsheet, Loader, CheckCircle } from "lucide-react";
-import { assembleReportData, downloadJSON, downloadCSV } from "../lib/assessmentReport";
+import { assembleReportData, assembleEntityReportData, downloadJSON, downloadCSV } from "../lib/assessmentReport";
 import { buildPDF } from "../lib/pdfReportBuilder";
 
-export default function DownloadReportMenu({ entities, auditRuns }) {
+export default function DownloadReportMenu({
+  mode = "overview",
+  entities,
+  auditRuns,
+  entityData,
+  entityName,
+}) {
   const [open, setOpen] = useState(false);
   const [generating, setGenerating] = useState(false); // "pdf" | "json" | "csv" | false
   const [error, setError] = useState(null);
@@ -32,7 +38,6 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
   const toastTimerRef = useRef(null);
 
   // ── Close on outside click ───────────────────────────────────────────────
-  // (hooks must be called before any conditional return)
   useEffect(() => {
     function handleOutside(e) {
       if (containerRef.current && !containerRef.current.contains(e.target)) {
@@ -57,9 +62,9 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
     };
   }, []);
 
-  // ── Generation handler ───────────────────────────────────────────────────
-  // Guard: no assessment data → render nothing (placed after hooks per Rules of Hooks)
-  if (!entities || entities.length === 0) return null;
+  // ── Guards: no data → render nothing ──────────────────────────────────────
+  if (mode === "overview" && (!entities || entities.length === 0)) return null;
+  if (mode === "entity" && !entityData && !entityName) return null;
 
   async function handleGenerate(format) {
     setOpen(false);
@@ -67,7 +72,17 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
     setToast(null);
     setGenerating(format);
     try {
-      const reportData = await assembleReportData(entities, auditRuns || []);
+      let reportData;
+      if (mode === "entity") {
+        reportData = await assembleEntityReportData(
+          entityName || entityData?.entity_name,
+          entityData,
+          auditRuns
+        );
+      } else {
+        reportData = await assembleReportData(entities, auditRuns || []);
+      }
+
       if (format === "pdf") {
         buildPDF(reportData);
       } else if (format === "csv") {
@@ -75,6 +90,7 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
       } else {
         downloadJSON(reportData);
       }
+
       // Show toast with current time
       const now = new Date();
       const pad = (n) => String(n).padStart(2, "0");
@@ -91,6 +107,7 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
   }
 
   const isLoading = generating !== false;
+  const buttonLabel = mode === "entity" ? "DOWNLOAD REPORT" : "DOWNLOAD ASSESSMENT";
 
   return (
     <div className="download-report-menu" ref={containerRef}>
@@ -101,7 +118,7 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
         disabled={isLoading}
         aria-haspopup="true"
         aria-expanded={open}
-        aria-label="Download Assessment Report"
+        aria-label={mode === "entity" ? "Download Entity Report" : "Download Assessment Report"}
       >
         {isLoading ? (
           <>
@@ -116,7 +133,7 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
           </>
         ) : (
           <>
-            <span>DOWNLOAD ASSESSMENT</span>
+            <span>{buttonLabel}</span>
             <ChevronDown
               size={13}
               className={`download-report-chevron${open ? " open" : ""}`}
@@ -152,7 +169,9 @@ export default function DownloadReportMenu({ entities, auditRuns }) {
           >
             <FileSpreadsheet size={14} aria-hidden="true" />
             <span>Download CSV</span>
-            <span className="download-report-item-hint">priority table</span>
+            <span className="download-report-item-hint">
+              {mode === "entity" ? "dossier data" : "priority table"}
+            </span>
           </button>
         </div>
       )}

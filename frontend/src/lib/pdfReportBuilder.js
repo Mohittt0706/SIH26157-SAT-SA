@@ -613,6 +613,253 @@ function renderDisclaimer(doc, cursor, disclaimerText) {
 
 // ── Main export ────────────────────────────────────────────────────────────
 
+// ── Main exports ───────────────────────────────────────────────────────────
+
+/**
+ * buildEntityPDF(reportData)
+ *
+ * Renders a single entity's dossier report as a jsPDF document and triggers
+ * a browser download.
+ *
+ * @param {Object} reportData — as returned by assembleEntityReportData()
+ */
+export function buildEntityPDF(reportData) {
+  const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
+
+  const { _meta, entity_summary, findings, expected_vs_observed, trend, audit_metadata, disclaimer, report_hash } = reportData;
+
+  // ── Cover page (page 1) ──────────────────────────────────────────────────
+  doc.setFillColor(...ACCENT);
+  doc.rect(0, 0, PAGE_W, 4, "F");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(28);
+  doc.setTextColor(...BLACK);
+  doc.text("SAT-SA", MARGIN_L, 50);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(14);
+  doc.setTextColor(...GRAY);
+  doc.text("Supervisory Entity Assessment Dossier", MARGIN_L, 62);
+
+  doc.setFontSize(9);
+  doc.setTextColor(...ACCENT);
+  doc.text("VEIL — Visibility and Evidence Intelligence Layer", MARGIN_L, 72);
+
+  doc.setDrawColor(...DIVIDER);
+  doc.setLineWidth(0.4);
+  doc.line(MARGIN_L, 80, PAGE_W - MARGIN_R, 80);
+
+  // Entity Highlight Card
+  const cardY = 90;
+  doc.setFillColor(248, 250, 252);
+  doc.setDrawColor(...DIVIDER);
+  doc.roundedRect(MARGIN_L, cardY, CONTENT_W, 36, 2, 2, "FD");
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(16);
+  doc.setTextColor(...BLACK);
+  doc.text(display(_meta?.entity_name), MARGIN_L + 8, cardY + 12);
+
+  const band = (entity_summary?.risk_band || "").toLowerCase();
+  const bandCol = bandColor(band);
+  doc.setFontSize(10);
+  doc.setTextColor(...bandCol);
+  const scoreText = entity_summary?.risk_score !== NA
+    ? `Risk Score: ${Number(entity_summary.risk_score).toFixed(1)} / 100 (${band.toUpperCase()})`
+    : "Risk Score: —";
+  doc.text(scoreText, MARGIN_L + 8, cardY + 20);
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(...GRAY);
+  doc.text(`Primary Driver: ${display(entity_summary?.primary_driver)}`, MARGIN_L + 8, cardY + 28);
+
+  // Metadata block
+  const kvY = 140;
+  const labelW = 52;
+  const lineH = 9;
+
+  const fields = [
+    ["Generated", display(_meta?.generated_at_display)],
+    ["Assessment Run", display(_meta?.run_id)],
+    ["Schema Version", display(reportData.report_schema_version || "1.0")],
+    ["Report Hash", report_hash ? trunc(report_hash, 48) : "—"],
+  ];
+
+  fields.forEach(([label, value], i) => {
+    const y = kvY + i * lineH;
+    doc.setFontSize(8);
+    doc.setTextColor(...GRAY);
+    doc.text(label.toUpperCase(), MARGIN_L, y);
+    doc.setFontSize(9);
+    doc.setTextColor(...BLACK);
+    doc.text(value, MARGIN_L + labelW, y);
+  });
+
+  // Classification notice at bottom
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.setTextColor(...GRAY);
+  doc.text(
+    "FOR AUTHORIZED SUPERVISORY USE ONLY",
+    PAGE_W / 2,
+    PAGE_H - 25,
+    { align: "center" }
+  );
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(7.5);
+  doc.text(
+    "Handle in accordance with applicable data-handling policies.",
+    PAGE_W / 2,
+    PAGE_H - 20,
+    { align: "center" }
+  );
+
+  // ── Content pages ────────────────────────────────────────────────────────
+  doc.addPage();
+  drawFooter(doc);
+  const cursor = makeCursor(22);
+
+  // Section 1: Executive Summary & Component Breakdown
+  drawSectionTitle(doc, cursor, "1  Executive Summary & Component Scores");
+
+  const comp = entity_summary?.component_scores || {};
+  const compHead = ["Component Detector", "Score", "Weight", "Description"];
+  const compBody = [
+    ["Execution Gap", comp.execution_gap !== NA ? String(Number(comp.execution_gap).toFixed(2)) : "—", "40%", "Triaged closure anomalies & investigation note duplication"],
+    ["Negative Space", comp.negative_space !== NA ? String(Number(comp.negative_space).toFixed(2)) : "—", "35%", "Statistical gaps in reported severities or alert volumes"],
+    ["Anomaly Drift", comp.anomaly !== NA ? String(Number(comp.anomaly).toFixed(2)) : "—", "25%", "Isolation Forest peer multi-feature drift"],
+  ];
+  drawTable(doc, cursor, compHead, compBody, [0.25, 0.12, 0.12, 0.51]);
+
+  // Peer benchmark comparisons if available
+  if (entity_summary?.peer_metrics) {
+    ensureSpace(doc, cursor, 24);
+    setHeading3(doc);
+    doc.text("Peer Group Benchmark Comparisons", MARGIN_L, cursor.y);
+    cursor.y += 5;
+
+    const pm = entity_summary.peer_metrics;
+    const pmHead = ["Metric", "Observed Value", "Peer Median", "Variance"];
+    const pmBody = [];
+
+    if (pm.avg_closure_seconds) {
+      const entM = Math.round(pm.avg_closure_seconds.entity / 60);
+      const peerM = Math.round(pm.avg_closure_seconds.peer_median / 60);
+      pmBody.push(["Avg Closure Time", `${entM} min`, `${peerM} min`, `${entM - peerM >= 0 ? `+${entM - peerM}` : entM - peerM} min`]);
+    }
+    if (pm.escalation_rate) {
+      const entR = Math.round(pm.escalation_rate.entity * 100);
+      const peerR = Math.round(pm.escalation_rate.peer_median * 100);
+      pmBody.push(["Escalation Rate", `${entR}%`, `${peerR}%`, `${entR - peerR >= 0 ? `+${entR - peerR}` : entR - peerR}%`]);
+    }
+    if (pm.avg_note_length) {
+      const entN = Math.round(pm.avg_note_length.entity);
+      const peerN = Math.round(pm.avg_note_length.peer_median);
+      pmBody.push(["Avg Note Length", `${entN} chars`, `${peerN} chars`, `${entN - peerN >= 0 ? `+${entN - peerN}` : entN - peerN} chars`]);
+    }
+    if (pm.alert_count) {
+      const entA = pm.alert_count.entity;
+      const peerA = Math.round(pm.alert_count.peer_median);
+      pmBody.push(["Alert Count", `${entA}`, `${peerA}`, `${entA - peerA >= 0 ? `+${entA - peerA}` : entA - peerA}`]);
+    }
+
+    if (pmBody.length > 0) {
+      drawTable(doc, cursor, pmHead, pmBody, [0.35, 0.22, 0.22, 0.21]);
+    }
+  }
+
+  // Section 2: Why Flagged (Findings & Evidence)
+  ensureSpace(doc, cursor, 24);
+  drawSectionTitle(doc, cursor, "2  Why Flagged (Evidence & Rule Triggers)");
+
+  if (!findings || findings.length === 0) {
+    drawParagraph(doc, cursor, "No suspicious rules or behavioral findings recorded for this entity.");
+  } else {
+    findings.forEach((finding, fi) => {
+      ensureSpace(doc, cursor, 20);
+      setHeading3(doc);
+      doc.text(`Finding ${fi + 1}: ${trunc(finding.rule, 80)}`, MARGIN_L, cursor.y);
+      cursor.y += 5;
+
+      drawKV(doc, cursor, "Detector", finding.detector, 36);
+      drawKV(doc, cursor, "Description", finding.description, 36);
+      drawKV(doc, cursor, "Evidence Count", finding.evidence_count, 36);
+
+      if (finding.evidence && finding.evidence.length > 0) {
+        ensureSpace(doc, cursor, 20);
+        setMuted(doc);
+        doc.setFontSize(7.5);
+        doc.text("EVIDENCE ITEMS", MARGIN_L, cursor.y);
+        cursor.y += 4;
+
+        const evHead = ["Detail", "Reason"];
+        const evBody = finding.evidence.map((ev) => [
+          trunc(ev.detail, 100),
+          trunc(ev.reason, 80),
+        ]);
+        drawTable(doc, cursor, evHead, evBody, [0.58, 0.42]);
+      }
+      cursor.y += 3;
+    });
+  }
+
+  // Section 3: Expected vs Observed
+  if (expected_vs_observed && expected_vs_observed.length > 0) {
+    ensureSpace(doc, cursor, 24);
+    drawSectionTitle(doc, cursor, "3  Expected vs Observed Baseline Deviation");
+
+    const evoHead = ["Metric", "Observed", "Expected", "Unit", "Z-Score", "Direction", "Interpretation"];
+    const evoWidths = [0.20, 0.10, 0.10, 0.08, 0.09, 0.10, 0.33];
+    const evoBody = expected_vs_observed.map((row) => [
+      trunc(row.metric, 40),
+      display(row.observed),
+      display(row.expected),
+      display(row.unit),
+      row.deviation_z !== NA ? String(Number(row.deviation_z).toFixed(2)) : "—",
+      display(row.direction),
+      trunc(row.interpretation, 80),
+    ]);
+    drawTable(doc, cursor, evoHead, evoBody, evoWidths);
+  }
+
+  // Section 4: Temporal / Trend Analysis
+  if (trend) {
+    ensureSpace(doc, cursor, 24);
+    drawSectionTitle(doc, cursor, "4  Temporal / Trend Trajectory");
+
+    drawKV(doc, cursor, "Direction", trend.direction, 36);
+    drawKV(doc, cursor, "Volatility", trend.volatility !== NA
+      ? Number(trend.volatility).toFixed(4)
+      : NA, 36);
+
+    if (trend.points && trend.points.length > 0) {
+      const tHead = ["Run ID", "Timestamp", "Risk Score"];
+      const tBody = trend.points.map((p) => [
+        display(p.run_id),
+        display(p.timestamp),
+        p.risk_score !== NA ? String(Number(p.risk_score).toFixed(3)) : "—",
+      ]);
+      drawTable(doc, cursor, tHead, tBody, [0.22, 0.50, 0.28]);
+    }
+  }
+
+  // Section 5: Audit & Telemetry Context
+  ensureSpace(doc, cursor, 24);
+  renderAuditMetadata(doc, cursor, audit_metadata);
+
+  // Section 6: Supervisory Review Template
+  renderSupervisoryReviewTemplate(doc, cursor);
+
+  // Section 7: Disclaimer
+  renderDisclaimer(doc, cursor, disclaimer);
+
+  // Trigger download
+  const filename = buildFileName(reportData, "pdf");
+  doc.save(filename);
+}
+
 /**
  * buildPDF(reportData)
  *
@@ -622,6 +869,10 @@ function renderDisclaimer(doc, cursor, disclaimerText) {
  * @param {Object} reportData — as returned by assembleReportData()
  */
 export function buildPDF(reportData) {
+  if (reportData?._meta?.mode === "entity") {
+    return buildEntityPDF(reportData);
+  }
+
   const doc = new jsPDF({ unit: "mm", format: "a4", orientation: "portrait" });
 
   const { _meta, overview, supervisory_priority, entity_details, audit_metadata, disclaimer } = reportData;

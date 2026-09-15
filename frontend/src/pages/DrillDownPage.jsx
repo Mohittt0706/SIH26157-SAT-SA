@@ -16,6 +16,7 @@ import WhyFlaggedPanel from "../components/WhyFlaggedPanel";
 import ExpectedObserved from "../components/ExpectedObserved";
 import TrendPanel from "../components/TrendPanel";
 import BrandBlock from "../components/BrandBlock";
+import DownloadReportMenu from "../components/DownloadReportMenu";
 
 export default function DrillDownPage() {
   const { entityName: paramEntityName } = useParams();
@@ -197,12 +198,23 @@ export default function DrillDownPage() {
       </nav>
 
       <section className="drilldown-page">
-        {/* BACK BUTTON */}
-        <div className="drilldown-back">
+        {/* BACK BUTTON & ACTIONS */}
+        <div
+          className="drilldown-back"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "12px",
+            marginBottom: "35px",
+          }}
+        >
           <Link to="/dashboard" aria-label="Back to overview">
             <ArrowLeft size={15} />
             BACK TO OVERVIEW
           </Link>
+          <DownloadReportMenu mode="entity" entityData={data} entityName={entityName} />
         </div>
 
         {/* 1. ENTITY HEADER & RISK SCORE */}
