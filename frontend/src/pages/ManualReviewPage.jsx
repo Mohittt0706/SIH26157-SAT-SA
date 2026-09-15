@@ -19,18 +19,10 @@ import {
   getManualReviewComparison,
   getManualReviewMetrics,
   getBlindEvidence,
+  getBlindEntities,
 } from "../lib/api";
 import usePageMetadata from "../hooks/usePageMetadata";
 import BrandBlock from "../components/BrandBlock";
-
-const EXACT_SIX_ENTITIES = [
-  "Delta Rail Systems",
-  "Indus Financial Services",
-  "Continental Banking Corp",
-  "Fortis Defense Systems",
-  "Apex Power Grid Ltd",
-  "Himalayan Healthcare Network",
-];
 
 // ---------------------------------------------------------------------------
 // UI-form-value <-> backend-enum-value conversion. The form shows the
@@ -313,7 +305,32 @@ export default function ManualReviewPage() {
   const navigate = useNavigate();
 
   const rawDecoded = paramEntityName ? decodeURIComponent(paramEntityName) : null;
-  const selectedEntity = EXACT_SIX_ENTITIES.includes(rawDecoded) ? rawDecoded : null;
+
+  // The selectable roster — name + alert_count only, fetched live from
+  // GET /api/manual-review/entities so it always matches whatever dataset
+  // is currently loaded rather than a fixed or stale list. null while
+  // loading (distinct from an empty array, an actually-empty dataset).
+  const [blindEntities, setBlindEntities] = useState(null);
+  const [entitiesError, setEntitiesError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getBlindEntities()
+      .then((data) => {
+        if (!cancelled) setBlindEntities(data);
+      })
+      .catch((err) => {
+        console.error("Failed to load manual-review entity list:", err);
+        if (!cancelled) setEntitiesError("Unable to load the entity list from the current dataset.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const entitiesLoading = blindEntities === null && !entitiesError;
+  const entityNames = blindEntities ? blindEntities.map((e) => e.entity_name) : [];
+  const selectedEntity = rawDecoded && entityNames.includes(rawDecoded) ? rawDecoded : null;
 
   const [loadingEntity, setLoadingEntity] = useState(false);
   const [evidence, setEvidence] = useState(null);
@@ -505,62 +522,84 @@ export default function ManualReviewPage() {
                 <div className="panel-label">TARGET SELECTION</div>
                 <h2>Supervisory Review Entities</h2>
                 <p style={{ margin: "4px 0 0", fontSize: "14px", color: "var(--muted)" }}>
-                  Select an organization from the designated supervisory evaluation cohort to begin blind dossier review.
+                  Select an organization from the currently loaded dataset to begin blind dossier review.
                 </p>
               </div>
-              <span className="panel-meta">6 EVALUATION ENTITIES</span>
+              <span className="panel-meta">
+                {entitiesLoading ? "LOADING…" : `${blindEntities.length} EVALUATION ENTIT${blindEntities.length === 1 ? "Y" : "IES"}`}
+              </span>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "20px", marginTop: "20px" }}>
-              {EXACT_SIX_ENTITIES.map((name, idx) => (
-                <div
-                  key={name}
-                  style={{
-                    background: "var(--surface)",
-                    border: "1px solid var(--line)",
-                    borderRadius: "6px",
-                    padding: "24px",
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
-                      <span style={{ fontSize: "11px", fontFamily: "monospace", color: "var(--muted)", fontWeight: 700 }}>
-                        {(idx + 1).toString().padStart(2, "0")} / 06
-                      </span>
-                    </div>
-                    <h3 style={{ fontSize: "18px", margin: "0 0 8px", color: "var(--text)" }}>{name}</h3>
-                    <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 16px", lineHeight: "1.4" }}>
-                      Operational evidence dossier available for blind review. Analytical scores remain hidden until a review is submitted.
-                    </p>
-                  </div>
+            {entitiesError && (
+              <p style={{ fontSize: "13px", color: "var(--muted)", marginTop: "16px" }}>{entitiesError}</p>
+            )}
 
-                  <button
-                    onClick={() => handleSelectEntity(name)}
+            {!entitiesError && entitiesLoading && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "20px", marginTop: "20px" }}>
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="skeleton skeleton-card" style={{ height: "180px" }} />
+                ))}
+              </div>
+            )}
+
+            {!entitiesError && !entitiesLoading && blindEntities.length === 0 && (
+              <p style={{ fontSize: "13px", color: "var(--muted)", marginTop: "16px" }}>
+                No entities found — upload a dataset first.
+              </p>
+            )}
+
+            {!entitiesError && !entitiesLoading && blindEntities.length > 0 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(360px, 1fr))", gap: "20px", marginTop: "20px" }}>
+                {blindEntities.map(({ entity_name: name, alert_count: alertCount }, idx) => (
+                  <div
+                    key={name}
                     style={{
-                      padding: "10px 16px",
-                      background: "rgba(86, 199, 255, 0.12)",
-                      border: "1px solid var(--accent)",
-                      color: "var(--accent)",
-                      borderRadius: "4px",
-                      fontWeight: 600,
-                      fontSize: "13px",
-                      cursor: "pointer",
+                      background: "var(--surface)",
+                      border: "1px solid var(--line)",
+                      borderRadius: "6px",
+                      padding: "24px",
                       display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      marginTop: "16px",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
                     }}
                   >
-                    <FileCheck size={15} />
-                    <span>Open Review Dossier</span>
-                  </button>
-                </div>
-              ))}
-            </div>
+                    <div>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
+                        <span style={{ fontSize: "11px", fontFamily: "monospace", color: "var(--muted)", fontWeight: 700 }}>
+                          {(idx + 1).toString().padStart(2, "0")} / {blindEntities.length.toString().padStart(2, "0")}
+                        </span>
+                      </div>
+                      <h3 style={{ fontSize: "18px", margin: "0 0 8px", color: "var(--text)" }}>{name}</h3>
+                      <p style={{ fontSize: "13px", color: "var(--muted)", margin: "0 0 16px", lineHeight: "1.4" }}>
+                        {alertCount} alert{alertCount === 1 ? "" : "s"} available for blind review. Analytical scores remain hidden until a review is submitted.
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => handleSelectEntity(name)}
+                      style={{
+                        padding: "10px 16px",
+                        background: "rgba(86, 199, 255, 0.12)",
+                        border: "1px solid var(--accent)",
+                        color: "var(--accent)",
+                        borderRadius: "4px",
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "8px",
+                        marginTop: "16px",
+                      }}
+                    >
+                      <FileCheck size={15} />
+                      <span>Open Review Dossier</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

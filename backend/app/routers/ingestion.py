@@ -1,4 +1,4 @@
-"""POST /api/upload — parse a SOC alert CSV or JSON file and load it into SQLite.
+"""POST /api/upload — parse a SOC alert CSV, JSON, or SQLite DB export and load it into SQLite.
 
 Each upload represents a fresh assessment run, so the alerts table is wiped
 before the new file's rows are inserted.  AssessmentRun records persist
@@ -7,7 +7,11 @@ historically and are not affected by alerts-table resets.
 
 import io
 import json
+import os
 import re
+import sqlite3
+import tempfile
+from pathlib import Path
 from typing import Optional
 
 import pandas as pd
@@ -33,6 +37,19 @@ REQUIRED_COLUMNS: list[str] = [
     "investigation_notes",
     "asset_type",
 ]
+
+MAX_DB_UPLOAD_BYTES: int = 50 * 1024 * 1024
+"""Cap on an uploaded .db/.sqlite file's size (50 MiB). Generous for a SOC
+export of a few hundred thousand alert rows, but bounds how large a file this
+endpoint will write to a temp file and open, however briefly and read-only."""
+
+PREFERRED_TABLE_NAME: str = "alerts"
+"""Table name tried first when a .db/.sqlite upload has more than one table
+containing all REQUIRED_COLUMNS — matches the ingested table's own name."""
+
+SQLITE_INTERNAL_TABLE_PREFIX: str = "sqlite_"
+"""SQLite's own bookkeeping tables (sqlite_sequence, sqlite_stat1, ...) are
+never candidates — they're not data the uploader intended to ingest."""
 
 TRUE_VALUES: set[str] = {"yes", "true", "1"}
 FALSE_VALUES: set[str] = {"no", "false", "0"}
@@ -97,9 +114,11 @@ def _detect_format(filename: Optional[str]) -> str:
         return "json"
     if name.endswith(".csv"):
         return "csv"
+    if name.endswith(".db") or name.endswith(".sqlite"):
+        return "db"
     raise HTTPException(
         status_code=400,
-        detail="Unsupported file type: expected a .csv or .json file.",
+        detail="Unsupported file type: expected a .csv, .json, .db, or .sqlite file.",
     )
 
 
@@ -139,6 +158,122 @@ def _parse_json(raw: bytes) -> "pd.DataFrame":
         return pd.DataFrame.from_records(records)
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"Could not parse JSON: {exc}") from exc
+
+
+def _table_columns(conn: sqlite3.Connection, table_name: str) -> list[str]:
+    """Column names for *table_name*, in schema order.
+
+    PRAGMA doesn't support bind parameters for identifiers, so *table_name*
+    (which only ever comes from this connection's own sqlite_master, never
+    from user-supplied text directly) is double-quote-escaped the standard
+    SQL way before being interpolated.
+    """
+    escaped = table_name.replace('"', '""')
+    cursor = conn.execute(f'PRAGMA table_info("{escaped}")')
+    return [row[1] for row in cursor.fetchall()]
+
+
+def _find_alerts_table(conn: sqlite3.Connection) -> tuple[str, dict[str, str]]:
+    """Locate a table whose columns are a superset of REQUIRED_COLUMNS.
+
+    Tries a table literally named "alerts" first (case-insensitive), then
+    every other user table in the database, in the order sqlite_master
+    returns them. Column matching is case-insensitive, since a real export
+    tool's casing conventions (e.g. "AlertId", "ALERT_ID") shouldn't be a
+    reason to reject an otherwise-valid export.
+
+    Returns (table_name, column_map) where column_map maps each required
+    column (lowercase) to that table's actual column name, for the caller to
+    SELECT and rename by.
+
+    Raises HTTPException(400) — naming every table found and, for each, which
+    required columns are missing — if no table qualifies.
+    """
+    table_rows = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name"
+    ).fetchall()
+    table_names = [row[0] for row in table_rows if not row[0].startswith(SQLITE_INTERNAL_TABLE_PREFIX)]
+
+    if not table_names:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded database contains no tables.",
+        )
+
+    # "alerts" first (case-insensitive), then everything else in place.
+    ordered = sorted(table_names, key=lambda name: (name.lower() != PREFERRED_TABLE_NAME, table_names.index(name)))
+
+    missing_by_table: dict[str, list[str]] = {}
+    for table_name in ordered:
+        columns = _table_columns(conn, table_name)
+        lower_to_actual = {col.lower(): col for col in columns}
+        missing = [req for req in REQUIRED_COLUMNS if req not in lower_to_actual]
+        if not missing:
+            column_map = {req: lower_to_actual[req] for req in REQUIRED_COLUMNS}
+            return table_name, column_map
+        missing_by_table[table_name] = missing
+
+    raise HTTPException(
+        status_code=400,
+        detail={
+            "message": "No table in the uploaded database contains all required columns.",
+            "tables_found": table_names,
+            "missing_columns_by_table": missing_by_table,
+        },
+    )
+
+
+def _parse_sqlite_db(raw: bytes) -> "pd.DataFrame":
+    """Parse a .db/.sqlite export: write to a temp file, open read-only, extract rows.
+
+    Security: the file is opened with sqlite3's URI "mode=ro" (read-only at
+    the SQLite level, not just a file-permission convention) and nothing from
+    it is ever executed — only SELECT/PRAGMA reads against identifiers this
+    function itself discovered via sqlite_master. The temp file is always
+    removed afterward, success or failure.
+    """
+    if len(raw) > MAX_DB_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                f"Database file too large: {len(raw)} bytes exceeds the "
+                f"{MAX_DB_UPLOAD_BYTES} byte limit."
+            ),
+        )
+
+    fd, tmp_path_str = tempfile.mkstemp(suffix=".sqlite")
+    tmp_path = Path(tmp_path_str)
+    try:
+        with os.fdopen(fd, "wb") as tmp_file:
+            tmp_file.write(raw)
+
+        uri = f"file:{tmp_path.as_posix()}?mode=ro"
+        try:
+            conn = sqlite3.connect(uri, uri=True)
+        except sqlite3.Error as exc:
+            raise HTTPException(status_code=400, detail=f"Could not open database file: {exc}") from exc
+
+        try:
+            try:
+                table_name, column_map = _find_alerts_table(conn)
+            except sqlite3.Error as exc:
+                # Lazy open: sqlite3.connect() succeeds even for a non-database
+                # file — the first real read is what discovers that, e.g. via
+                # sqlite_master here.
+                raise HTTPException(status_code=400, detail=f"Not a valid SQLite database: {exc}") from exc
+
+            select_list = ", ".join(f'"{column_map[req].replace(chr(34), chr(34) * 2)}" AS "{req}"' for req in REQUIRED_COLUMNS)
+            escaped_table = table_name.replace('"', '""')
+            try:
+                df = pd.read_sql_query(f'SELECT {select_list} FROM "{escaped_table}"', conn)
+            except (sqlite3.Error, pd.errors.DatabaseError) as exc:
+                raise HTTPException(status_code=400, detail=f"Could not read table '{table_name}': {exc}") from exc
+        finally:
+            conn.close()
+
+        return df
+    finally:
+        tmp_path.unlink(missing_ok=True)
 
 
 def _process_dataframe(df: "pd.DataFrame", db: Session, filename: str = "unknown", file_format: str = "csv") -> dict[str, object]:
@@ -341,13 +476,21 @@ def _build_results_snapshot(db: Session, detector_config: str) -> str:
     return json.dumps(entity_results, sort_keys=True)
 
 
+def _parse_by_format(raw: bytes, file_format: str) -> "pd.DataFrame":
+    if file_format == "csv":
+        return _parse_csv(raw)
+    if file_format == "json":
+        return _parse_json(raw)
+    return _parse_sqlite_db(raw)
+
+
 @router.post("/upload")
 async def upload_alerts(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ) -> dict[str, object]:
-    """Parse an uploaded alert CSV or JSON file and replace the alerts table with its contents."""
+    """Parse an uploaded alert CSV, JSON, or SQLite DB export and replace the alerts table with its contents."""
     raw = await file.read()
     file_format = _detect_format(file.filename)
-    df = _parse_csv(raw) if file_format == "csv" else _parse_json(raw)
+    df = _parse_by_format(raw, file_format)
     return _process_dataframe(df, db, filename=file.filename or "unknown", file_format=file_format)

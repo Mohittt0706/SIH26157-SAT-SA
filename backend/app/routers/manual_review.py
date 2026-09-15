@@ -1,9 +1,14 @@
 """Blind manual review workflow — validates VEIL against independent human judgement.
 
 The whole point of this workflow is that a supervisor forms their own
-verdict from raw evidence *before* ever seeing what VEIL concluded. Two
+verdict from raw evidence *before* ever seeing what VEIL concluded. The
 endpoints therefore sit on opposite sides of a hard line:
 
+  - GET /manual-review/entities is the entity picker: every entity in the
+    currently loaded dataset, name + alert count only. Same blindness
+    guarantee as the dossier below — no score, band, or detector output,
+    ever — and always read live from the alerts table so it can never go
+    stale against whatever was last uploaded.
   - GET /manual-review/{entity_name}/evidence is the blind dossier. It must
     never return risk_score, risk_band, primary_driver, component scores,
     any detector or rule name, detector-produced findings/evidence, a
@@ -28,13 +33,14 @@ from __future__ import annotations
 import statistics
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.analytics.risk_score import compute_risk_scores
 from app.database import get_db
 from app.models import Alert, ManualReview
 from app.schemas import (
+    BlindEntitySummary,
     EntityBlindEvidence,
     ManualReviewComparison,
     ManualReviewCreate,
@@ -90,6 +96,30 @@ def _veil_signal(risk_band: str) -> bool:
     does not recompute or reinterpret it.
     """
     return risk_band != "low"
+
+
+# ---------------------------------------------------------------------------
+# 5.1 — the entity picker (registered before "/manual-review/{entity_name}"
+# below, same reason as /metrics: it's a literal path, not a wildcard match)
+# ---------------------------------------------------------------------------
+
+@router.get("/manual-review/entities", response_model=list[BlindEntitySummary])
+def list_blind_entities(db: Session = Depends(get_db)) -> list[dict]:
+    """Every entity in the currently loaded dataset, name + alert count only.
+
+    Backs the manual-review entity picker. Deliberately reads only
+    Alert.entity_name/alert_id — never calls compute_risk_scores or any
+    detector — so this list can never carry a risk_score, risk_band, or
+    primary_driver ahead of a reviewer forming their own judgement. Always
+    derived live from the alerts table, so it reflects whatever dataset is
+    currently loaded rather than any fixed or previously-uploaded roster.
+    """
+    rows = db.execute(
+        select(Alert.entity_name, func.count(Alert.alert_id))
+        .group_by(Alert.entity_name)
+        .order_by(Alert.entity_name.asc())
+    ).all()
+    return [{"entity_name": name, "alert_count": count} for name, count in rows]
 
 
 # ---------------------------------------------------------------------------

@@ -298,6 +298,19 @@ class EntityEvidenceAggregates(BaseModel):
     asset_type_distribution: dict[str, int]
 
 
+class BlindEntitySummary(BaseModel):
+    """One entry in GET /api/manual-review/entities.
+
+    Only a name and an alert count — never a score, band, or anything
+    derived from a detector. This is what populates the manual-review entity
+    picker, so it must carry exactly the same "no VEIL conclusion" guarantee
+    as EntityBlindEvidence below.
+    """
+
+    entity_name: str
+    alert_count: int
+
+
 class EntityBlindEvidence(BaseModel):
     """Response for GET /api/manual-review/{entity_name}/evidence.
 

@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import usePageMetadata from "../hooks/usePageMetadata";
 import BrandBlock from "../components/BrandBlock";
+import { getRiskScores } from "../lib/api";
 
 const capabilities = [
   {
@@ -25,28 +27,26 @@ const capabilities = [
   },
 ];
 
-const entities = [
-  {
-    name: "Continental Banking Corp",
-    score: 87,
-    signal: "Execution Gap",
-  },
-  {
-    name: "Indus Financial Services",
-    score: 81,
-    signal: "Execution Gap",
-  },
-  {
-    name: "Fortis Defense Systems",
-    score: 76,
-    signal: "Anomaly",
-  },
-  {
-    name: "Delta Rail Systems",
-    score: 69,
-    signal: "Negative Space",
-  },
-];
+// Landing-page preview is bound to the live dataset (GET /api/risk-scores)
+// rather than illustrative fixtures — a judge/reviewer landing here first
+// must see the same entities and numbers the dashboard shows next, not a
+// static showcase that quietly diverges from whatever is actually loaded.
+// This page has no blind-review constraint (unlike ManualReviewPage), so
+// showing risk_score here is fine.
+const PRIMARY_DRIVER_LABELS = {
+  execution_gap: "Execution Gap",
+  negative_space: "Negative Space",
+  anomaly: "Anomaly",
+};
+
+const PREVIEW_ENTITY_LIMIT = 4;
+
+function median(sortedValues) {
+  const n = sortedValues.length;
+  if (n === 0) return null;
+  const mid = Math.floor(n / 2);
+  return n % 2 === 0 ? (sortedValues[mid - 1] + sortedValues[mid]) / 2 : sortedValues[mid];
+}
 
 export default function LandingPage() {
   usePageMetadata({
@@ -54,6 +54,41 @@ export default function LandingPage() {
     description: "Evidence-backed signals for human review — not definitive security verdicts.",
     path: "/",
   });
+
+  // null = still loading (distinct from an empty array, an actually-empty
+  // dataset — e.g. nothing uploaded yet).
+  const [riskScores, setRiskScores] = useState(null);
+  const [riskScoresError, setRiskScoresError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getRiskScores()
+      .then((data) => {
+        if (!cancelled) setRiskScores(data);
+      })
+      .catch((err) => {
+        console.error("Failed to load risk scores for landing preview:", err);
+        if (!cancelled) setRiskScoresError("Live data unavailable.");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const loadingPreview = riskScores === null && !riskScoresError;
+  const hasData = Array.isArray(riskScores) && riskScores.length > 0;
+
+  const sortedByScoreDesc = hasData ? [...riskScores].sort((a, b) => b.risk_score - a.risk_score) : [];
+  const previewEntities = sortedByScoreDesc.slice(0, PREVIEW_ENTITY_LIMIT);
+
+  const entityCount = hasData ? riskScores.length : null;
+  const alertCount = hasData ? riskScores.reduce((sum, r) => sum + (r.alert_count || 0), 0) : null;
+
+  const scoresAsc = hasData ? sortedByScoreDesc.map((r) => r.risk_score).reverse() : [];
+  const highScore = scoresAsc.length ? scoresAsc[scoresAsc.length - 1] : null;
+  const lowScore = scoresAsc.length ? scoresAsc[0] : null;
+  const mediumScore = median(scoresAsc);
+
   return (
     <main className="site-shell">
       {/* NAVBAR */}
@@ -130,12 +165,12 @@ export default function LandingPage() {
           <div className="metrics-grid">
             <div className="metric">
               <span>ENTITIES</span>
-              <strong>10</strong>
+              <strong>{entityCount === null ? "—" : entityCount}</strong>
             </div>
 
             <div className="metric">
               <span>ALERTS</span>
-              <strong>639</strong>
+              <strong>{alertCount === null ? "—" : alertCount}</strong>
             </div>
 
             <div className="metric">
@@ -150,31 +185,39 @@ export default function LandingPage() {
               <span>0 — 100</span>
             </div>
 
-            <div className="chart-bars">
-              <div className="chart-row">
-                <span>HIGH</span>
-                <div className="bar-track">
-                  <div className="bar-fill high" />
-                </div>
-                <b>87</b>
-              </div>
+            {!loadingPreview && !hasData && (
+              <p style={{ fontSize: "12px", color: "var(--muted)", margin: "19px 0 0" }}>
+                {riskScoresError || "No dataset loaded yet — upload one to see live signals."}
+              </p>
+            )}
 
-              <div className="chart-row">
-                <span>MEDIUM</span>
-                <div className="bar-track">
-                  <div className="bar-fill medium" />
+            {(loadingPreview || hasData) && (
+              <div className="chart-bars">
+                <div className="chart-row">
+                  <span>HIGH</span>
+                  <div className="bar-track">
+                    <div className="bar-fill high" style={hasData ? { width: `${highScore}%` } : undefined} />
+                  </div>
+                  <b>{hasData ? highScore.toFixed(0) : "—"}</b>
                 </div>
-                <b>61</b>
-              </div>
 
-              <div className="chart-row">
-                <span>LOW</span>
-                <div className="bar-track">
-                  <div className="bar-fill low" />
+                <div className="chart-row">
+                  <span>MEDIUM</span>
+                  <div className="bar-track">
+                    <div className="bar-fill medium" style={hasData ? { width: `${mediumScore}%` } : undefined} />
+                  </div>
+                  <b>{hasData ? mediumScore.toFixed(0) : "—"}</b>
                 </div>
-                <b>28</b>
+
+                <div className="chart-row">
+                  <span>LOW</span>
+                  <div className="bar-track">
+                    <div className="bar-fill low" style={hasData ? { width: `${lowScore}%` } : undefined} />
+                  </div>
+                  <b>{hasData ? lowScore.toFixed(0) : "—"}</b>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="preview-table">
@@ -184,11 +227,19 @@ export default function LandingPage() {
               <span>SCORE</span>
             </div>
 
-            {entities.map((entity) => (
-              <div className="table-row" key={entity.name}>
-                <span className="entity-name">{entity.name}</span>
-                <span className="signal-text">{entity.signal}</span>
-                <span className="entity-score">{entity.score}</span>
+            {!loadingPreview && !hasData && (
+              <p style={{ fontSize: "12px", color: "var(--muted)", margin: "12px 0" }}>
+                {riskScoresError ? "" : "Upload a dataset to populate this preview."}
+              </p>
+            )}
+
+            {previewEntities.map((entity) => (
+              <div className="table-row" key={entity.entity_name}>
+                <span className="entity-name">{entity.entity_name}</span>
+                <span className="signal-text">
+                  {PRIMARY_DRIVER_LABELS[entity.primary_driver] || entity.primary_driver || "—"}
+                </span>
+                <span className="entity-score">{entity.risk_score.toFixed(1)}</span>
               </div>
             ))}
           </div>

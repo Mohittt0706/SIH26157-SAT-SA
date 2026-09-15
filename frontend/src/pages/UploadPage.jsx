@@ -32,11 +32,15 @@ export default function UploadPage() {
     if (!selectedFile) return;
 
     const lowerName = selectedFile.name.toLowerCase();
-    const isSupported = lowerName.endsWith(".csv") || lowerName.endsWith(".json");
+    const isSupported =
+      lowerName.endsWith(".csv") ||
+      lowerName.endsWith(".json") ||
+      lowerName.endsWith(".db") ||
+      lowerName.endsWith(".sqlite");
 
     if (!isSupported) {
       setFile(null);
-      setError("Please select a CSV or JSON file.");
+      setError("Please select a CSV, JSON, .db, or .sqlite file.");
       return;
     }
 
@@ -74,7 +78,7 @@ export default function UploadPage() {
 
   const uploadFile = async () => {
     if (!file) {
-      setError("Please select a CSV or JSON file first.");
+      setError("Please select a CSV, JSON, .db, or .sqlite file first.");
       return;
     }
 
@@ -94,6 +98,10 @@ export default function UploadPage() {
         const detail = err.response.data.detail;
         if (typeof detail === "object" && detail.missing_columns) {
           errorMessage = `Missing required columns: ${detail.missing_columns.join(", ")}`;
+        } else if (typeof detail === "object" && detail.tables_found) {
+          // .db/.sqlite upload with no table containing every required
+          // column — see backend/app/routers/ingestion.py's _find_alerts_table.
+          errorMessage = `${detail.message} Tables found: ${detail.tables_found.join(", ")}.`;
         } else if (typeof detail === "string") {
           errorMessage = detail;
         } else {
@@ -107,9 +115,18 @@ export default function UploadPage() {
     }
   };
 
+  const isBinaryDbFile = (selectedFile) => {
+    const lowerName = (selectedFile?.name || "").toLowerCase();
+    return lowerName.endsWith(".db") || lowerName.endsWith(".sqlite");
+  };
+
   const openFile = async (event) => {
     if (event.target.closest(".remove-file")) return;
     if (!file) return;
+    // .db/.sqlite is binary — there's no meaningful text/table preview to
+    // build from it client-side the way there is for CSV/JSON, so skip
+    // straight past this rather than decoding garbage as UTF-8.
+    if (isBinaryDbFile(file)) return;
 
     try {
       const text = await file.text();
@@ -193,7 +210,7 @@ export default function UploadPage() {
               <h2>Upload operational records</h2>
             </div>
 
-            <div className="workspace-format">CSV / JSON</div>
+            <div className="workspace-format">CSV / JSON / DB</div>
           </div>
 
           {!file && (
@@ -211,7 +228,7 @@ export default function UploadPage() {
                 <Upload size={22} strokeWidth={1.5} />
               </div>
 
-              <h3>Drop your CSV or JSON file here</h3>
+              <h3>Drop your CSV, JSON, or database file here</h3>
 
               <p>
                 or{" "}
@@ -221,13 +238,13 @@ export default function UploadPage() {
               </p>
 
               <span className="drop-hint">
-                Supported formats: .csv, .json
+                Supported formats: .csv, .json, .db, .sqlite
               </span>
 
               <input
                 ref={fileInputRef}
                 type="file"
-                accept=".csv,.json,text/csv,application/json"
+                accept=".csv,.json,.db,.sqlite,text/csv,application/json,application/x-sqlite3,application/vnd.sqlite3"
                 onChange={handleInputChange}
                 hidden
               />
@@ -238,8 +255,8 @@ export default function UploadPage() {
             <div
               className="selected-file"
               onClick={openFile}
-              style={{ cursor: "pointer" }}
-              title={`Click to preview ${file.name}`}
+              style={{ cursor: isBinaryDbFile(file) ? "default" : "pointer" }}
+              title={isBinaryDbFile(file) ? file.name : `Click to preview ${file.name}`}
             >
               <div className="file-icon">
                 <FileText size={21} strokeWidth={1.5} />
@@ -248,7 +265,8 @@ export default function UploadPage() {
               <div className="file-information">
                 <strong>{file.name}</strong>
                 <span>
-                  {(file.size / 1024).toFixed(1)} KB (Click to view preview)
+                  {(file.size / 1024).toFixed(1)} KB
+                  {isBinaryDbFile(file) ? "" : " (Click to view preview)"}
                 </span>
               </div>
 

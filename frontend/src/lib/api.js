@@ -47,6 +47,18 @@ export async function getPrioritySamples(limit) {
 }
 
 /**
+ * Entity picker for the manual-review workflow — GET /api/manual-review/entities.
+ * Name + alert_count only, derived live from the currently loaded dataset.
+ * Never carries a risk_score/risk_band/primary_driver — same blindness
+ * guarantee as getBlindEvidence below, so this is safe to call before any
+ * review has been formed.
+ */
+export async function getBlindEntities() {
+  const response = await client.get("/manual-review/entities");
+  return response.data;
+}
+
+/**
  * Blind evidence dossier for one entity — GET /api/manual-review/{entity}/evidence.
  * No fallback on failure: a failed blind fetch must surface as a real error
  * to the caller, not silently resolve to null (that null previously drove a

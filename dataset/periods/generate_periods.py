@@ -1,22 +1,24 @@
-"""Generate a four-quarter multi-period version of the SAT-SA synthetic dataset.
+"""Generate a four-quarter multi-period version of the SAT-SA extended dataset.
 
-The existing dataset (dataset/soc_alerts_synthetic_dataset.csv) is a single
-snapshot, so every entity has exactly one AssessmentRun and the trend feature
-has nothing to plot. This script generates four quarterly CSVs — same 10
-entities, same 8-column ingestion schema — so uploading them in order builds
-up a real multi-period history per entity.
+dataset/soc_alerts_extended.csv is a single snapshot (21 entities, Jan-Jun
+2026), so every entity has exactly one AssessmentRun and the trend feature
+has nothing to plot. This script generates four quarterly CSVs — same 21
+entities, same 8-column ingestion schema, entity roster and per-field value
+pools matching dataset/generate_extended.py — so uploading them in order
+builds up a real multi-period history per entity.
 
-Same generation approach as backend/benchmark.py: numpy Generator with a
-fixed seed, categorical fields drawn from the real dataset's observed
-per-field frequency weights (severity, asset_type), the same fixed
-investigation-notes pool, and closure durations in the same observed range.
-Unlike benchmark.py (which only cares about scale), this script also
-reproduces the *shape* of the three real seeded patterns already baked into
-the original dataset (see project.md and dataset/answer_key_INTERNAL_ONLY.csv
-[gitignored]) — execution-gap's fast-closure/no-escalation/template-notes
-rates, negative-space's collapsing alert volume, and anomaly's volume spike —
-by directly controlling the same knobs the detectors read, per entity per
-quarter. See dataset/periods/README.md for exactly what was planted where.
+Regenerated 2026-09 to replace an earlier version built against the retired
+10-entity primary dataset (Delta Rail Systems / Indus Financial Services /
+Continental Banking Corp), which no longer exist in the canonical roster.
+Same mechanism as before: numpy Generator with a fixed seed, and the same
+knobs the detectors read directly (fast_closure_rate / no_escalation_rate /
+template_notes_rate for execution_gap.py, alert_count and severity weights
+for negative_space.py, alert_count and closure/escalation/severity/asset
+drift for anomaly.py) driven per entity per quarter so each seeded entity
+traces a deliberate quarter-over-quarter trajectory. See
+dataset/periods/README.md for the narrative version of exactly what was
+planted where, and dataset/README_extended.md / dataset/generate_extended.py
+for the single-snapshot values each trajectory converges toward.
 
 Usage: python generate_periods.py
 """
@@ -25,7 +27,7 @@ from __future__ import annotations
 
 import csv as csv_mod
 import zlib
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -33,13 +35,11 @@ import numpy as np
 
 OUT_DIR = Path(__file__).resolve().parent
 
-GEN_SEED: int = 20250701
+GEN_SEED: int = 20260915
 """Fixed seed — every run of this script reproduces byte-identical CSVs."""
 
 # ---------------------------------------------------------------------------
-# Schema — the 8 columns app.routers.ingestion.REQUIRED_COLUMNS actually reads
-# (category/closure_duration_minutes/status from the original 11-column CSV
-# are dropped; closure_duration_minutes is implied by closed_time - created_time).
+# Schema — the 8 columns app.routers.ingestion.REQUIRED_COLUMNS actually reads.
 # ---------------------------------------------------------------------------
 
 COLUMNS: list[str] = [
@@ -48,19 +48,18 @@ COLUMNS: list[str] = [
 ]
 
 # ---------------------------------------------------------------------------
-# Value pools and weights — observed frequencies in
-# dataset/soc_alerts_synthetic_dataset.csv (same values used in benchmark.py).
+# Value pools and weights — mirrors dataset/generate_extended.py.
 # ---------------------------------------------------------------------------
 
 SEVERITIES: list[str] = ["Low", "Medium", "High", "Critical"]
-SEVERITY_WEIGHTS: list[float] = [0.372457, 0.316119, 0.181534, 0.129890]
+NORMAL_SEVERITY_WEIGHTS: list[float] = [0.52, 0.28, 0.14, 0.06]
+"""Baseline severity mix — matches generate_extended.py's NORMAL_SEV."""
 
 ASSET_TYPES: list[str] = [
-    "Cloud Workload", "Database", "Endpoint", "IoT Device", "Network Device", "Server",
+    "Server", "Endpoint", "Firewall", "Database", "Network Device",
+    "Cloud Workload", "IoT Device", "Identity Provider",
 ]
-ASSET_TYPE_WEIGHTS: list[float] = [
-    0.176839, 0.173709, 0.173709, 0.165884, 0.158059, 0.151800,
-]
+ASSET_TYPE_WEIGHTS: list[float] = [1 / len(ASSET_TYPES)] * len(ASSET_TYPES)
 
 ESCALATION_RATE_BY_SEVERITY: dict[str, float] = {
     "Critical": 0.638554,
@@ -69,17 +68,17 @@ ESCALATION_RATE_BY_SEVERITY: dict[str, float] = {
     "Medium": 0.207921,
 }
 """Baseline P(escalated=Yes | severity) — applied whenever an entity/quarter
-has no execution-gap override active for that severity."""
+has no execution-gap or drift override active for that severity."""
 
-# The real dataset's 8-note pool splits naturally into two groups by how the
-# real seeded execution-gap entities (Indus Financial Services, Continental
-# Banking Corp) used them: 4 detailed, non-template notes normal SOC work
-# produces, and 4 short/generic notes that read as rubber-stamped closures.
 LONG_NOTES: list[str] = [
     "Correlated with SIEM logs across 3 hosts, identified lateral movement attempt, escalated.",
     "Investigated source IP, confirmed malicious signature, blocked at firewall, root cause documented.",
     "Performed forensic triage on affected host, isolated system, initiated containment protocol.",
     "Cross-referenced with threat intel feed, identified C2 communication pattern, escalated to IR team.",
+    "Reviewed EDR telemetry timeline; parent process traced to legitimate installer.",
+    "Analysed PCAP sample; payload matched benign monitoring agent heartbeat.",
+    "Contacted asset owner and confirmed scheduled maintenance window covered the activity.",
+    "Ran memory capture on affected host; no injected process artefacts identified.",
 ]
 SHORT_NOTES: list[str] = [
     "Reviewed and closed.",
@@ -88,82 +87,84 @@ SHORT_NOTES: list[str] = [
     "False positive.",
 ]
 ALL_NOTES: list[str] = LONG_NOTES + SHORT_NOTES
-"""Baseline entities draw uniformly from all 8, exactly like the real dataset
-— every entity sharing the same 8-note pool is what keeps TEMPLATE_NOTES a
+"""Baseline entities draw uniformly from all 12, keeping TEMPLATE_NOTES a
 peer-relative signal rather than one that fires on everyone."""
 
 FAST_CLOSURE_SEVERITIES: set[str] = {"critical", "high"}
 """Mirrors execution_gap.FAST_CLOSURE_SEVERITIES."""
 NO_ESCALATION_OVERRIDE_SEVERITIES: set[str] = {"critical", "high"}
-"""Severities whose escalation an execution-gap profile can override. Only
-"critical" feeds execution_gap.py's NO_ESCALATION rule directly, but the real
-seeded Continental Banking Corp row also drove High-severity escalation to
-0% — reproduced here so the anomaly detector's escalation_rate feature and
-the rule both move together, the way they did in the original dataset."""
+"""Severities whose escalation an execution-gap/drift profile can override."""
 
 NORMAL_DURATION_MIN_MINUTES: int = 150
 NORMAL_DURATION_MAX_MINUTES: int = 210
-"""Closure duration for every alert with no fast-closure override active —
-i.e. every baseline-entity alert, Delta Rail's and Fortis's alerts in every
-quarter, and the (1 - fast_closure_rate) fraction of Indus's/Continental's.
-
-Deliberately much narrower than the real single-snapshot dataset's observed
-1-598 minute range. That range is fine for a single static snapshot, but
-under repeated quarter-over-quarter peer comparison (see
-compute_anomaly_from_features -> _peer_median/_peer_mad in anomaly.py, run
-fresh against only 9 peers each quarter) it lets a "normal" entity's own
-average closure time wobble by double-digit percentages purely from
-per-alert sampling noise, and with only 9 peers the resulting peer MAD
-estimate is itself noisy enough that an entity's harmless wobble can read as
-a multi-sigma deviation in one quarter and nothing in the next. Narrowing
-this range shrinks that sampling noise so the six baseline entities' own
-avg_closure_seconds stays genuinely close together and stable release over
-release, which is what actually keeps them off the top of the isolation
-forest's per-quarter relative ranking — see dataset/periods/README.md for
-the diagnosis this constant was tuned against."""
+"""Closure duration for every alert with no fast-closure/drift override
+active. Deliberately narrow (see the original version of this file / git
+history for the full diagnosis) so a "normal" entity's own average closure
+time doesn't wobble double digits purely from per-quarter sampling noise
+against a modest peer count."""
 
 FAST_DURATION_MIN_MINUTES: int = 1
 FAST_DURATION_MAX_MINUTES: int = 4
-"""1-4 minutes — the exact closure_duration_minutes range observed on the
-real dataset's Indus Financial Services / Continental Banking Corp rows."""
+"""1-4 minutes — matches Meridian Trust Bank's converged Q2 / single-snapshot
+fast-closure range in generate_extended.py."""
 
-ENTITY_NAMES: list[str] = [
-    "Jupiter Aviation Control",
-    "Eastern Water Utility",
-    "Indus Financial Services",
-    "Fortis Defense Systems",
-    "Ganga Oil & Gas",
-    "Bharat Telecom Networks",
-    "Himalayan Healthcare Network",
-    "Apex Power Grid Ltd",
-    "Continental Banking Corp",
-    "Delta Rail Systems",
+# ---------------------------------------------------------------------------
+# Entity roster — matches dataset/generate_extended.py's 21 entities exactly.
+# ---------------------------------------------------------------------------
+
+SEEDED_ENTITIES: list[str] = [
+    "Saraswati Rail Network",
+    "Meridian Trust Bank",
+    "Kaveri Power Holdings",
+    "Arcadia Defence Systems",
+    "Konkan Maritime Ltd",
+    "Nilgiri Water Authority",
+    "Deccan Health Network",
 ]
-"""Same 10 entities as dataset/soc_alerts_synthetic_dataset.csv."""
+
+BASELINE_ENTITIES: list[str] = [
+    "Apex Power Grid Ltd",
+    "Bharat Telecom Networks",
+    "Cauvery Logistics Corp",
+    "Eastern Grid Utility",
+    "Godavari Chemicals",
+    "Himalayan Healthcare Network",
+    "Indus Financial Services",
+    "Jupiter Aviation Control",
+    "Krishna Port Authority",
+    "Lakshmi Insurance Group",
+    "Malabar Gas Pipelines",
+    "Narmada Steel Works",
+    "Orissa Mining Federation",
+    "Pennar Cement Industries",
+]
+
+ENTITY_NAMES: list[str] = SEEDED_ENTITIES + BASELINE_ENTITIES
 
 BASELINE_ALERT_COUNT: dict[str, int] = {
-    "Jupiter Aviation Control": 90,
-    "Eastern Water Utility": 95,
-    "Ganga Oil & Gas": 90,
-    "Bharat Telecom Networks": 85,
-    "Himalayan Healthcare Network": 100,
-    "Apex Power Grid Ltd": 95,
+    "Apex Power Grid Ltd": 198,
+    "Bharat Telecom Networks": 214,
+    "Cauvery Logistics Corp": 187,
+    "Eastern Grid Utility": 221,
+    "Godavari Chemicals": 176,
+    "Himalayan Healthcare Network": 209,
+    "Indus Financial Services": 193,
+    "Jupiter Aviation Control": 202,
+    "Krishna Port Authority": 218,
+    "Lakshmi Insurance Group": 181,
+    "Malabar Gas Pipelines": 206,
+    "Narmada Steel Works": 195,
+    "Orissa Mining Federation": 212,
+    "Pennar Cement Industries": 189,
 }
-"""Per-quarter target volume for the six stable entities (±BASELINE_NOISE_FRACTION
-noise applied per quarter — see _noisy_count). Roughly double the real
-dataset's per-6-month totals for these same entities — a deliberate increase
-(not just a schema match) so every rate-based feature (escalation_rate,
-critical_ratio, avg_note_length, avg_closure_seconds) averages over more
-alerts and each entity's own quarterly mean is less exposed to sampling
-noise, on top of the tightened NORMAL_DURATION range above."""
+"""Per-quarter target volume for the 14 stable entities (±BASELINE_NOISE_FRACTION
+noise applied per quarter). Matches each entity's alert count in
+generate_extended.py's single Jan-Jun 2026 snapshot."""
 
 BASELINE_NOISE_FRACTION: float = 0.06
-"""Multiplicative per-quarter volume noise for the six stable entities.
-Lowered from an earlier 0.15 — the same instability documented in
-NORMAL_DURATION_MIN/MAX_MINUTES above applies here: alert_count is itself
-one of the six anomaly features, so injecting the same size of noise this
-detector is meant to distinguish from a real signal directly worked against
-"stay genuinely close to peers"."""
+"""Multiplicative per-quarter volume noise for the 14 baseline entities —
+alert_count is itself an anomaly feature, so this stays small enough that no
+baseline entity's quarterly wobble competes with a seeded entity's signal."""
 
 QUARTERS: list[tuple[str, str, datetime, datetime]] = [
     ("2025_q3", "period_2025_q3.csv", datetime(2025, 7, 1), datetime(2025, 9, 30, 23, 59, 59)),
@@ -177,15 +178,27 @@ QUARTERS: list[tuple[str, str, datetime, datetime]] = [
 class EntityQuarterProfile:
     """The knobs that drive one entity's alert generation for one quarter.
 
-    fast_closure_rate / no_escalation_rate / template_notes_rate are all
-    ``None`` for a quarter with no planted pattern — the entity falls back to
-    the global baseline rates for every field that quarter.
+    Every field left at its default falls back to the global baseline for
+    that field. ``severity_weights`` overrides the [low, medium, high,
+    critical] mix (e.g. to remove a severity entirely for negative-space's
+    MISSING_EXPECTED_SEVERITY rule); ``assets`` restricts which asset types
+    an entity's alerts are drawn from (for Konkan's asset-diversity drift);
+    ``closure_range_minutes`` overrides the *baseline* (non-fast-closure)
+    duration range (for Konkan's growing avg_closure_seconds); an
+    ``escalation_rate_override`` maps individual severities to a flat
+    escalation probability, independent of the execution-gap NO_ESCALATION
+    override (used by Konkan to *raise*, not lower, escalation as part of
+    its multi-feature drift).
     """
 
     alert_count: int
     fast_closure_rate: float | None = None
     no_escalation_rate: float | None = None
     template_notes_rate: float | None = None
+    severity_weights: list[float] | None = None
+    assets: list[str] | None = None
+    closure_range_minutes: tuple[int, int] | None = None
+    escalation_rate_override: dict[str, float] | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -194,104 +207,157 @@ class EntityQuarterProfile:
 # ---------------------------------------------------------------------------
 
 SEEDED_PROFILES: dict[str, dict[str, EntityQuarterProfile]] = {
-    "Delta Rail Systems": {
-        # Negative-space: already mildly below the peer baseline in Q3 (about
-        # 44% of the six stable entities' ~90/quarter band — enough to clear
-        # a real, if modest, LOW_ALERT_VOLUME z-score, not "normal" in the
-        # strict statistical sense), collapsing further every quarter after —
-        # a deteriorating trend with no execution-gap or anomaly overrides at
-        # any point; volume alone drives the signal.
-        "2025_q3": EntityQuarterProfile(alert_count=40),
-        "2025_q4": EntityQuarterProfile(alert_count=35),
-        "2026_q1": EntityQuarterProfile(alert_count=15),
-        "2026_q2": EntityQuarterProfile(alert_count=3),
+    # Deteriorating: near-normal in Q3, collapses into the negative-space
+    # pattern (low volume + missing severities) by Q2 — matches
+    # generate_extended.py's converged Saraswati profile (11 alerts,
+    # low/medium only).
+    "Saraswati Rail Network": {
+        "2025_q3": EntityQuarterProfile(alert_count=180, severity_weights=[0.50, 0.29, 0.15, 0.06]),
+        "2025_q4": EntityQuarterProfile(alert_count=90, severity_weights=[0.55, 0.30, 0.15, 0.00]),
+        "2026_q1": EntityQuarterProfile(alert_count=35, severity_weights=[0.65, 0.35, 0.00, 0.00]),
+        "2026_q2": EntityQuarterProfile(alert_count=11, severity_weights=[0.70, 0.30, 0.00, 0.00]),
     },
-    "Indus Financial Services": {
-        # Execution-gap present from Q3, worsening slightly each quarter —
-        # by Q2 it reaches the same near-total rates the real single-snapshot
-        # dataset shows for this entity.
+    # Execution-gap present from Q3, worsening every quarter, converging on
+    # generate_extended.py's blatant Meridian profile by Q2 (94.7% fast
+    # closure / 90.3% no-escalation / 100% template notes).
+    #
+    # alert_count is deliberately held near the 14-baseline band (~200-215)
+    # every quarter, instead of climbing on its own — execution_gap.py's
+    # score (40% of the blended risk_score, and NOT peer-relative) is the
+    # only thing allowed to drive this entity's trend. A rising alert_count
+    # would also feed anomaly.py's Isolation Forest, whose per-quarter score
+    # is rescaled *relative to whichever other entities are most anomalous
+    # that same quarter* (see Konkan Maritime Ltd's profile note below) — if
+    # Meridian's own anomaly contribution spiked early (e.g. from an
+    # elevated Q3 volume with comparatively little competition that quarter)
+    # and then eased as Konkan/Saraswati's patterns escalate in later
+    # quarters, the *blended* score could fall even while execution_gap
+    # climbs. Keeping volume flat removes that confound; the escalating
+    # fast-closure rate still pulls avg_closure_seconds down every quarter
+    # too, so anomaly's own signal reinforces the climb instead of fighting
+    # it.
+    "Meridian Trust Bank": {
         "2025_q3": EntityQuarterProfile(
-            alert_count=60, fast_closure_rate=0.30, no_escalation_rate=0.30, template_notes_rate=0.25
+            alert_count=205, fast_closure_rate=0.15, no_escalation_rate=0.15, template_notes_rate=0.12
         ),
         "2025_q4": EntityQuarterProfile(
-            alert_count=62, fast_closure_rate=0.48, no_escalation_rate=0.48, template_notes_rate=0.42
+            alert_count=208, fast_closure_rate=0.45, no_escalation_rate=0.45, template_notes_rate=0.40
         ),
         "2026_q1": EntityQuarterProfile(
-            alert_count=64, fast_closure_rate=0.68, no_escalation_rate=0.68, template_notes_rate=0.62
+            alert_count=210, fast_closure_rate=0.75, no_escalation_rate=0.72, template_notes_rate=0.75
         ),
         "2026_q2": EntityQuarterProfile(
-            alert_count=66, fast_closure_rate=0.93, no_escalation_rate=0.93, template_notes_rate=0.90
+            alert_count=212, fast_closure_rate=0.97, no_escalation_rate=0.95, template_notes_rate=1.00
         ),
     },
-    "Continental Banking Corp": {
-        # Execution-gap strongly present in Q3/Q4 (mirrors the real dataset's
-        # single-snapshot Continental profile), then remediated: Q1 shows
-        # partial improvement, Q2 is close to baseline. The one entity that
-        # gets *better* — otherwise the trend feature only ever shows one
-        # direction.
+    # Execution-gap in Q3/Q4 (peaking near generate_extended.py's subtle
+    # Kaveri profile), then clearly improving in Q1/Q2 as if remediation
+    # happened — the one entity that gets better.
+    "Kaveri Power Holdings": {
         "2025_q3": EntityQuarterProfile(
-            alert_count=34, fast_closure_rate=0.90, no_escalation_rate=0.90, template_notes_rate=0.85
+            alert_count=230, fast_closure_rate=0.52, no_escalation_rate=0.62, template_notes_rate=0.36
         ),
         "2025_q4": EntityQuarterProfile(
-            alert_count=33, fast_closure_rate=0.85, no_escalation_rate=0.85, template_notes_rate=0.80
+            alert_count=240, fast_closure_rate=0.58, no_escalation_rate=0.68, template_notes_rate=0.39
         ),
         "2026_q1": EntityQuarterProfile(
-            alert_count=45, fast_closure_rate=0.35, no_escalation_rate=0.35, template_notes_rate=0.30
+            alert_count=245, fast_closure_rate=0.40, no_escalation_rate=0.45, template_notes_rate=0.30
         ),
+        # Partial remediation, not disappearance — Kaveri should still read
+        # as a mildly elevated, recently-improved entity in Q2, not as a
+        # clean baseline. Rates left well above zero (vs. an earlier
+        # near-total remediation to ~0.08-0.12, which put its blended score
+        # below most baselines and read as the detector having stopped
+        # looking rather than as a fix).
         "2026_q2": EntityQuarterProfile(
-            alert_count=60, fast_closure_rate=0.05, no_escalation_rate=0.10, template_notes_rate=0.10
+            alert_count=250, fast_closure_rate=0.42, no_escalation_rate=0.45, template_notes_rate=0.33
         ),
     },
-    "Fortis Defense Systems": {
-        # Anomaly-spike: near-baseline volume through Q4, then a sudden
-        # step-change in Q1 that continues into Q2 — nothing gradual,
-        # matching "appearing only in Q1/Q2". The Q1/Q2 spike is carried
-        # entirely by alert_count, as originally intended; Q3/Q4 needed a
-        # second, deliberately boring stabilizer alongside alert_count —
-        # see below for why volume alone would not reliably hold there.
-        #
-        # Q3/Q4 (alert_count=100, no_escalation_rate=0.85): 100 is only a
-        # hair above the six stable entities' own ~85-100/quarter band —
-        # deliberately not the 150-200 range tried and discarded below.
-        # anomaly.py's per-quarter score is an Isolation Forest output
-        # rescaled *relative to whichever other entities are most anomalous
-        # that same quarter* (see _convert_scores), and Q3/Q4 are exactly
-        # the quarters where Continental Banking Corp's execution-gap
-        # pattern is near its worst. Every volume tried in that 150-200
-        # range produced a highly unstable anomaly score purely from how
-        # much of the "most anomalous" ranking Continental happened to
-        # leave available that specific quarter (e.g. one run: an=0.286 in
-        # Q3 but an=0.417 in Q4 off an *identical* alert_count of 200,
-        # because Continental's own rates eased slightly between the two
-        # quarters) — occasionally landing Fortis's "boring" quarter above
-        # its own Q1/Q2 "spike" quarter, reproducing the exact bug this fix
-        # exists to remove, just at different numbers. A small, fixed
-        # no_escalation_rate override (deterministic — it does not depend on
-        # what any other entity does that quarter) gives Q3/Q4 a reliable
-        # floor comfortably above the stable-entity ceiling without
-        # depending on winning a volatile, competitive anomaly ranking; the
-        # near-baseline alert_count keeps that quarter's own anomaly
-        # contribution small and quiet, so the floor mostly comes from this
-        # execution_gap contribution instead. This is a real, if modest,
-        # signal (not literally zero), so "low and unremarkable" here means
-        # "far below Delta's/Continental's/Indus's worst quarters and below
-        # its own Q1/Q2", not "statistically identical to a clean entity".
-        #
-        # Q1/Q2 (alert_count=320/360): a ~3.2-3.6x jump off the ~100
-        # baseline, sized to dominate the anomaly ranking regardless of what
-        # Continental/Indus/Delta are doing that quarter — the actual
-        # anomaly-spike signal, and the reason Q1/Q2 read clearly higher
-        # than Q3/Q4 even though Q3/Q4 no longer scores anywhere near zero.
-        "2025_q3": EntityQuarterProfile(alert_count=95, no_escalation_rate=0.85),
-        "2025_q4": EntityQuarterProfile(alert_count=95, no_escalation_rate=0.85),
-        "2026_q1": EntityQuarterProfile(alert_count=550),
-        "2026_q2": EntityQuarterProfile(alert_count=650),
+    # Anomaly volume spike appearing only in Q1/Q2 — near-baseline volume
+    # through Q4 (a hair above the 14 baselines' ~180-220/quarter band, like
+    # execution_gap's Fortis-lesson: no other override needed), then a
+    # sudden step-change that continues into Q2, converging on
+    # generate_extended.py's 760-alert single-snapshot volume.
+    "Arcadia Defence Systems": {
+        "2025_q3": EntityQuarterProfile(alert_count=225),
+        "2025_q4": EntityQuarterProfile(alert_count=235),
+        "2026_q1": EntityQuarterProfile(alert_count=620),
+        "2026_q2": EntityQuarterProfile(alert_count=760),
+    },
+    # Multi-feature drift building gradually across all four quarters:
+    # closure time, escalation rate, critical ratio all climb together while
+    # asset diversity narrows — no single rule catches it, converging on
+    # generate_extended.py's Konkan profile (avg closure ~34,815s,
+    # escalation ~0.59-0.81, critical ratio ~0.20-0.22, 3 asset types).
+    "Konkan Maritime Ltd": {
+        # Q3 is deliberately mild — close enough to baseline that it is not
+        # yet the most anomalous entity that quarter (anomaly.py's Isolation
+        # Forest output is rescaled *relative to peers*, so an entity that is
+        # already the most-anomalous peer in Q3 saturates at 1.0 immediately
+        # and cannot show gradual buildup — see README's "why Q3 starts mild"
+        # note). Each subsequent quarter pushes closure time, escalation,
+        # severity mix and asset diversity further from baseline.
+        "2025_q3": EntityQuarterProfile(
+            alert_count=190,
+            severity_weights=[0.42, 0.30, 0.21, 0.07],
+            assets=ASSET_TYPES,
+            closure_range_minutes=(170, 270),
+        ),
+        "2025_q4": EntityQuarterProfile(
+            alert_count=190,
+            severity_weights=[0.38, 0.29, 0.22, 0.11],
+            assets=["Server", "Identity Provider", "Cloud Workload", "Database", "Network Device", "Endpoint"],
+            closure_range_minutes=(190, 300),
+        ),
+        "2026_q1": EntityQuarterProfile(
+            alert_count=190,
+            severity_weights=[0.30, 0.28, 0.26, 0.16],
+            assets=["Server", "Identity Provider", "Cloud Workload", "Database"],
+            closure_range_minutes=(280, 420),
+            escalation_rate_override={"Critical": 0.72, "High": 0.60},
+        ),
+        "2026_q2": EntityQuarterProfile(
+            alert_count=190,
+            severity_weights=[0.22, 0.26, 0.30, 0.22],
+            assets=["Server", "Identity Provider", "Cloud Workload"],
+            closure_range_minutes=(433, 733),  # 26000-44000s
+            escalation_rate_override={"Critical": 0.90, "High": 0.81},
+        ),
+    },
+    # Stable missing-severity pattern throughout — flat but flagged, a
+    # different signal from deteriorating: normal volume every quarter (so
+    # LOW_ALERT_VOLUME never fires) but no high/critical severity at all in
+    # any quarter, matching generate_extended.py's Nilgiri profile exactly.
+    "Nilgiri Water Authority": {
+        "2025_q3": EntityQuarterProfile(alert_count=170, severity_weights=[0.66, 0.34, 0.00, 0.00]),
+        "2025_q4": EntityQuarterProfile(alert_count=178, severity_weights=[0.66, 0.34, 0.00, 0.00]),
+        "2026_q1": EntityQuarterProfile(alert_count=172, severity_weights=[0.66, 0.34, 0.00, 0.00]),
+        "2026_q2": EntityQuarterProfile(alert_count=175, severity_weights=[0.66, 0.34, 0.00, 0.00]),
+    },
+    # Oscillating — alternates between a mild quarter and a spike quarter so
+    # it reads as volatile rather than trending in either direction. Spike
+    # quarters land in the same range as generate_extended.py's Deccan
+    # "deliberately ambiguous" snapshot (26.7% fast closure / 43% duplicated
+    # notes); mild quarters sit close to baseline.
+    "Deccan Health Network": {
+        # Amplitude widened from an earlier mild<->spike swing (which stayed
+        # under the trend classifier's volatility threshold and read as
+        # "stable") so the oscillation is large enough to register as
+        # genuinely volatile rather than merely quiet.
+        "2025_q3": EntityQuarterProfile(
+            alert_count=200, fast_closure_rate=0.04, no_escalation_rate=0.06, template_notes_rate=0.04
+        ),
+        "2025_q4": EntityQuarterProfile(
+            alert_count=210, fast_closure_rate=0.55, no_escalation_rate=0.60, template_notes_rate=0.50
+        ),
+        "2026_q1": EntityQuarterProfile(
+            alert_count=200, fast_closure_rate=0.05, no_escalation_rate=0.08, template_notes_rate=0.05
+        ),
+        "2026_q2": EntityQuarterProfile(
+            alert_count=210, fast_closure_rate=0.52, no_escalation_rate=0.58, template_notes_rate=0.48
+        ),
     },
 }
-
-STABLE_ENTITIES: list[str] = [name for name in ENTITY_NAMES if name not in SEEDED_PROFILES]
-"""The six entities with no planted pattern in any quarter — pure baseline
-with normal quarter-to-quarter noise."""
 
 
 def _normalized(weights: list[float]) -> np.ndarray:
@@ -300,7 +366,7 @@ def _normalized(weights: list[float]) -> np.ndarray:
 
 
 def _noisy_count(base: int, rng: np.random.Generator) -> int:
-    """Apply ±BASELINE_NOISE_FRACTION multiplicative noise to a baseline count."""
+    """Apply +/-BASELINE_NOISE_FRACTION multiplicative noise to a baseline count."""
     factor = rng.uniform(1.0 - BASELINE_NOISE_FRACTION, 1.0 + BASELINE_NOISE_FRACTION)
     return max(1, int(round(base * factor)))
 
@@ -321,22 +387,28 @@ def _generate_alert(
     rng: np.random.Generator,
 ) -> dict[str, str]:
     """Build one alert row for *entity* under *profile*."""
-    severity = rng.choice(SEVERITIES, p=_normalized(SEVERITY_WEIGHTS))
-    asset_type = rng.choice(ASSET_TYPES, p=_normalized(ASSET_TYPE_WEIGHTS))
+    sev_weights = profile.severity_weights if profile.severity_weights is not None else NORMAL_SEVERITY_WEIGHTS
+    severity = rng.choice(SEVERITIES, p=_normalized(sev_weights))
+    asset_pool = profile.assets if profile.assets is not None else ASSET_TYPES
+    asset_type = rng.choice(asset_pool)
     severity_lc = severity.lower()
 
     # --- closure duration ---
     fast_closure_rate = profile.fast_closure_rate
     is_fast_candidate = severity_lc in FAST_CLOSURE_SEVERITIES
+    normal_range = profile.closure_range_minutes or (NORMAL_DURATION_MIN_MINUTES, NORMAL_DURATION_MAX_MINUTES)
     if is_fast_candidate and fast_closure_rate is not None and rng.random() < fast_closure_rate:
         duration_minutes = int(rng.integers(FAST_DURATION_MIN_MINUTES, FAST_DURATION_MAX_MINUTES + 1))
     else:
-        duration_minutes = int(rng.integers(NORMAL_DURATION_MIN_MINUTES, NORMAL_DURATION_MAX_MINUTES + 1))
+        duration_minutes = int(rng.integers(normal_range[0], normal_range[1] + 1))
 
     # --- escalation ---
     no_escalation_rate = profile.no_escalation_rate
+    esc_override = profile.escalation_rate_override
     if severity_lc in NO_ESCALATION_OVERRIDE_SEVERITIES and no_escalation_rate is not None:
         escalated = rng.random() >= no_escalation_rate
+    elif esc_override is not None and severity in esc_override:
+        escalated = rng.random() < esc_override[severity]
     else:
         escalated = rng.random() < ESCALATION_RATE_BY_SEVERITY[severity]
 
@@ -374,9 +446,8 @@ def generate_quarter(quarter_key: str, quarter_start: datetime, quarter_end: dat
         # A separate, entity+quarter-derived RNG stream so adding/removing an
         # entity's pattern in one quarter never perturbs another entity's
         # random draws in the same quarter (each entity's stream is fully
-        # independent and reproducible on its own).
-        # zlib.crc32 (not Python's salted built-in hash()) so the derived
-        # seed — and therefore every generated row — is identical run to run.
+        # independent and reproducible on its own). zlib.crc32 (not Python's
+        # salted built-in hash()) so the derived seed is identical run to run.
         entity_seed = seed ^ zlib.crc32(f"{entity}|{quarter_key}".encode("utf-8"))
         rng = np.random.default_rng(entity_seed)
         profile = _profile_for(entity, quarter_key, rng)
