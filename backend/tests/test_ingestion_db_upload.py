@@ -8,6 +8,7 @@ trace) naming the tables found and what's missing; and the file-size limit
 is enforced without needing an actual 50MB fixture.
 """
 
+import json
 import os
 import sqlite3
 import tempfile
@@ -261,10 +262,30 @@ def test_not_actually_a_sqlite_file_returns_clean_400(client):
 # ---------------------------------------------------------------------------
 
 def test_db_upload_over_size_limit_rejected(client, monkeypatch):
-    monkeypatch.setattr(ingestion_module, "MAX_DB_UPLOAD_BYTES", 10)
+    monkeypatch.setattr(ingestion_module, "MAX_UPLOAD_BYTES", 10)
     db_bytes = _build_sqlite_bytes(table_name="alerts")
     assert len(db_bytes) > 10
     resp = _upload_db(client, db_bytes, filename="export.db")
+    assert resp.status_code == 400
+    assert "too large" in resp.json()["detail"].lower()
+
+
+def test_csv_upload_over_size_limit_rejected(client, monkeypatch):
+    """The same MAX_UPLOAD_BYTES limit applies to CSV, not just .db/.sqlite."""
+    monkeypatch.setattr(ingestion_module, "MAX_UPLOAD_BYTES", 10)
+    resp = _upload_csv(client)
+    assert resp.status_code == 400
+    assert "too large" in resp.json()["detail"].lower()
+
+
+def test_json_upload_over_size_limit_rejected(client, monkeypatch):
+    """The same MAX_UPLOAD_BYTES limit applies to JSON, not just .db/.sqlite."""
+    monkeypatch.setattr(ingestion_module, "MAX_UPLOAD_BYTES", 10)
+    payload = json.dumps({"alerts": [{"alert_id": "A1", "entity_name": "Acme Corp"}]}).encode("utf-8")
+    resp = client.post(
+        "/api/upload",
+        files={"file": ("dataset.json", payload, "application/json")},
+    )
     assert resp.status_code == 400
     assert "too large" in resp.json()["detail"].lower()
 

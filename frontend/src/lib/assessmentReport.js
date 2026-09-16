@@ -56,6 +56,36 @@ function safeArr(val) {
   return Array.isArray(val) && val.length > 0 ? val : [];
 }
 
+// ── CSV cell escaping (security hardening) ─────────────────────────────────
+
+/** Leading characters spreadsheet apps (Excel, Google Sheets, LibreOffice)
+ * interpret as "this cell is a formula" when a CSV is opened. */
+const CSV_FORMULA_TRIGGER_CHARS = new Set(["=", "+", "-", "@", "\t", "\r"]);
+
+/**
+ * RFC 4180 quoting plus CSV/formula-injection hardening for one cell.
+ *
+ * entity_name (and, in the entity dossier export, investigation-note-derived
+ * evidence strings) originate from an uploaded file — untrusted input by the
+ * time it reaches here. A cell beginning with =, +, -, or @ is executed as a
+ * formula by common spreadsheet apps on open, which is a real exfiltration/
+ * code-execution vector for a CSV export (not merely a display-escaping
+ * concern the way JSX/jsPDF's plain-text rendering already is elsewhere in
+ * this file). Prefixing a single quote is the standard mitigation — every
+ * major spreadsheet app treats a leading `'` as "force this cell to text"
+ * and does not render the quote itself.
+ */
+function csvCell(val) {
+  let s = String(val ?? "");
+  if (s.length > 0 && CSV_FORMULA_TRIGGER_CHARS.has(s[0])) {
+    s = `'${s}`;
+  }
+  if (s.includes(",") || s.includes('"') || s.includes("\n")) {
+    return `"${s.replace(/"/g, '""')}"`;
+  }
+  return s;
+}
+
 // ── Timestamp formatter ────────────────────────────────────────────────────
 
 /**
@@ -462,18 +492,9 @@ export function downloadCSV(reportData) {
   const filename = buildFileName(reportData, "csv");
   const rows = reportData?.supervisory_priority ?? [];
 
-  const escape = (val) => {
-    const s = String(val ?? "");
-    // RFC 4180: wrap in quotes if value contains comma, quote, or newline
-    if (s.includes(",") || s.includes('"') || s.includes("\n")) {
-      return `"${s.replace(/"/g, '""')}"`;
-    }
-    return s;
-  };
-
   const header = ["Entity", "Risk Score", "Risk Band", "Alert Count", "Primary Driver"];
   const lines = [
-    header.map(escape).join(","),
+    header.map(csvCell).join(","),
     ...rows.map((row) =>
       [
         row.entity_name,
@@ -482,7 +503,7 @@ export function downloadCSV(reportData) {
         row.alert_count,
         row.primary_driver,
       ]
-        .map(escape)
+        .map(csvCell)
         .join(",")
     ),
   ];
@@ -513,17 +534,9 @@ export function downloadEntityCSV(reportData) {
   const evo = reportData?.expected_vs_observed ?? [];
   const trend = reportData?.trend?.points ?? [];
 
-  const escape = (val) => {
-    const s = String(val ?? "");
-    if (s.includes(",") || s.includes('"') || s.includes("\n")) {
-      return `"${s.replace(/"/g, '""')}"`;
-    }
-    return s;
-  };
-
   const lines = [];
   lines.push(["--- ENTITY ASSESSMENT SUMMARY ---"].join(","));
-  lines.push(["Entity Name", "Risk Score", "Risk Band", "Primary Driver", "Execution Gap", "Negative Space", "Anomaly"].map(escape).join(","));
+  lines.push(["Entity Name", "Risk Score", "Risk Band", "Primary Driver", "Execution Gap", "Negative Space", "Anomaly"].map(csvCell).join(","));
   lines.push([
     summary.entity_name,
     summary.risk_score,
@@ -532,14 +545,14 @@ export function downloadEntityCSV(reportData) {
     comp.execution_gap,
     comp.negative_space,
     comp.anomaly,
-  ].map(escape).join(","));
+  ].map(csvCell).join(","));
 
   lines.push("");
   lines.push(["--- EXPECTED VS OBSERVED ---"].join(","));
-  lines.push(["Metric", "Observed", "Expected", "Unit", "Deviation Z", "Direction", "Interpretation"].map(escape).join(","));
+  lines.push(["Metric", "Observed", "Expected", "Unit", "Deviation Z", "Direction", "Interpretation"].map(csvCell).join(","));
   if (evo.length > 0) {
     evo.forEach((r) => {
-      lines.push([r.metric, r.observed, r.expected, r.unit, r.deviation_z, r.direction, r.interpretation].map(escape).join(","));
+      lines.push([r.metric, r.observed, r.expected, r.unit, r.deviation_z, r.direction, r.interpretation].map(csvCell).join(","));
     });
   } else {
     lines.push(["No expected vs observed anomalies flagged for this entity."]);
@@ -547,15 +560,15 @@ export function downloadEntityCSV(reportData) {
 
   lines.push("");
   lines.push(["--- FINDINGS & EVIDENCE ---"].join(","));
-  lines.push(["Rule", "Detector", "Description", "Evidence Count", "Evidence Detail", "Reason"].map(escape).join(","));
+  lines.push(["Rule", "Detector", "Description", "Evidence Count", "Evidence Detail", "Reason"].map(csvCell).join(","));
   if (findings.length > 0) {
     findings.forEach((f) => {
       if (f.evidence && f.evidence.length > 0) {
         f.evidence.forEach((ev) => {
-          lines.push([f.rule, f.detector, f.description, f.evidence_count, ev.detail, ev.reason].map(escape).join(","));
+          lines.push([f.rule, f.detector, f.description, f.evidence_count, ev.detail, ev.reason].map(csvCell).join(","));
         });
       } else {
-        lines.push([f.rule, f.detector, f.description, f.evidence_count, "", ""].map(escape).join(","));
+        lines.push([f.rule, f.detector, f.description, f.evidence_count, "", ""].map(csvCell).join(","));
       }
     });
   } else {
@@ -565,9 +578,9 @@ export function downloadEntityCSV(reportData) {
   if (trend && trend.length > 0) {
     lines.push("");
     lines.push(["--- TEMPORAL TREND ---"].join(","));
-    lines.push(["Run ID", "Timestamp", "Risk Score"].map(escape).join(","));
+    lines.push(["Run ID", "Timestamp", "Risk Score"].map(csvCell).join(","));
     trend.forEach((p) => {
-      lines.push([p.run_id, p.timestamp, p.risk_score].map(escape).join(","));
+      lines.push([p.run_id, p.timestamp, p.risk_score].map(csvCell).join(","));
     });
   }
 

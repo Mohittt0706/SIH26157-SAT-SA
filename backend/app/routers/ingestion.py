@@ -38,10 +38,19 @@ REQUIRED_COLUMNS: list[str] = [
     "asset_type",
 ]
 
-MAX_DB_UPLOAD_BYTES: int = 50 * 1024 * 1024
-"""Cap on an uploaded .db/.sqlite file's size (50 MiB). Generous for a SOC
-export of a few hundred thousand alert rows, but bounds how large a file this
-endpoint will write to a temp file and open, however briefly and read-only."""
+MAX_UPLOAD_BYTES: int = 20 * 1024 * 1024
+"""Cap on an uploaded file's size (20 MiB), enforced identically for every
+format — CSV, JSON, and .db/.sqlite alike (security hardening: an unbounded
+upload is a memory/disk-exhaustion vector regardless of what's inside it).
+Matches frontend/nginx.conf's client_max_body_size, so a file nginx would
+reject at the edge is rejected for the same reason the backend would reject
+it directly — no format gets a silently different ceiling. Generous for a
+SOC export of a few hundred thousand alert rows."""
+
+UPLOAD_READ_CHUNK_BYTES: int = 1024 * 1024
+"""Chunk size for the bounded read in _read_upload_bounded — large enough to
+be efficient, small enough that an oversized upload is caught within one
+chunk of the limit rather than after the whole body has been buffered."""
 
 PREFERRED_TABLE_NAME: str = "alerts"
 """Table name tried first when a .db/.sqlite upload has more than one table
@@ -226,21 +235,35 @@ def _find_alerts_table(conn: sqlite3.Connection) -> tuple[str, dict[str, str]]:
 def _parse_sqlite_db(raw: bytes) -> "pd.DataFrame":
     """Parse a .db/.sqlite export: write to a temp file, open read-only, extract rows.
 
-    Security: the file is opened with sqlite3's URI "mode=ro" (read-only at
-    the SQLite level, not just a file-permission convention) and nothing from
-    it is ever executed — only SELECT/PRAGMA reads against identifiers this
-    function itself discovered via sqlite_master. The temp file is always
-    removed afterward, success or failure.
+    SECURITY — nothing from the uploaded file is ever executed as code, only
+    read as data. A reviewer auditing this path should be able to verify
+    every one of these independently against the function body below:
+      - Opened via sqlite3's URI "mode=ro" — read-only *at the SQLite engine
+        level* (rejects writes even if the OS-level file permissions were
+        somehow writable), not merely a file-permission convention.
+      - The only statements ever executed are `SELECT name FROM sqlite_master
+        ...` (fixed, no user input), `PRAGMA table_info("<table>")`, and a
+        final `SELECT <cols> FROM "<table>"` — and the <table>/<cols>
+        identifiers substituted into those two are never taken from the
+        request; they are values this function *itself* read back out of
+        the opened database's own sqlite_master/table_info a moment earlier,
+        then double-quote-escaped before reuse (standard SQL identifier
+        escaping, not string concatenation of request data).
+      - No ATTACH DATABASE, no PRAGMA other than table_info, no ALTER/CREATE/
+        INSERT/UPDATE/DELETE, and no query text from inside the uploaded
+        file (e.g. a VIEW's stored definition, or a trigger body) is ever
+        executed by *us* — reading a table that happens to be backed by a
+        view still only runs a SELECT this function issued, not anything an
+        attacker authored, and read-only mode blocks trigger-firing writes
+        regardless.
+      - `enable_load_extension` is never called — Python's sqlite3 module
+        already ships with extension loading off by default; the explicit
+        call below removes any doubt for a reviewer rather than relying on
+        that default silently.
+    Size is bounded upstream (MAX_UPLOAD_BYTES, enforced by the caller before
+    this function ever runs) and the temp file is always removed afterward,
+    success or failure.
     """
-    if len(raw) > MAX_DB_UPLOAD_BYTES:
-        raise HTTPException(
-            status_code=400,
-            detail=(
-                f"Database file too large: {len(raw)} bytes exceeds the "
-                f"{MAX_DB_UPLOAD_BYTES} byte limit."
-            ),
-        )
-
     fd, tmp_path_str = tempfile.mkstemp(suffix=".sqlite")
     tmp_path = Path(tmp_path_str)
     try:
@@ -250,6 +273,7 @@ def _parse_sqlite_db(raw: bytes) -> "pd.DataFrame":
         uri = f"file:{tmp_path.as_posix()}?mode=ro"
         try:
             conn = sqlite3.connect(uri, uri=True)
+            conn.enable_load_extension(False)  # explicit; see SECURITY note above
         except sqlite3.Error as exc:
             raise HTTPException(status_code=400, detail=f"Could not open database file: {exc}") from exc
 
@@ -484,13 +508,45 @@ def _parse_by_format(raw: bytes, file_format: str) -> "pd.DataFrame":
     return _parse_sqlite_db(raw)
 
 
+async def _read_upload_bounded(file: UploadFile, max_bytes: int) -> bytes:
+    """Read *file*'s body in chunks, rejecting with 400 as soon as it exceeds
+    *max_bytes* — enforced identically for CSV, JSON, and .db/.sqlite, all
+    three of which funnel through this same read before any format-specific
+    parsing runs.
+
+    Reading in bounded chunks (rather than `await file.read()` with no limit,
+    then checking the length afterward) means an oversized upload is rejected
+    after at most one chunk past the limit, not after the entire file has
+    already been buffered — the size guard this function exists for would be
+    largely pointless if it only checked size *after* fully consuming an
+    arbitrarily large body into memory.
+    """
+    chunks: list[bytes] = []
+    total = 0
+    while True:
+        chunk = await file.read(UPLOAD_READ_CHUNK_BYTES)
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > max_bytes:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"File too large: exceeds the {max_bytes} byte "
+                    f"({max_bytes // (1024 * 1024)} MiB) upload limit."
+                ),
+            )
+        chunks.append(chunk)
+    return b"".join(chunks)
+
+
 @router.post("/upload")
 async def upload_alerts(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ) -> dict[str, object]:
     """Parse an uploaded alert CSV, JSON, or SQLite DB export and replace the alerts table with its contents."""
-    raw = await file.read()
+    raw = await _read_upload_bounded(file, MAX_UPLOAD_BYTES)
     file_format = _detect_format(file.filename)
     df = _parse_by_format(raw, file_format)
     return _process_dataframe(df, db, filename=file.filename or "unknown", file_format=file_format)

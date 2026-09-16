@@ -19,7 +19,9 @@ services:
         # to this container, which forwards to `backend` over the compose network.
         VITE_API_BASE_URL: /api
     ports:
-      - "80:80"
+      # Host 80 -> container 8080: nginx runs as a non-root user in-container
+      # (see frontend/Dockerfile) and cannot bind port 80 itself.
+      - "80:8080"
     depends_on:
       - backend
     restart: unless-stopped
