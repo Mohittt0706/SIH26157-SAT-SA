@@ -308,9 +308,13 @@ function renderCoverPage(doc, meta) {
 function renderOverview(doc, cursor, overview) {
   drawSectionTitle(doc, cursor, "1  Assessment Overview");
 
-  const run = overview.latest_run;
-  drawKV(doc, cursor, "Entities Analyzed", overview.entity_count);
-  drawKV(doc, cursor, "Total Alerts", overview.total_alerts !== undefined ? overview.total_alerts.toLocaleString() : NA);
+  const run = overview?.latest_run;
+  drawKV(doc, cursor, "Entities Analyzed", overview?.entity_count ?? 0);
+  const totalAlertsStr =
+    overview?.total_alerts !== undefined && overview?.total_alerts !== null
+      ? Number(overview.total_alerts).toLocaleString()
+      : NA;
+  drawKV(doc, cursor, "Total Alerts", totalAlertsStr);
 
   if (run) {
     cursor.y += 2;
@@ -342,9 +346,11 @@ function renderPriorityTable(doc, cursor, priorityRows) {
 
   const body = priorityRows.map((row) => [
     display(row.entity_name),
-    row.risk_score !== NA ? String(Number(row.risk_score).toFixed(3)) : "—",
+    row.risk_score !== NA && row.risk_score !== null && !isNaN(Number(row.risk_score))
+      ? String(Number(row.risk_score).toFixed(1))
+      : "—",
     display(row.risk_band).toUpperCase(),
-    row.alert_count !== NA ? String(row.alert_count) : "—",
+    row.alert_count !== NA && row.alert_count !== null ? String(row.alert_count) : "—",
     display(row.primary_driver),
   ]);
 
@@ -415,9 +421,10 @@ function renderEntityDetail(doc, cursor, detail, index) {
   setMuted(doc);
   doc.setFontSize(8);
   const bandStr = display(detail.risk_band).toUpperCase();
-  const scoreStr = detail.risk_score !== NA
-    ? `Risk Score: ${Number(detail.risk_score).toFixed(3)}`
-    : "Risk Score: —";
+  const scoreStr =
+    detail.risk_score !== NA && detail.risk_score !== null && !isNaN(Number(detail.risk_score))
+      ? `Risk Score: ${Number(detail.risk_score).toFixed(1)}`
+      : "Risk Score: —";
   doc.text(`${scoreStr}   |   Band: ${bandStr}   |   Primary Driver: ${display(detail.primary_driver)}`, MARGIN_L, cursor.y);
   cursor.y += 5;
 

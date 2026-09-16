@@ -71,6 +71,12 @@ overwriting it.
 report — PDF, JSON, or CSV — assembled client-side from the same data already on
 screen, so no separate backend call or extra network exposure is needed.
 
+![Exporting entity assessment dossier](docs/screenshots/report_download.png)
+*Report generation: one-click client-side export with download verification toast.*
+
+![Generated supervisory report dossier](docs/screenshots/report_generated.png)
+*Generated artifact: tamper-evident PDF dossier with cryptographic SHA-256 integrity hash.*
+
 **6. Audit.** Every upload is preserved as a historical run — timestamp, source file,
 ingestion counts, the exact detector configuration in force, and the resulting scores —
 so a supervisor can revisit or reproduce any past assessment.

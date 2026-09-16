@@ -21,7 +21,7 @@ import {
   getAuditRuns,
   getAuditRunDetail,
   getEntityTrend,
-} from "./api";
+} from "./api.js";
 
 // ── Sentinel used wherever a field is missing ──────────────────────────────
 export const NA = "Not available for this assessment.";
@@ -127,11 +127,20 @@ function fileStamp(date) {
 
 // ── Section builders ───────────────────────────────────────────────────────
 
+/** Helper to enforce short timeout so offline mode doesn't hang */
+function withTimeout(promise, ms = 2000, fallback = null) {
+  return Promise.race([
+    promise.catch(() => fallback),
+    new Promise((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
 /** Section 1 — Assessment Overview */
 function buildOverview(entities, latestRun) {
-  const totalAlerts = entities.reduce((s, e) => s + (e.alert_count || 0), 0);
+  const safeEntities = Array.isArray(entities) ? entities : [];
+  const totalAlerts = safeEntities.reduce((s, e) => s + (Number(e.alert_count) || 0), 0);
   return {
-    entity_count: entities.length,
+    entity_count: safeEntities.length,
     total_alerts: totalAlerts,
     latest_run: latestRun
       ? {
@@ -148,7 +157,8 @@ function buildOverview(entities, latestRun) {
 
 /** Section 2 — Supervisory Review Priority (all entities, summary only) */
 function buildPriorityTable(entities) {
-  return entities.map((e) => ({
+  const safeEntities = Array.isArray(entities) ? entities : [];
+  return safeEntities.map((e) => ({
     entity_name: safe(e.entity_name),
     risk_score: e.risk_score !== undefined && e.risk_score !== null ? e.risk_score : NA,
     risk_band: safe(e.risk_band),
@@ -163,8 +173,26 @@ function buildPriorityTable(entities) {
  * trend   = response from getEntityTrend(name)
  */
 function buildEntityDetail(entity, detail, trend) {
+  let rawFindings = safeArr(detail?.findings);
+
+  // Offline fallback: if backend drill-down is unreachable, use findings_summary
+  if (rawFindings.length === 0 && Array.isArray(entity?.findings_summary) && entity.findings_summary.length > 0) {
+    rawFindings = entity.findings_summary.map((name) => ({
+      rule: name.toUpperCase().replace(/\s+/g, "_"),
+      detector: name.toLowerCase().replace(/\s+/g, "_"),
+      description: `Elevated supervisory signal detected during assessment run (${name}).`,
+      evidence_count: entity.alert_count !== undefined && entity.alert_count !== null ? entity.alert_count : NA,
+      evidence: [
+        {
+          detail: `${name} signal triggered for ${entity.entity_name || "entity"}.`,
+          reason: `Primary risk driver identified as ${entity.primary_driver || name}.`,
+        },
+      ],
+    }));
+  }
+
   // Section 3 — Why Flagged
-  const findings = safeArr(detail?.findings).map((f) => ({
+  const findings = rawFindings.map((f) => ({
     rule: safe(f.rule),
     detector: safe(f.detector),
     description: safe(f.description),
@@ -214,17 +242,18 @@ function buildEntityDetail(entity, detail, trend) {
 }
 
 /** Section 6 — Audit / Assessment Metadata */
-function buildAuditMetadata(runDetail) {
-  if (!runDetail) return null;
+function buildAuditMetadata(runDetail, fallbackRun = null) {
+  const source = runDetail || fallbackRun;
+  if (!source) return null;
   return {
-    id: safe(runDetail.id),
-    timestamp: safe(runDetail.timestamp),
-    filename: safe(runDetail.filename),
-    rows_received: safe(runDetail.rows_received),
-    rows_inserted: safe(runDetail.rows_inserted),
-    rows_skipped: safe(runDetail.rows_skipped),
-    entity_count: safe(runDetail.entity_count),
-    detector_config: runDetail.detector_config ?? NA,
+    id: safe(source.id),
+    timestamp: safe(source.timestamp),
+    filename: safe(source.filename),
+    rows_received: safe(source.rows_received),
+    rows_inserted: safe(source.rows_inserted),
+    rows_skipped: safe(source.rows_skipped),
+    entity_count: safe(source.entity_count),
+    detector_config: runDetail?.detector_config ?? NA,
   };
 }
 
@@ -263,28 +292,44 @@ export async function assembleReportData(entities, auditRuns) {
   const generatedAt = formatTimestamp(now);
   const stamp = fileStamp(now);
 
+  const safeEntities = Array.isArray(entities) ? entities : [];
   const latestRun = auditRuns && auditRuns.length > 0 ? auditRuns[0] : null;
   const runId = latestRun?.id ?? "no-run";
 
   // Identify which entities warrant a full drill-down
-  const flaggedEntities = entities.filter(isFlagged);
+  const flaggedEntities = safeEntities.filter(isFlagged);
 
-  // Fetch audit run detail and all flagged-entity details concurrently
-  const [runDetail, ...entityResults] = await Promise.all([
-    latestRun
-      ? getAuditRunDetail(latestRun.id).catch(() => null)
-      : Promise.resolve(null),
-    ...flaggedEntities.map((entity) =>
-      Promise.all([
-        getEntityDetails(entity.entity_name).catch(() => ({})),
-        getEntityTrend(entity.entity_name).catch(() => ({})),
-      ])
-    ),
-  ]);
+  // If browser is offline, don't attempt network calls
+  const isOffline = typeof navigator !== "undefined" && navigator?.onLine === false;
+
+  let runDetail = null;
+  let entityResults = [];
+
+  if (!isOffline) {
+    try {
+      [runDetail, ...entityResults] = await Promise.all([
+        latestRun
+          ? withTimeout(getAuditRunDetail(latestRun.id), 2500, null)
+          : Promise.resolve(null),
+        ...flaggedEntities.map((entity) =>
+          Promise.all([
+            withTimeout(getEntityDetails(entity.entity_name), 2500, {}),
+            withTimeout(getEntityTrend(entity.entity_name), 2500, {}),
+          ])
+        ),
+      ]);
+    } catch {
+      runDetail = null;
+      entityResults = flaggedEntities.map(() => [{}, {}]);
+    }
+  } else {
+    runDetail = null;
+    entityResults = flaggedEntities.map(() => [{}, {}]);
+  }
 
   // Build per-entity detail sections
   const entityDetails = flaggedEntities.map((entity, i) => {
-    const [detail, trend] = entityResults[i];
+    const [detail, trend] = entityResults[i] || [{}, {}];
     return buildEntityDetail(entity, detail, trend);
   });
 
@@ -304,16 +349,16 @@ export async function assembleReportData(entities, auditRuns) {
     },
 
     // Section 1
-    overview: buildOverview(entities, latestRun),
+    overview: buildOverview(safeEntities, latestRun),
 
     // Section 2
-    supervisory_priority: buildPriorityTable(entities),
+    supervisory_priority: buildPriorityTable(safeEntities),
 
     // Sections 3–5 (flagged entities only)
     entity_details: entityDetails,
 
     // Section 6
-    audit_metadata: buildAuditMetadata(runDetail),
+    audit_metadata: buildAuditMetadata(runDetail, latestRun),
 
     // Section 7 — static template
     supervisory_review: {
@@ -364,7 +409,7 @@ export async function assembleEntityReportData(entityName, entityData = null, au
   let runs = auditRuns;
   if (!runs || runs.length === 0) {
     try {
-      runs = await getAuditRuns();
+      runs = await withTimeout(getAuditRuns(), 2000, []);
     } catch {
       runs = [];
     }
@@ -373,16 +418,28 @@ export async function assembleEntityReportData(entityName, entityData = null, au
   const latestRun = runs && runs.length > 0 ? runs[0] : null;
   const runId = latestRun?.id ?? "no-run";
 
-  // Fetch run detail, trend, and entity details if missing
-  const [runDetail, trend, fetchedDetail] = await Promise.all([
-    latestRun
-      ? getAuditRunDetail(latestRun.id).catch(() => null)
-      : Promise.resolve(null),
-    getEntityTrend(entityName).catch(() => null),
-    !entityData
-      ? getEntityDetails(entityName).catch(() => null)
-      : Promise.resolve(entityData),
-  ]);
+  const isOffline = typeof navigator !== "undefined" && navigator?.onLine === false;
+  let runDetail = null;
+  let trend = null;
+  let fetchedDetail = entityData;
+
+  if (!isOffline) {
+    try {
+      [runDetail, trend, fetchedDetail] = await Promise.all([
+        latestRun
+          ? withTimeout(getAuditRunDetail(latestRun.id), 2500, null)
+          : Promise.resolve(null),
+        withTimeout(getEntityTrend(entityName), 2500, null),
+        !entityData
+          ? withTimeout(getEntityDetails(entityName), 2500, null)
+          : Promise.resolve(entityData),
+      ]);
+    } catch {
+      runDetail = null;
+      trend = null;
+      fetchedDetail = entityData;
+    }
+  }
 
   const detail = entityData || fetchedDetail;
 
@@ -391,6 +448,7 @@ export async function assembleEntityReportData(entityName, entityData = null, au
     risk_score: detail?.risk_score,
     risk_band: detail?.risk_band,
     primary_driver: detail?.primary_driver,
+    findings_summary: detail?.findings_summary,
   };
 
   const entityDetailSection = buildEntityDetail(entity, detail, trend);
@@ -422,7 +480,7 @@ export async function assembleEntityReportData(entityName, entityData = null, au
     findings: entityDetailSection.findings,
     expected_vs_observed: entityDetailSection.expected_vs_observed,
     trend: entityDetailSection.trend,
-    audit_metadata: buildAuditMetadata(runDetail),
+    audit_metadata: buildAuditMetadata(runDetail, latestRun),
     supervisory_review: {
       final_decision: NA,
       examiner_notes: NA,
