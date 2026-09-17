@@ -67,6 +67,9 @@ VEIL's output and an agreement comparison across concern, priority, and recommen
 Every review is kept, so a re-reviewed entity accumulates history rather than
 overwriting it.
 
+![Manual review interface](docs/screenshots/manualreview.png)
+*Manual review: blinded assessment input and comparison against VEIL's conclusions.*
+
 **5. Export.** Both the dashboard and any entity's drill-down page can download a
 report — PDF, JSON, or CSV — assembled client-side from the same data already on
 screen, so no separate backend call or extra network exposure is needed.
